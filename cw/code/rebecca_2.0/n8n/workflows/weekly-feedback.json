@@ -1,0 +1,199 @@
+{
+  "name": "Weekly Feedback Prep",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "weekly-feedback",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "weekly-feedback"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { \"intern_id\": $json.body.intern_id, \"intern_name\": $json.body.intern_name, \"supervisor\": $json.body.supervisor, \"week_ending\": $json.body.week_ending, \"execution_id\": $json.body.execution_id } }}",
+        "options": {}
+      },
+      "id": "set-variables",
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"status\": \"accepted\", \"execution_id\": $json.execution_id, \"message\": \"Weekly feedback prep started for \" + $json.intern_name } }}",
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.QA_BOT_URL }}/api/intern/\" + $json.intern_id + \"/tasks?status=completed&since=\" + (new Date(new Date($json.week_ending).getTime() - 7*24*60*60*1000)).toISOString().split('T')[0]",
+        "options": {}
+      },
+      "id": "get-completed-tasks",
+      "name": "Get Completed Tasks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [650, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.QA_BOT_URL }}/api/intern/\" + $('Extract Data').item.json.intern_id + \"/tasks?status=in_progress",
+        "options": {}
+      },
+      "id": "get-in-progress-tasks",
+      "name": "Get In-Progress Tasks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [850, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { \"intern_name\": $('Extract Data').item.json.intern_name, \"supervisor\": $('Extract Data').item.json.supervisor, \"week_ending\": $('Extract Data').item.json.week_ending, \"completed_tasks\": $('Get Completed Tasks').item.json.tasks || [], \"in_progress_tasks\": $json.tasks || [], \"execution_id\": $('Extract Data').item.json.execution_id } }}",
+        "options": {}
+      },
+      "id": "compile-summary",
+      "name": "Compile Summary",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"general\", \"message\": \"Weekly Feedback Summary for \" + $json.intern_name + \" (Week ending \" + $json.week_ending + \")\\n\\n**Completed This Week:** \" + ($json.completed_tasks.length || 0) + \" tasks\\n\" + ($json.completed_tasks.map(t => '- ' + t.title).join('\\n') || '- No tasks completed') + \"\\n\\n**In Progress:** \" + ($json.in_progress_tasks.length || 0) + \" tasks\\n\" + ($json.in_progress_tasks.map(t => '- ' + t.title).join('\\n') || '- No tasks in progress') + \"\\n\\n@\" + $json.supervisor + \" - Please review and add your feedback.\" } }}",
+        "options": {}
+      },
+      "id": "send-summary",
+      "name": "Send Summary to Zoom",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1250, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/n8n/callback",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"execution_id\": $('Extract Data').item.json.execution_id, \"status\": \"completed\", \"secret\": $env.N8N_CALLBACK_SECRET, \"result\": { \"intern_name\": $('Extract Data').item.json.intern_name, \"week_ending\": $('Extract Data').item.json.week_ending, \"completed_count\": ($('Compile Summary').item.json.completed_tasks || []).length, \"in_progress_count\": ($('Compile Summary').item.json.in_progress_tasks || []).length } } }}",
+        "options": {}
+      },
+      "id": "notify-complete",
+      "name": "Notify QA Bot Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1450, 400],
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Completed Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Completed Tasks": {
+      "main": [
+        [
+          {
+            "node": "Get In-Progress Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get In-Progress Tasks": {
+      "main": [
+        [
+          {
+            "node": "Compile Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Summary": {
+      "main": [
+        [
+          {
+            "node": "Send Summary to Zoom",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Summary to Zoom": {
+      "main": [
+        [
+          {
+            "node": "Notify QA Bot Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "qa-bot"
+    },
+    {
+      "name": "intern-management"
+    }
+  ],
+  "triggerCount": 0
+}

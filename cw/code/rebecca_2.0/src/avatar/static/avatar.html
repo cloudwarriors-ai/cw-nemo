@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Bot Avatar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        /* Pulsing sphere container */
+        .sphere-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Outer glow rings - controlled by JavaScript based on audio */
+        .glow-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            opacity: 0.2;
+            transition: transform 0.05s ease-out, opacity 0.05s ease-out;
+        }
+        .glow-ring:nth-child(1) {
+            width: 220px;
+            height: 220px;
+        }
+        .glow-ring:nth-child(2) {
+            width: 250px;
+            height: 250px;
+        }
+        .glow-ring:nth-child(3) {
+            width: 280px;
+            height: 280px;
+        }
+
+        /* Main sphere canvas */
+        .sphere-canvas {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Audio visualization bars around sphere */
+        .audio-bars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .bot-name {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.5);
+        }
+        .status {
+            font-size: 18px;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        .debug-info {
+            font-size: 12px;
+            opacity: 0.5;
+            margin-top: 20px;
+        }
+
+        /* State-based colors - no CSS animations, controlled by JS */
+        .sphere-container.speaking .glow-ring {
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+        .sphere-container.listening .glow-ring {
+            border-color: rgba(56, 239, 125, 0.4);
+        }
+        .sphere-container.thinking .glow-ring {
+            border-color: rgba(240, 147, 251, 0.4);
+        }
+        .sphere-container.error .glow-ring {
+            border-color: rgba(235, 51, 73, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sphere-container" id="sphereContainer">
+            <div class="glow-ring"></div>
+            <div class="glow-ring"></div>
+            <div class="glow-ring"></div>
+            <canvas class="sphere-canvas" id="sphereCanvas" width="200" height="200"></canvas>
+        </div>
+        <div class="bot-name">QA Bot</div>
+        <div class="status" id="status">Connecting...</div>
+        <div class="debug-info" id="debug"></div>
+    </div>
+
+    <script>
+        // Extract session ID from URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const botId = urlParams.get('bot_id') || urlParams.get('meeting_id') || 'unknown';
+
+        // WebSocket connection
+        let ws = null;
+        let audioContext = null;
+        let analyser = null;
+        let isPlaying = false;
+        const audioQueue = [];
+        const MAX_AUDIO_QUEUE_SIZE = 10;
+
+        // Audio buffering settings
+        const BUFFER_THRESHOLD = 2;
+        let isBuffering = true;
+        let scheduledEndTime = 0;
+        let activeSources = [];
+
+        // Audio level tracking for visualization (inspired by voice-reactive orb techniques)
+        let currentAudioLevel = 0;
+        let targetAudioLevel = 0;
+        let peakLevel = 0;
+        const AUDIO_SMOOTHING = 0.15;  // Smoother transitions (0.15 from orb tutorial)
+        const PEAK_DECAY = 0.92;  // Peak meter decay
+
+        // Reconnection settings
+        const MAX_RECONNECT_ATTEMPTS = 5;
+        const MAX_RECONNECT_DELAY = 30000;
+        let reconnectAttempts = 0;
+        let reconnectDelay = 1000;
+
+        // DOM elements
+        const sphereContainer = document.getElementById('sphereContainer');
+        const sphereCanvas = document.getElementById('sphereCanvas');
+        const ctx = sphereCanvas.getContext('2d');
+        const status = document.getElementById('status');
+        const debug = document.getElementById('debug');
+        const glowRings = document.querySelectorAll('.glow-ring');
+
+        // Sphere animation state
+        let animationFrame = 0;
+        let currentState = 'connecting';
+
+        // Color schemes for different states
+        const colorSchemes = {
+            connecting: { primary: '#667eea', secondary: '#764ba2', glow: 'rgba(102, 126, 234, 0.4)' },
+            listening: { primary: '#11998e', secondary: '#38ef7d', glow: 'rgba(56, 239, 125, 0.4)' },
+            speaking: { primary: '#667eea', secondary: '#764ba2', glow: 'rgba(102, 126, 234, 0.6)' },
+            thinking: { primary: '#f093fb', secondary: '#f5576c', glow: 'rgba(240, 147, 251, 0.4)' },
+            error: { primary: '#eb3349', secondary: '#f45c43', glow: 'rgba(235, 51, 73, 0.4)' },
+            barge_in: { primary: '#ffecd2', secondary: '#fcb69f', glow: 'rgba(252, 182, 159, 0.4)' }
+        };
+
+        // Initialize audio context with analyser
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                // Smaller FFT for faster, more reactive response
+                analyser.fftSize = 128;
+                // Lower smoothing for more reactive visualization
+                analyser.smoothingTimeConstant = 0.4;
+                // Adjust decibel range for better sensitivity
+                analyser.minDecibels = -90;
+                analyser.maxDecibels = -10;
+                console.log('AudioContext initialized with analyser (fftSize=128, smoothing=0.4)');
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        // Draw the 3D-looking sphere
+        function drawSphere() {
+            const width = sphereCanvas.width;
+            const height = sphereCanvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const baseRadius = 85;
+
+            // Smooth audio level transition
+            currentAudioLevel += (targetAudioLevel - currentAudioLevel) * AUDIO_SMOOTHING;
+
+            // Calculate pulse amount based on audio level and state
+            // Using voice-reactive orb technique: scale = 1 + level * 0.35
+            let pulseAmount = 0;
+            let glowIntensity = 1;
+            if (currentState === 'speaking') {
+                // Scale factor: 35% max increase (from orb tutorial)
+                const scaleFactor = 1 + currentAudioLevel * 0.35;
+                pulseAmount = baseRadius * (scaleFactor - 1);
+                // Glow opacity: 0.25 + level * 2.45 (dramatic glow from orb tutorial)
+                glowIntensity = 0.5 + currentAudioLevel * 2.0;
+            } else if (currentState === 'thinking') {
+                pulseAmount = Math.sin(animationFrame * 0.05) * 5;
+            }
+
+            const radius = baseRadius + pulseAmount;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Get color scheme
+            const colors = colorSchemes[currentState] || colorSchemes.connecting;
+
+            // Draw outer glow (intensity varies with audio - orb technique)
+            // Glow expands significantly with audio for dramatic effect
+            const glowRadius = radius * (1.4 + currentAudioLevel * 0.6);
+            const glowGradient = ctx.createRadialGradient(centerX, centerY, radius * 0.7, centerX, centerY, glowRadius);
+            // Dramatic glow opacity based on intensity (capped at reasonable max)
+            const glowOpacity = Math.min(0.8, 0.3 * glowIntensity);
+            const glowColor = colors.glow.replace(/[\d.]+\)$/, `${glowOpacity})`);
+            glowGradient.addColorStop(0, glowColor);
+            glowGradient.addColorStop(0.5, glowColor.replace(/[\d.]+\)$/, `${glowOpacity * 0.5})`));
+            glowGradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = glowGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw main sphere with gradient
+            const sphereGradient = ctx.createRadialGradient(
+                centerX - radius * 0.3, centerY - radius * 0.3, 0,
+                centerX, centerY, radius
+            );
+            sphereGradient.addColorStop(0, lightenColor(colors.primary, 40));
+            sphereGradient.addColorStop(0.5, colors.primary);
+            sphereGradient.addColorStop(1, colors.secondary);
+
+            ctx.fillStyle = sphereGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw highlight (3D effect)
+            const highlightGradient = ctx.createRadialGradient(
+                centerX - radius * 0.4, centerY - radius * 0.4, 0,
+                centerX - radius * 0.4, centerY - radius * 0.4, radius * 0.6
+            );
+            highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+            highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+            ctx.fillStyle = highlightGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw audio waveform ring when speaking
+            if (currentState === 'speaking' && currentAudioLevel > 0.05) {
+                drawAudioWaveRing(centerX, centerY, radius + 10, currentAudioLevel);
+            }
+
+            // Draw inner pattern (subtle)
+            drawInnerPattern(centerX, centerY, radius * 0.7);
+
+            animationFrame++;
+        }
+
+        // Draw audio wave ring around sphere
+        function drawAudioWaveRing(cx, cy, radius, level) {
+            const colors = colorSchemes[currentState] || colorSchemes.speaking;
+            const numPoints = 64;
+            const waveAmplitude = level * 20;
+
+            ctx.strokeStyle = colors.glow;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let i = 0; i <= numPoints; i++) {
+                const angle = (i / numPoints) * Math.PI * 2;
+                const wave = Math.sin(angle * 8 + animationFrame * 0.1) * waveAmplitude;
+                const r = radius + wave;
+                const x = cx + Math.cos(angle) * r;
+                const y = cy + Math.sin(angle) * r;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        // Draw subtle inner pattern
+        function drawInnerPattern(cx, cy, radius) {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+
+            // Rotating lines
+            const numLines = 6;
+            const rotation = animationFrame * 0.01;
+
+            for (let i = 0; i < numLines; i++) {
+                const angle = (i / numLines) * Math.PI + rotation;
+                ctx.beginPath();
+                ctx.moveTo(
+                    cx + Math.cos(angle) * radius * 0.3,
+                    cy + Math.sin(angle) * radius * 0.3
+                );
+                ctx.lineTo(
+                    cx + Math.cos(angle) * radius,
+                    cy + Math.sin(angle) * radius
+                );
+                ctx.stroke();
+            }
+        }
+
+        // Utility: lighten a hex color
+        function lightenColor(hex, percent) {
+            const num = parseInt(hex.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.min(255, (num >> 16) + amt);
+            const G = Math.min(255, ((num >> 8) & 0x00FF) + amt);
+            const B = Math.min(255, (num & 0x0000FF) + amt);
+            return `rgb(${R}, ${G}, ${B})`;
+        }
+
+        // Animation loop
+        function animate() {
+            drawSphere();
+            requestAnimationFrame(animate);
+        }
+
+        // Update UI state
+        function setState(state, message) {
+            currentState = state || 'connecting';
+            sphereContainer.className = 'sphere-container ' + currentState;
+            status.textContent = message;
+            debug.textContent = `Bot ID: ${botId} | State: ${state}`;
+        }
+
+        // Decode base64 audio to AudioBuffer
+        async function decodeAudio(base64Data) {
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return await audioContext.decodeAudioData(bytes.buffer);
+        }
+
+        // Schedule audio chunk for seamless playback
+        async function scheduleAudioChunk(base64Data, format = 'mp3') {
+            initAudio();
+
+            try {
+                const audioBuffer = await decodeAudio(base64Data);
+
+                // Create source node
+                const source = audioContext.createBufferSource();
+                source.buffer = audioBuffer;
+
+                // Connect through analyser for visualization
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+
+                // Calculate start time for seamless playback
+                const currentTime = audioContext.currentTime;
+                const startTime = Math.max(currentTime, scheduledEndTime);
+
+                // Schedule the audio
+                source.start(startTime);
+                scheduledEndTime = startTime + audioBuffer.duration;
+
+                // Track this source
+                activeSources.push(source);
+                source.onended = () => {
+                    const idx = activeSources.indexOf(source);
+                    if (idx > -1) activeSources.splice(idx, 1);
+
+                    if (activeSources.length === 0 && audioQueue.length === 0) {
+                        isPlaying = false;
+                        targetAudioLevel = 0;
+                        setState('listening', 'Listening...');
+                    }
+                };
+
+                console.log(`Scheduled audio: ${audioBuffer.duration.toFixed(2)}s`);
+                return true;
+
+            } catch (error) {
+                console.error('Audio decode/schedule error:', error);
+                return false;
+            }
+        }
+
+        // Update audio level from analyser
+        function updateAudioLevel() {
+            if (!analyser || !isPlaying) {
+                targetAudioLevel *= 0.9;  // Gradual fade out
+                peakLevel *= PEAK_DECAY;
+                // Still update rings during fade out
+                updateGlowRings(targetAudioLevel);
+                return;
+            }
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            // Focus on bass and mid frequencies (first 60% of spectrum)
+            // These are more impactful for voice visualization
+            const bassEnd = Math.floor(bufferLength * 0.2);  // Low bass
+            const midEnd = Math.floor(bufferLength * 0.6);   // Mids
+
+            // Calculate weighted average with emphasis on bass
+            let bassSum = 0, midSum = 0, highSum = 0;
+
+            for (let i = 0; i < bassEnd; i++) {
+                bassSum += dataArray[i];
+            }
+            for (let i = bassEnd; i < midEnd; i++) {
+                midSum += dataArray[i];
+            }
+            for (let i = midEnd; i < bufferLength; i++) {
+                highSum += dataArray[i];
+            }
+
+            const bassAvg = bassSum / bassEnd;
+            const midAvg = midSum / (midEnd - bassEnd);
+            const highAvg = highSum / (bufferLength - midEnd);
+
+            // Weight: bass 50%, mids 35%, highs 15%
+            const weightedAvg = (bassAvg * 0.5 + midAvg * 0.35 + highAvg * 0.15);
+
+            // Normalize using voice-reactive orb technique: (avg - floor) / range
+            // Floor of 16 removes noise, ceiling of 90 captures typical voice peaks
+            let level = Math.min(1, Math.max(0, (weightedAvg - 16) / 90));
+
+            targetAudioLevel = level;
+
+            // Peak detection with decay
+            if (level > peakLevel) {
+                peakLevel = level;
+            } else {
+                peakLevel *= PEAK_DECAY;
+            }
+
+            // Update glow rings based on audio level
+            updateGlowRings(level);
+        }
+
+        // Update glow rings based on audio level (voice-reactive orb technique)
+        function updateGlowRings(level) {
+            // More dramatic scaling: 35% max like orb tutorial
+            // Opacity range: 0.25 to ~0.9 for visible glow effect
+
+            glowRings.forEach((ring, index) => {
+                // Stagger the effect - outer rings react slightly delayed
+                const delay = index * 0.08;
+                const adjustedLevel = Math.max(0, level - delay * 0.2);
+
+                // Scale: 1 + level * 0.25 (slightly less than sphere for layered effect)
+                const ringScale = 1 + adjustedLevel * 0.25;
+                // Opacity: dramatic like orb (0.25 + level * 2.0, capped at 0.9)
+                const ringOpacity = Math.min(0.9, 0.25 + adjustedLevel * 1.5);
+
+                ring.style.transform = `scale(${ringScale})`;
+                ring.style.opacity = ringOpacity;
+            });
+        }
+
+        // Audio level update loop - 60fps for smooth visualization
+        setInterval(updateAudioLevel, 16);
+
+        // Process buffered audio queue
+        async function processAudioQueue() {
+            if (audioQueue.length === 0) return;
+
+            if (isBuffering && audioQueue.length < BUFFER_THRESHOLD) {
+                console.log(`Buffering: ${audioQueue.length}/${BUFFER_THRESHOLD} chunks`);
+                return;
+            }
+
+            isBuffering = false;
+            isPlaying = true;
+            setState('speaking', 'Speaking...');
+
+            while (audioQueue.length > 0) {
+                const chunk = audioQueue.shift();
+                await scheduleAudioChunk(chunk.data, chunk.format);
+            }
+        }
+
+        // Stop all audio (for barge-in)
+        function stopAllAudio() {
+            for (const source of activeSources) {
+                try {
+                    source.stop();
+                } catch (e) {}
+            }
+            activeSources = [];
+            audioQueue.length = 0;
+            isPlaying = false;
+            isBuffering = true;
+            scheduledEndTime = 0;
+            targetAudioLevel = 0;
+            console.log('Audio stopped (barge-in)');
+        }
+
+        // Connect to WebSocket
+        function connect() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws/avatar/${botId}`;
+
+            console.log('Connecting to:', wsUrl);
+            setState('connecting', 'Connecting...');
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+                setState('listening', 'Listening...');
+                reconnectAttempts = 0;
+                reconnectDelay = 1000;
+
+                ws.send(JSON.stringify({
+                    type: 'hello',
+                    bot_id: botId,
+                    capabilities: ['audio_playback']
+                }));
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+                    handleMessage(message);
+                } catch (error) {
+                    console.error('Message parse error:', error);
+                }
+            };
+
+            ws.onclose = (event) => {
+                console.log('WebSocket closed:', event.code, event.reason);
+
+                reconnectAttempts++;
+                if (reconnectAttempts <= MAX_RECONNECT_ATTEMPTS) {
+                    setState('connecting', `Reconnecting (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})...`);
+                    setTimeout(connect, reconnectDelay);
+                    reconnectDelay = Math.min(reconnectDelay * 2, MAX_RECONNECT_DELAY);
+                } else {
+                    setState('listening', 'QA Bot');
+                    console.log('Max reconnection attempts reached');
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                setState('error', 'Connection error');
+            };
+        }
+
+        // Handle incoming messages
+        function handleMessage(message) {
+            console.log('Received:', message.type);
+
+            switch (message.type) {
+                case 'audio':
+                    if (audioQueue.length < MAX_AUDIO_QUEUE_SIZE) {
+                        audioQueue.push({
+                            data: message.data,
+                            format: message.format || 'mp3'
+                        });
+                    } else {
+                        console.warn('Audio queue full, dropping oldest');
+                        audioQueue.shift();
+                        audioQueue.push({
+                            data: message.data,
+                            format: message.format || 'mp3'
+                        });
+                    }
+                    processAudioQueue();
+                    break;
+
+                case 'state':
+                    if (message.state === 'speaking') {
+                        isBuffering = true;
+                        scheduledEndTime = audioContext ? audioContext.currentTime : 0;
+                    } else if (message.state === 'listening') {
+                        if (audioQueue.length > 0 && isBuffering) {
+                            isBuffering = false;
+                            processAudioQueue();
+                        } else if (!isPlaying) {
+                            setState('listening', message.message || 'Listening...');
+                        }
+                    } else if (message.state === 'barge_in') {
+                        stopAllAudio();
+                        setState('listening', 'Interrupted - Listening...');
+                    } else {
+                        setState(message.state, message.message || message.state);
+                    }
+                    break;
+
+                case 'ping':
+                    ws.send(JSON.stringify({ type: 'pong' }));
+                    break;
+
+                default:
+                    console.log('Unknown message type:', message.type);
+            }
+        }
+
+        // Auto-initialize audio on first click
+        document.body.addEventListener('click', initAudio, { once: true });
+
+        // Start animation loop
+        animate();
+
+        // Start WebSocket connection
+        connect();
+    </script>
+</body>
+</html>

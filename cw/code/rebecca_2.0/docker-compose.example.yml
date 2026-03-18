@@ -1,0 +1,132 @@
+# Docker Compose for QA Continuity App (Rebecca 2.0)
+#
+# Spins up the complete stack:
+#   - rebecca-bot: Flask application
+#   - rebecca-n8n: Workflow automation
+#   - rebecca-nginx: Reverse proxy with traefik
+#
+# Usage:
+#   1. Copy to docker-compose.yml: cp docker-compose.example.yml docker-compose.yml
+#   2. Update YOUR_DOMAIN placeholders with your actual domain
+#   3. Start all:        docker-compose up -d
+#   4. View logs:        docker-compose logs -f
+#   5. Stop all:         docker-compose down
+
+services:
+  # ===================
+  # NGINX Reverse Proxy
+  # ===================
+  rebecca-nginx:
+    image: nginx:latest
+    container_name: rebecca-nginx
+    volumes:
+      - ../rebecca-nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - proxy
+      - rebecca-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.rebecca.entrypoints=websecure"
+      - "traefik.http.routers.rebecca.tls=true"
+      - "traefik.http.routers.rebecca.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.rebecca.rule=Host(`YOUR_DOMAIN`)"
+      - "traefik.http.services.rebecca.loadbalancer.server.port=80"
+      - "traefik.http.routers.rebecca-http.entrypoints=web"
+      - "traefik.http.routers.rebecca-http.rule=Host(`YOUR_DOMAIN`)"
+      - "traefik.http.routers.rebecca-http.middlewares=redirect-to-https"
+    depends_on:
+      rebecca-bot:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ===================
+  # QA Bot (Flask App)
+  # ===================
+  rebecca-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rebecca-bot
+    env_file:
+      - .env
+    environment:
+      - PORT=5000
+      - DB_PATH=/app/data/state.db
+      - LOG_DIR=/app/logs
+      - N8N_WEBHOOK_URL=http://rebecca-n8n:5678/webhook
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - rebecca-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      rebecca-n8n:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # ===================
+  # n8n Workflow Engine
+  # ===================
+  rebecca-n8n:
+    image: n8nio/n8n:2.2.4
+    container_name: rebecca-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_PATH=/n8n/
+      - N8N_EDITOR_BASE_URL=https://YOUR_DOMAIN/n8n/
+      - WEBHOOK_URL=https://YOUR_DOMAIN/n8n/
+      - N8N_TRUST_PROXY=true
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-change-this-32-char-key-in-prod}
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:-changeme}
+      - GENERIC_TIMEZONE=${TZ:-America/Chicago}
+      - TZ=${TZ:-America/Chicago}
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      - N8N_LISTEN_ADDRESS=0.0.0.0
+      - QA_BOT_URL=http://rebecca-bot:5000
+    volumes:
+      - rebecca-n8n-data:/home/node/.n8n
+      - ./n8n/workflows:/home/node/.n8n/workflows
+    networks:
+      - rebecca-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+volumes:
+  rebecca-n8n-data:
+    driver: local
+
+networks:
+  rebecca-network:
+    name: rebecca-network
+    driver: bridge
+  proxy:
+    external: true

@@ -1,0 +1,14 @@
+{
+  "name": "@openclaw/zoomwarriors",
+  "version": "2026.2.12",
+  "description": "ZoomWarriors2 presales quoting platform integration",
+  "type": "module",
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "openclaw": "*"
+  }
+}

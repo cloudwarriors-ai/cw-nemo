@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, height=720">
+    <title>QA Bot Avatar</title>
+    <!-- LiveKit Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        /* Video container - full screen */
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #video-container video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Fallback avatar when no video */
+        .fallback-avatar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        .avatar-circle.speaking {
+            animation: pulse 1s ease-in-out infinite;
+        }
+        .avatar-circle.listening {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        .avatar-circle.connecting {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: think 1.5s ease-in-out infinite;
+        }
+        .avatar-icon {
+            font-size: 120px;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes think {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Name tag overlay */
+        .name-tag {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 24px;
+            border-radius: 25px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        /* Status bar */
+        .status-bar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 30px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+        .status-dot.connecting { background: #FF9800; animation: blink 1s infinite; }
+        .status-dot.connected { background: #4CAF50; }
+        .status-dot.speaking { background: #2196F3; animation: blink 0.5s infinite; }
+        .status-dot.error { background: #f44336; }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Hide when video is playing */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="name-tag">QA Bot</div>
+
+        <!-- Video container for LiveKit stream -->
+        <div id="video-container"></div>
+
+        <!-- Fallback avatar when no video -->
+        <div class="fallback-avatar" id="fallback">
+            <div class="avatar-circle connecting" id="avatar-circle">
+                <span class="avatar-icon">🤖</span>
+            </div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="status-bar">
+            <div class="status-dot connecting" id="status-dot"></div>
+            <span id="status-text">Connecting...</span>
+        </div>
+    </div>
+
+    <script>
+        // Configuration from URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomName = urlParams.get('room') || 'qa-bot-room';
+        const meetingId = urlParams.get('meeting_id') || '';
+        let botId = urlParams.get('bot_id') || 'unknown';
+
+        // LiveKit configuration - will be fetched from server
+        let livekitUrl = null;
+        let livekitToken = null;
+
+        // Resolve meeting_id to bot_id if needed
+        async function resolveBotId() {
+            if (meetingId && botId === 'unknown') {
+                console.log('Resolving meeting_id to bot_id:', meetingId);
+                try {
+                    const response = await fetch(`/api/avatar/bot-id?meeting_id=${meetingId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.bot_id && data.bot_id !== 'unknown') {
+                            botId = data.bot_id;
+                            console.log('Resolved bot_id:', botId);
+                            return true;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to resolve bot_id:', error);
+                }
+                // Retry after a short delay (mapping may not be ready yet)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                try {
+                    const response = await fetch(`/api/avatar/bot-id?meeting_id=${meetingId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.bot_id && data.bot_id !== 'unknown') {
+                            botId = data.bot_id;
+                            console.log('Resolved bot_id (retry):', botId);
+                            return true;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to resolve bot_id (retry):', error);
+                }
+            }
+            return botId !== 'unknown';
+        }
+
+        // DOM elements
+        const videoContainer = document.getElementById('video-container');
+        const fallback = document.getElementById('fallback');
+        const avatarCircle = document.getElementById('avatar-circle');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+
+        // LiveKit room instance
+        let room = null;
+        let hasVideo = false;
+
+        // Update status display
+        function setStatus(state, message) {
+            statusDot.className = 'status-dot ' + state;
+            statusText.textContent = message;
+            avatarCircle.className = 'avatar-circle ' + state;
+
+            // Show/hide fallback based on video presence
+            if (hasVideo) {
+                fallback.classList.add('hidden');
+            } else {
+                fallback.classList.remove('hidden');
+            }
+        }
+
+        // Fetch LiveKit token from server
+        async function fetchToken() {
+            try {
+                const response = await fetch(`/api/avatar/livekit-token?room=${roomName}&bot_id=${botId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                livekitUrl = data.url;
+                livekitToken = data.token;
+                console.log('Got LiveKit token for room:', roomName);
+                return true;
+            } catch (error) {
+                console.error('Failed to fetch token:', error);
+                setStatus('error', 'Failed to get token');
+                return false;
+            }
+        }
+
+        // Handle new video track from participant
+        function handleTrackSubscribed(track, publication, participant) {
+            console.log('Track subscribed:', track.kind, 'from', participant.identity);
+
+            if (track.kind === 'video') {
+                // Attach video element
+                const element = track.attach();
+                element.style.width = '100%';
+                element.style.height = '100%';
+                element.style.objectFit = 'contain';
+
+                // Clear any existing video
+                videoContainer.innerHTML = '';
+                videoContainer.appendChild(element);
+
+                hasVideo = true;
+                setStatus('connected', 'Connected');
+                console.log('Avatar video attached');
+            }
+
+            if (track.kind === 'audio') {
+                // Attach audio element (will autoplay)
+                const element = track.attach();
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                console.log('Avatar audio attached');
+            }
+        }
+
+        // Handle track unsubscribed
+        function handleTrackUnsubscribed(track, publication, participant) {
+            console.log('Track unsubscribed:', track.kind);
+            track.detach().forEach(el => el.remove());
+
+            if (track.kind === 'video') {
+                hasVideo = false;
+                setStatus('connected', 'Waiting for avatar...');
+            }
+        }
+
+        // Handle participant speaking
+        function handleActiveSpeakerChanged(speakers) {
+            if (speakers.length > 0 && hasVideo) {
+                setStatus('speaking', 'Speaking...');
+            } else if (hasVideo) {
+                setStatus('connected', 'Listening...');
+            }
+        }
+
+        // Connect to LiveKit room
+        async function connectToRoom() {
+            setStatus('connecting', 'Connecting to LiveKit...');
+
+            // Fetch token first
+            if (!await fetchToken()) {
+                return;
+            }
+
+            try {
+                // Create room instance
+                room = new LivekitClient.Room({
+                    adaptiveStream: true,
+                    dynacast: true,
+                    videoCaptureDefaults: {
+                        resolution: { width: 1280, height: 720 }
+                    }
+                });
+
+                // Set up event handlers
+                room.on(LivekitClient.RoomEvent.TrackSubscribed, handleTrackSubscribed);
+                room.on(LivekitClient.RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed);
+                room.on(LivekitClient.RoomEvent.ActiveSpeakersChanged, handleActiveSpeakerChanged);
+
+                room.on(LivekitClient.RoomEvent.Connected, () => {
+                    console.log('Connected to room:', room.name);
+                    setStatus('connected', 'Connected - waiting for avatar...');
+                });
+
+                room.on(LivekitClient.RoomEvent.Disconnected, (reason) => {
+                    console.log('Disconnected from room:', reason);
+                    hasVideo = false;
+                    setStatus('connecting', 'Reconnecting...');
+
+                    // Attempt reconnection after delay
+                    setTimeout(connectToRoom, 3000);
+                });
+
+                room.on(LivekitClient.RoomEvent.ParticipantConnected, (participant) => {
+                    console.log('Participant connected:', participant.identity);
+                });
+
+                // Connect to room
+                await room.connect(livekitUrl, livekitToken);
+
+                // Check for existing participants with tracks
+                room.remoteParticipants.forEach((participant) => {
+                    participant.trackPublications.forEach((publication) => {
+                        if (publication.isSubscribed && publication.track) {
+                            handleTrackSubscribed(publication.track, publication, participant);
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Failed to connect to LiveKit:', error);
+                setStatus('error', 'Connection failed');
+
+                // Retry after delay
+                setTimeout(connectToRoom, 5000);
+            }
+        }
+
+        // Also maintain WebSocket connection for state updates from backend
+        let ws = null;
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws/avatar/${botId}`;
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected for state updates');
+                ws.send(JSON.stringify({
+                    type: 'hello',
+                    bot_id: botId,
+                    capabilities: ['livekit_video']
+                }));
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+                    if (message.type === 'state') {
+                        // Update status based on backend state
+                        if (message.state === 'speaking' && hasVideo) {
+                            setStatus('speaking', 'Speaking...');
+                        } else if (message.state === 'listening' && hasVideo) {
+                            setStatus('connected', 'Listening...');
+                        } else if (message.state === 'thinking') {
+                            setStatus('connecting', 'Thinking...');
+                        }
+                    } else if (message.type === 'ping') {
+                        ws.send(JSON.stringify({ type: 'pong' }));
+                    }
+                } catch (e) {
+                    console.error('WebSocket message error:', e);
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket closed, reconnecting...');
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        // Initialize
+        async function init() {
+            console.log('Initializing LiveKit avatar page');
+            console.log('Room:', roomName, 'Meeting ID:', meetingId, 'Initial Bot ID:', botId);
+
+            // Resolve meeting_id to bot_id if needed
+            await resolveBotId();
+            console.log('Using Bot ID:', botId);
+
+            // Connect to LiveKit for video
+            await connectToRoom();
+
+            // Connect WebSocket for state updates
+            connectWebSocket();
+        }
+
+        // Start when page loads
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+{
+  "name": "Intern Onboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "onboarding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "onboarding"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { \"intern_id\": $json.body.intern_id, \"intern_name\": $json.body.intern_name, \"program\": $json.body.program, \"start_date\": $json.body.start_date, \"supervisor\": $json.body.supervisor, \"email\": $json.body.email, \"execution_id\": $json.body.execution_id } }}",
+        "options": {}
+      },
+      "id": "set-variables",
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"status\": \"accepted\", \"execution_id\": $json.execution_id, \"message\": \"Onboarding workflow started for \" + $json.intern_name } }}",
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"general\", \"message\": \"Welcome to the team, \" + $json.intern_name + \"! You're joining the \" + $json.program + \" program. Your supervisor is \" + $json.supervisor + \". We're excited to have you starting on \" + $json.start_date + \".\" } }}",
+        "options": {}
+      },
+      "id": "send-welcome",
+      "name": "Send Welcome Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [650, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "unit": "days",
+        "value": 1
+      },
+      "id": "wait-1-day",
+      "name": "Wait 1 Day",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"general\", \"message\": \"Hi \" + $('Extract Data').item.json.intern_name + \"! Here's your Day 1 orientation checklist:\\n\\n- [ ] Review the Getting Started guide\\n- [ ] Set up your development environment\\n- [ ] Join the Daily DevOps meeting at 9 AM\\n- [ ] Introduce yourself in the team chat\\n- [ ] Review your first assigned issues\\n\\nLet me know if you have any questions!\" } }}",
+        "options": {}
+      },
+      "id": "send-checklist",
+      "name": "Send Orientation Checklist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1050, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "unit": "days",
+        "value": 6
+      },
+      "id": "wait-1-week",
+      "name": "Wait Until Friday",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"general\", \"message\": \"Week 1 check-in for \" + $('Extract Data').item.json.intern_name + \":\\n\\nHow's your first week going? Please share:\\n- What you've accomplished\\n- Any blockers or questions\\n- Topics you'd like to learn more about\\n\\n\" + $('Extract Data').item.json.supervisor + \" will review your progress.\" } }}",
+        "options": {}
+      },
+      "id": "week1-checkin",
+      "name": "Week 1 Check-in",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1450, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/n8n/callback",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"execution_id\": $('Extract Data').item.json.execution_id, \"status\": \"completed\", \"secret\": $env.N8N_CALLBACK_SECRET, \"result\": { \"intern_name\": $('Extract Data').item.json.intern_name, \"steps_completed\": [\"welcome\", \"checklist\", \"week1_checkin\"] } } }}",
+        "options": {}
+      },
+      "id": "notify-complete",
+      "name": "Notify QA Bot Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1650, 400],
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Welcome Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Message": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 Day",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 Day": {
+      "main": [
+        [
+          {
+            "node": "Send Orientation Checklist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Orientation Checklist": {
+      "main": [
+        [
+          {
+            "node": "Wait Until Friday",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Until Friday": {
+      "main": [
+        [
+          {
+            "node": "Week 1 Check-in",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Week 1 Check-in": {
+      "main": [
+        [
+          {
+            "node": "Notify QA Bot Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "qa-bot"
+    },
+    {
+      "name": "intern-management"
+    }
+  ],
+  "triggerCount": 0
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-session.schema.json",
+  "type": "object",
+  "description": "A work session binding a worker to a task with associated artifacts.",
+  "required": ["id", "task_id", "worker_id", "start_time", "artifact_ids", "context_source"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "start_time": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "end_time": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "artifact_ids": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/id" }
+    },
+    "context_source": { "$ref": "_defs.schema.json#/definitions/context_source" }
+  }
+}

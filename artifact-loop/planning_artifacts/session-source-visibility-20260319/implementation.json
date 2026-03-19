@@ -1,0 +1,319 @@
+{
+  "bootstrap_commands": [
+    "npm run build"
+  ],
+  "changed_files": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/helpers/format.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test-run.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-note.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-merge.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-status.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-history.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-commands.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/task-read.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-test-run.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/golden-path.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/failure-escape.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/session-workflow.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.d.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test-run.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-note.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-merge.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-status.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-history.js"
+  ],
+  "checkpoint_block_evidence": "M ../.github/workflows/pr.yaml, M ../Makefile, ?? ../AGENTS.md, ?? ../CLAUDE.md, ?? ./",
+  "checkpoint_block_reason": "unrelated_dirty_state",
+  "checkpoint_blocked": true,
+  "checkpoint_commit": "",
+  "clean_state_assertions": [
+    "Fresh governed state can resume from planning_artifacts without reconstructing prior chat context."
+  ],
+  "execution_coverage": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.execution-coverage.json"
+  },
+  "execution_ledger": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.execution-ledger.json",
+  "frontend_roundtrip_evidence": [],
+  "logging_evidence": [
+    {
+      "event": "artifact-loop diff summary captured for changed src/dist/bin surfaces.",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-log-artifact-loop-diff-100/manifest.json",
+      "proof_hash": "25c2931240604a7585a322d1df49c470fc2b8cd0e87d9424c8b8be1920bc6842"
+    }
+  ],
+  "memory_retrieval_evidence": [
+    {
+      "query": "artifact-loop CLI output session source visibility preferences",
+      "result_count": 0,
+      "tool": "mcp__codex_mem__build_context"
+    },
+    {
+      "query": "preference CLI output formatting tests planning gate artifact-loop",
+      "result_count": 0,
+      "tool": "mcp__codex_mem__search"
+    }
+  ],
+  "migration_fallback": {
+    "artifact_path": "",
+    "reason": "no migration defect observed",
+    "used": false
+  },
+  "objective_runtime_state": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.runtime-state.json",
+    "authoritative_artifacts": {
+      "packet_dag": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.packet-dag.json",
+      "schedule": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.schedule.json",
+      "status": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.status.json"
+    },
+    "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+    "compatibility_artifacts": {
+      "operator_view": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.operator-view.json",
+      "summary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.summary.json",
+      "support_confidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.support-confidence.json"
+    },
+    "controller_mode": "enforce",
+    "current_cycle_id": "objective-session-source-visibility-20260319-cycle-final",
+    "current_frontier": [],
+    "current_packet": "",
+    "derived_support_status": "supported",
+    "last_verifier_result": {
+      "reason": "Required packets accepted with deterministic evidence; checkpoint remains blocked by unrelated dirty repo state.",
+      "source": "validate_impl-prep",
+      "status": "approve"
+    },
+    "lifecycle_status": "approved",
+    "material_optional_work_reasons": [],
+    "material_optional_work_remaining": false,
+    "next_recommended_packet": "",
+    "objective_id": "objective-session-source-visibility-20260319",
+    "required_work_reasons": [],
+    "required_work_remaining": false,
+    "route_hint": "R3",
+    "safe_momentum_available": false,
+    "schema_version": "objective-runtime-state.v1",
+    "stop_allowed": true,
+    "stop_reason": "checkpoint_blocked",
+    "track_id": "session-source-visibility-20260319",
+    "unsupported_closure_risk": "none",
+    "updated_at": "2026-03-19T20:03:22+00:00"
+  },
+  "objective_status": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.status.json",
+    "blocked_packets": [],
+    "boundary_shrunk_remainder": [],
+    "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+    "completed_packets": [
+      "packet-emit-and-read-formatting",
+      "packet-verify-cli-contracts"
+    ],
+    "deferred_packets": [],
+    "objective_id": "objective-session-source-visibility-20260319",
+    "pending_packets": [],
+    "schema_version": "objective-status.v1",
+    "track_id": "session-source-visibility-20260319"
+  },
+  "objective_summary": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.summary.json"
+  },
+  "packet_results_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.packet-results.jsonl",
+  "packet_verdicts": [
+    {
+      "allowed_scope_status": "within_scope",
+      "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packets/packet-emit-and-read-formatting.verdict.json",
+      "changed_files": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/helpers/format.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test-run.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-note.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-merge.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-status.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-history.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-commands.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/task-read.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-test-run.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/golden-path.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/failure-escape.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/session-workflow.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.d.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test-run.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-note.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-merge.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-status.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-history.js"
+      ],
+      "packet_id": "packet-emit-and-read-formatting",
+      "runner_kind": "command",
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "allowed_scope_status": "within_scope",
+      "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packets/packet-verify-cli-contracts.verdict.json",
+      "changed_files": [],
+      "packet_id": "packet-verify-cli-contracts",
+      "runner_kind": "command",
+      "runtime_state": "accepted",
+      "strategy_name": "validation_command",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    }
+  ],
+  "preferences_applied": [
+    {
+      "decision": "Used planning-gate artifacts and deterministic evidence capture because the change touched multiple CLI/test/dist files.",
+      "key": "workspace.agents.process.non_trivial_governed_path",
+      "rationale": "Workspace policy requires governed closeout for non-trivial coding work and a packetized plan was sufficient for this bounded multi-file CLI change."
+    }
+  ],
+  "prompt_contract_used": [
+    {
+      "done_when": "Acceptance criteria are met, evidence artifacts are captured, and finalize_gate.py returns ok=true.",
+      "name": "feature-contract.v1",
+      "required_constraints": "Keep scope bounded to human-readable output, preserve JSON output and resolveTaskId precedence, and carry deterministic rollback/test evidence.",
+      "required_context": "Objective, users impacted, CLI data flow, and existing emit/status/history/test surfaces inside artifact-loop.",
+      "verification_section": "Run build, typecheck, tests, smoke stages, and governed artifact validation inside artifact-loop."
+    }
+  ],
+  "rollback_validation": {
+    "evidence": "Rollback contract manifest captured the bounded artifact-loop src/dist/bin file set.",
+    "executed": true,
+    "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-rollback-artifact-loop-contract-100/manifest.json",
+    "proof_hash": "ab5cd466579661620fdef8129c7ca188023e957e175ff6cda3e01f491e8dc4cf",
+    "result": "pass"
+  },
+  "schedule_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.schedule.json",
+  "schema_version": "implementation.v1",
+  "skill_trigger_eval_results": [
+    {
+      "false_negative_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "skill": "memory-adaptation",
+      "threshold_passed": true
+    },
+    {
+      "false_negative_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "skill": "planning-gate",
+      "threshold_passed": true
+    }
+  ],
+  "smoke_results": [
+    {
+      "command": "npm run build",
+      "decision": "continue",
+      "observed_output": "TypeScript build completed and refreshed dist output.",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-smoke-build-25/manifest.json",
+      "proof_hash": "b951c524e16f40f5057395374b950f710eeacc962ab3421a26d6ed3a7e6973da",
+      "stage": "25%",
+      "status": "pass"
+    },
+    {
+      "command": "npm run check",
+      "decision": "continue",
+      "observed_output": "tsc --noEmit passed for artifact-loop.",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-smoke-check-50/manifest.json",
+      "proof_hash": "06816caf3e759dd3d70418d501432bb1b811552fa38c6ed1ea79212d4ec10523",
+      "stage": "50%",
+      "status": "pass"
+    },
+    {
+      "command": "node -e \"import('./dist/src/cli/helpers/format.js').then((m)=>console.log(m.formatTaskReference('feat-widget', true)))\"",
+      "decision": "continue",
+      "observed_output": "Built helper printed feat-widget (from session).",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-smoke-helper-75/manifest.json",
+      "proof_hash": "8db21fad765d0baf93df51073f3e31368a045155c5475bf786294a285bd2a463",
+      "stage": "75%",
+      "status": "pass"
+    },
+    {
+      "command": "npm test",
+      "decision": "approve",
+      "observed_output": "Vitest completed with 137 passing tests.",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-smoke-test-100/manifest.json",
+      "proof_hash": "c9e5d0a3ed7899e45f339e367e9a6906af1a27cf7c24d7d44b54ec5c2b8f07c7",
+      "stage": "100%",
+      "status": "pass"
+    }
+  ],
+  "summary": "Implemented shared session-source task labeling across artifact-loop human CLI output, rebuilt dist, and updated existing output assertions.",
+  "support_confidence": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.support-confidence.json",
+    "external_support_coverage": {
+      "checkpoint_ready": false,
+      "deterministic_coverage_status": "pass",
+      "fallback_support_packet_ids": [],
+      "required_lane_gap_count": 0,
+      "validation_gap_present": false
+    },
+    "final_gate_recommendation": "allow_closure",
+    "mode": "enforce",
+    "objective_id": "objective-session-source-visibility-20260319",
+    "objective_support_status": "supported",
+    "packet_support": [
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packets/packet-emit-and-read-formatting.verdict.json",
+        "packet_id": "packet-emit-and-read-formatting",
+        "runtime_state": "accepted",
+        "strategy_name": "command_capture",
+        "support_status": "supported",
+        "unsupported_risk_reason": ""
+      },
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packets/packet-verify-cli-contracts.verdict.json",
+        "packet_id": "packet-verify-cli-contracts",
+        "runtime_state": "accepted",
+        "strategy_name": "validation_command",
+        "support_status": "supported",
+        "unsupported_risk_reason": ""
+      }
+    ],
+    "schema_version": "objective-support-confidence.v1",
+    "support_backed_closure": false,
+    "support_gap_reasons": [],
+    "support_remediation_available": false,
+    "track_id": "session-source-visibility-20260319",
+    "unsupported_closure_risk": "none"
+  },
+  "tests_run": [
+    {
+      "command": "npm run build",
+      "name": "worker-build",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-worker-build-50/manifest.json",
+      "proof_hash": "4f13f28c21b17f31c1d6eae22a0cd20a8838a5e26dd3e020382b9cdf68bbd97a",
+      "result": "artifact-loop dist regenerated successfully.",
+      "status": "pass"
+    },
+    {
+      "command": "npm run check",
+      "name": "verifier-check",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-verifier-check-50/manifest.json",
+      "proof_hash": "49c0ce94acde8f4696d1693d4498abf6b1dedee603d2ba533f640c344d4b3e38",
+      "result": "TypeScript no-emit check passed after formatter signature and callsite updates.",
+      "status": "pass"
+    },
+    {
+      "command": "npm test",
+      "name": "test-vitest",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-test-vitest-100/manifest.json",
+      "proof_hash": "7fabe849f25a389e5474178efff8760bdc74e0266b519c18b26f48ca8b4f0d9c",
+      "result": "Vitest passed with 137/137 tests green, including bin-backed emit-test-run coverage.",
+      "status": "pass"
+    }
+  ],
+  "validation_commands": [
+    "npm run check",
+    "npm test"
+  ],
+  "validation_plan": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.validation-plan.json"
+  }
+}

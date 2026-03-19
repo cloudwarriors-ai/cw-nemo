@@ -1,0 +1,55 @@
+{
+  "bootstrap_commands": [
+    "npm run build"
+  ],
+  "checkpoint_attempted_at": "2026-03-19T20:03:22+00:00",
+  "checkpoint_block_evidence": "M ../.github/workflows/pr.yaml, M ../Makefile, ?? ../AGENTS.md, ?? ../CLAUDE.md, ?? ./",
+  "checkpoint_block_reason": "unrelated_dirty_state",
+  "checkpoint_blocked": true,
+  "checkpoint_commit": "",
+  "checkpoint_id": "session-source-visibility-20260319-checkpoint-000",
+  "checkpoint_strategy": "git_checkpoint_required",
+  "clean_state_assertions": [
+    "Fresh governed state can resume from planning_artifacts without reconstructing prior chat context."
+  ],
+  "current_frontier": [],
+  "escalation_candidates": [],
+  "feature_ledger_ref": "objective.feature-list.json",
+  "handoff_notes": "Resume objective-session-source-visibility-20260319 from runtime artifacts without relying on chat history.",
+  "last_forward_movement": "evidence_bound_required_work_complete",
+  "last_verified_packet_ids": [
+    "packet-emit-and-read-formatting",
+    "packet-verify-cli-contracts"
+  ],
+  "next_recommended_packet": "",
+  "objective_id": "objective-session-source-visibility-20260319",
+  "open_risks": [
+    "History output currently had no task header, so adding one must stay minimal and human-only.",
+    "The artifact-loop bin entrypoint reads checked-in dist output, so source-only edits would leave one test path stale.",
+    "Session-derived annotation must never appear for explicit task arguments."
+  ],
+  "progress_log_ref": "objective.progress.jsonl",
+  "repo_state_summary": {
+    "branch": "main",
+    "cwd": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop",
+    "is_git_repo": true,
+    "repo_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+    "status_short": [
+      "M ../.github/workflows/pr.yaml",
+      "M ../Makefile",
+      "?? ../AGENTS.md",
+      "?? ../CLAUDE.md",
+      "?? ./"
+    ]
+  },
+  "rollback_validation_ref": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950343-rollback-artifact-loop-contract-100/manifest.json",
+  "schema_version": "objective-checkpoint.v1",
+  "stagnation_risk": "low",
+  "track_id": "session-source-visibility-20260319",
+  "ui_evidence_required": false,
+  "updated_at": "2026-03-19T20:03:22+00:00",
+  "validation_commands": [
+    "npm run check",
+    "npm test"
+  ]
+}

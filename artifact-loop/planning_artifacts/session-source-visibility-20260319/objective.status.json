@@ -1,0 +1,14 @@
+{
+  "blocked_packets": [],
+  "boundary_shrunk_remainder": [],
+  "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+  "completed_packets": [
+    "packet-emit-and-read-formatting",
+    "packet-verify-cli-contracts"
+  ],
+  "deferred_packets": [],
+  "objective_id": "objective-session-source-visibility-20260319",
+  "pending_packets": [],
+  "schema_version": "objective-status.v1",
+  "track_id": "session-source-visibility-20260319"
+}

@@ -1,0 +1,12 @@
+{
+  "allowed_scope_status": "within_scope",
+  "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packets/packet-verify-cli-contracts.verdict.json",
+  "changed_files": [],
+  "packet_id": "packet-verify-cli-contracts",
+  "runner_kind": "command",
+  "runtime_state": "accepted",
+  "strategy_name": "validation_command",
+  "support_status": "supported",
+  "unsupported_risk_reason": "",
+  "verifier_output": "accepted"
+}

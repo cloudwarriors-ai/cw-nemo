@@ -44,6 +44,14 @@ jobs:
         working-directory: nemoclaw
         run: npx vitest run
 
+      - name: Install artifact-loop dependencies
+        working-directory: artifact-loop
+        run: npm ci
+
+      - name: Run artifact-loop contract tests
+        working-directory: artifact-loop
+        run: npx vitest run
+
   test-e2e-sandbox:
     runs-on: ubuntu-latest
     timeout-minutes: 15

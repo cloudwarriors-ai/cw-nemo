@@ -1,0 +1,30 @@
+{
+  "name": "artifact-loop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Artifact Loop v0.5 — coordination engine with contract schemas and derivation logic",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "artifact-loop": "./bin/artifact-loop.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.37",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

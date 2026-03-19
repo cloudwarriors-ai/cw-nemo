@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "acceptance-signal.schema.json",
+  "type": "object",
+  "required": ["id", "category", "required", "success_condition"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "category": { "$ref": "_defs.schema.json#/definitions/signal_category" },
+    "required": {
+      "type": "boolean",
+      "description": "Whether this signal must be satisfied for task completion"
+    },
+    "success_condition": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "relevance_scope": {
+      "type": "string",
+      "description": "Optional scope limiting where this signal applies"
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Optional weight for confidence calculations"
+    },
+    "pattern": {
+      "type": "string",
+      "description": "Test name pattern (required when category=test)"
+    },
+    "path": {
+      "type": "string",
+      "description": "File path (required when category=file)"
+    },
+    "command": {
+      "type": "string",
+      "description": "Command string (required when category=command)"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "category": { "const": "test" } },
+        "required": ["category"]
+      },
+      "then": {
+        "required": ["pattern"],
+        "properties": { "pattern": { "type": "string" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "category": { "const": "file" } },
+        "required": ["category"]
+      },
+      "then": {
+        "required": ["path"],
+        "properties": { "path": { "type": "string" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "category": { "const": "command" } },
+        "required": ["category"]
+      },
+      "then": {
+        "required": ["command"],
+        "properties": { "command": { "type": "string" } }
+      }
+    }
+  ]
+}

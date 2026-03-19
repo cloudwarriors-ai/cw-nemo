@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "brief.schema.json",
+  "type": "object",
+  "description": "Periodic summary report of task states and health indicators.",
+  "required": ["id", "timestamp", "period_start", "period_end", "tasks"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "period_start": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "period_end": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["task_id", "status", "confidence", "staleness", "flags"],
+        "additionalProperties": false,
+        "properties": {
+          "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+          "confidence": { "$ref": "_defs.schema.json#/definitions/task_confidence" },
+          "staleness": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+          "flags": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "low_confidence_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["task_id", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "reason": { "type": "string" }
+        }
+      },
+      "description": "Tasks flagged for elevated quarantine or low binding confidence"
+    }
+  }
+}

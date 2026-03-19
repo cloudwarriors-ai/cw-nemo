@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "artifact.schema.json",
+  "type": "object",
+  "description": "Raw artifact before normalization.",
+  "required": ["id", "type", "timestamp", "source", "pointer", "summary"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "type": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "source": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "pointer": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "summary": { "type": "string" },
+    "raw_payload": {}
+  }
+}

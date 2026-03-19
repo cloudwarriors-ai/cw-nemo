@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "missing-input.schema.json",
+  "type": "object",
+  "description": "Standalone missing input record.",
+  "required": ["type", "source", "detected_at"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "$ref": "_defs.schema.json#/definitions/missing_input_type" },
+    "source": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "detected_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "resolved_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "resolution_artifact_id": { "$ref": "_defs.schema.json#/definitions/id" }
+  }
+}

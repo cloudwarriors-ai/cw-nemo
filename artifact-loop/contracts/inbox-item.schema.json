@@ -2,13 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "inbox-item.schema.json",
   "type": "object",
-  "required": ["id", "recipient_worker_id", "project_id", "kind", "status", "created_at", "payload_ref"],
+  "required": ["id", "recipient_worker_id", "kind", "status", "created_at", "payload_ref"],
   "additionalProperties": false,
   "properties": {
     "id": { "$ref": "_defs.schema.json#/definitions/id" },
     "recipient_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
     "recipient_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
     "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "team_id": { "$ref": "_defs.schema.json#/definitions/id" },
     "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
     "kind": {
       "type": "string",
@@ -27,7 +28,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["assignment", "message", "brief_run"]
+          "enum": ["assignment", "message", "brief_run", "team_brief_run"]
         },
         "id": { "$ref": "_defs.schema.json#/definitions/id" }
       }

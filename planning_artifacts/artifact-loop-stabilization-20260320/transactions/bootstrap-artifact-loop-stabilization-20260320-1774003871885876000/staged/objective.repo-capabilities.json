@@ -1,0 +1,63 @@
+{
+  "capabilities": {
+    "build": true,
+    "lint": false,
+    "schema_check": false,
+    "security_sensitive_review": true,
+    "smoke_e2e": false,
+    "tests": true,
+    "typecheck": true
+  },
+  "confidence_by_lane": {
+    "build": "medium",
+    "lint": "none",
+    "schema_check": "none",
+    "security_sensitive_review": "none",
+    "smoke_e2e": "none",
+    "tests": "high",
+    "typecheck": "medium"
+  },
+  "detectors_run": [
+    "ci_config",
+    "node_package_json",
+    "python_project"
+  ],
+  "lane_commands": {
+    "build": [
+      "npm run build"
+    ],
+    "lint": [],
+    "schema_check": [],
+    "security_sensitive_review": [],
+    "smoke_e2e": [],
+    "tests": [
+      "npm run test"
+    ],
+    "typecheck": [
+      "pyright"
+    ]
+  },
+  "missing_capabilities": {
+    "lint": "No deterministic repo capability discovered for lint.",
+    "schema_check": "No deterministic repo capability discovered for schema_check.",
+    "smoke_e2e": "No deterministic repo capability discovered for smoke_e2e."
+  },
+  "schema_version": "objective-repo-capabilities.v1",
+  "source_refs": {
+    "build": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/.github/workflows/pr-limit.yaml",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/.github/workflows/pr.yaml"
+    ],
+    "lint": [],
+    "schema_check": [],
+    "security_sensitive_review": [],
+    "smoke_e2e": [],
+    "tests": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/package.json"
+    ],
+    "typecheck": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/pyproject.toml"
+    ]
+  },
+  "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw"
+}

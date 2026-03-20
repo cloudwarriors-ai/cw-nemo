@@ -1,0 +1,40 @@
+{
+  "captured_at": "2026-03-20T10:57:27+00:00",
+  "command_argv": [
+    "bash",
+    "-lc",
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces"
+  ],
+  "cwd": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+  "duration_ms": 93086,
+  "ended_at": "2026-03-20T10:57:27+00:00",
+  "env_whitelist": {
+    "HOME": "/Users/chadsimon",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/Users/chadsimon/.codex/tmp/arg0/codex-arg0vHab8f:/Users/chadsimon/.opencode/bin:/Users/chadsimon/.rbenv/shims:/Users/chadsimon/.rbenv/bin:/Users/chadsimon/.local/bin:/Users/chadsimon/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Applications/Codex.app/Contents/Resources",
+    "PWD": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+    "SHELL": "/bin/zsh",
+    "TMPDIR": "/var/folders/8g/yc19qrvx1p5f65_tdtpj2fqw0000gn/T/",
+    "USER": "chadsimon"
+  },
+  "exit_code": 0,
+  "name": "smoke-stabilization-final",
+  "output_truncated": false,
+  "producer": "run_cmd_capture.v1",
+  "safety": {
+    "decision": "ok",
+    "override_reason": "",
+    "override_used": false
+  },
+  "schema_version": "run-cmd-capture.v1",
+  "stage": "100%",
+  "started_at": "2026-03-20T10:55:54+00:00",
+  "stderr_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004154-smoke-stabilization-final-100/stderr.redacted.txt",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004154-smoke-stabilization-final-100/stdout.redacted.txt",
+  "stdout_sha256": "8c52de67d474531f6036ca7b2c227d3ba97da6ce0fce1372bd77eac77391a813",
+  "timeout_exceeded": false,
+  "timeout_sec": 1800,
+  "track_id": "artifact-loop-stabilization-20260320"
+}

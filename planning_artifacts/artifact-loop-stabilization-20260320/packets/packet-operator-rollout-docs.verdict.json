@@ -1,0 +1,35 @@
+{
+  "allowed_scope_status": "within_scope",
+  "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-operator-rollout-docs.verdict.json",
+  "captured_commands": [
+    "rg -n \"org-surface-smoke|review:lead-surfaces|Stage 1|Stage 2|Stage 3\" /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md"
+  ],
+  "changed_files": [
+    "artifact-loop/docs/org-stabilization-rollout.md",
+    "artifact-loop/docs/tailscale-rollout.md",
+    "artifact-loop/README.md"
+  ],
+  "evidence_refs": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003825-docs-stabilization-grep-95/manifest.json"
+  ],
+  "fallback_reason": "",
+  "fallback_used": false,
+  "packet_id": "packet-operator-rollout-docs",
+  "produced_artifacts": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003825-docs-stabilization-grep-95/manifest.json"
+  ],
+  "runner_kind": "command_capture",
+  "runtime_state": "accepted",
+  "step_results": [
+    {
+      "evidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003825-docs-stabilization-grep-95/manifest.json",
+      "status": "pass",
+      "step": "governed_capture"
+    }
+  ],
+  "strategy_name": "command_capture",
+  "summary": "Documentation grep capture confirms the rollout note, README entrypoint link, and runtime gate wording.",
+  "support_status": "supported",
+  "unsupported_risk_reason": "",
+  "verifier_output": "accepted"
+}

@@ -13,17 +13,28 @@
  */
 
 import { mkdirSync, readFileSync, readdirSync, writeFileSync, existsSync } from "node:fs";
-import { randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { derive } from "./derive.js";
 import { createUsageStore, summarizeUsage } from "./usage-store.js";
 import type {
+  AdoptionApplyResult,
+  AdoptionPlan,
+  AdoptionPlanRequest,
+  AdoptionStatus,
   Assignment,
   AssignmentCreate,
   CanonicalStatus,
   DerivationOutput,
   DerivationRun,
   IngestResult,
+  Invite,
+  InviteClaimRequest,
+  InviteClaimResult,
+  InviteCreate,
+  InviteCreateResult,
+  InviteRevokeRequest,
+  InviteStatus,
   Organization,
   OrganizationBootstrapRequest,
   OrganizationBootstrapResult,
@@ -59,10 +70,19 @@ import type {
   TaskMessageCreate,
   TaskCreate,
   Team,
+  TeamBrief,
+  TeamBriefAttentionItem,
+  TeamBriefRun,
+  TeamBriefSchedule,
+  TeamBriefScheduleUpsert,
+  TeamBriefMovementItem,
   TeamCreate,
+  TeamMemberWorkload,
   TeamMembership,
   TeamMembershipCreate,
   TeamMembershipRole,
+  TeamProjectListItem,
+  TeamSummary,
   TaskState,
   Worker,
   WorkerAgent,
@@ -93,6 +113,7 @@ const CANONICAL_STATUSES: CanonicalStatus[] = [
 ];
 
 const BRIEF_MOVEMENT_LIMIT = 10;
+const DEFAULT_INVITE_EXPIRY_DAYS = 7;
 
 interface ProjectTaskFilters {
   status?: CanonicalStatus;
@@ -104,9 +125,18 @@ interface InboxFilters {
   status?: InboxItemStatus;
 }
 
+interface PersistedInvite extends Invite {
+  token_hash: string;
+}
+
 export class ArtifactLoopEngine {
   readonly dataDir: string;
   private readonly organizationPath: string;
+  private readonly invitesDir: string;
+  private readonly teamBriefSchedulesDir: string;
+  private readonly teamBriefRunsDir: string;
+  private readonly adoptionReportsDir: string;
+  private readonly adoptionStatusPath: string;
   private readonly tasksDir: string;
   private readonly projectsDir: string;
   private readonly teamsDir: string;
@@ -127,6 +157,11 @@ export class ArtifactLoopEngine {
   constructor(options: EngineOptions) {
     this.dataDir = options.dataDir;
     this.organizationPath = join(options.dataDir, "organization.json");
+    this.invitesDir = join(options.dataDir, "invites");
+    this.teamBriefSchedulesDir = join(options.dataDir, "team-brief-schedules");
+    this.teamBriefRunsDir = join(options.dataDir, "team-brief-runs");
+    this.adoptionReportsDir = join(options.dataDir, "adoption-reports");
+    this.adoptionStatusPath = join(options.dataDir, "adoption-status.json");
     this.tasksDir = join(options.dataDir, "tasks");
     this.projectsDir = join(options.dataDir, "projects");
     this.teamsDir = join(options.dataDir, "teams");
@@ -145,6 +180,10 @@ export class ArtifactLoopEngine {
     this.usageStore = createUsageStore(options.dataDir);
 
     mkdirSync(this.tasksDir, { recursive: true });
+    mkdirSync(this.invitesDir, { recursive: true });
+    mkdirSync(this.teamBriefSchedulesDir, { recursive: true });
+    mkdirSync(this.teamBriefRunsDir, { recursive: true });
+    mkdirSync(this.adoptionReportsDir, { recursive: true });
     mkdirSync(this.projectsDir, { recursive: true });
     mkdirSync(this.teamsDir, { recursive: true });
     mkdirSync(this.membershipsDir, { recursive: true });
@@ -349,6 +388,173 @@ export class ArtifactLoopEngine {
       .sort((a, b) => a.member_id.localeCompare(b.member_id));
   }
 
+  createTeamInvite(teamId: string, input: InviteCreate): InviteCreateResult {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    if (!this.getWorker(input.invited_by_worker_id)) {
+      throw new Error(`Worker not found: ${input.invited_by_worker_id}`);
+    }
+    this.assertMemberHasRole(input.invited_by_worker_id, undefined, ["admin"]);
+    if (this.getWorker(input.member_id)) {
+      throw new Error(`Worker already exists: ${input.member_id}`);
+    }
+    const existingMemberships = this.getMembershipsForMember(input.member_id);
+    const otherMemberships = existingMemberships.filter((membership) => membership.team_id !== teamId);
+    if (otherMemberships.length > 0) {
+      throw new Error(`Member already belongs to different team: ${input.member_id}`);
+    }
+
+    const now = new Date();
+    const existingMembership = existingMemberships.find((membership) => membership.team_id === teamId);
+    if (existingMembership && existingMembership.status !== "pending") {
+      throw new Error(`Member already active in team: ${input.member_id} in ${teamId}`);
+    }
+    const membership: TeamMembership = existingMembership
+      ? {
+          ...existingMembership,
+          role: input.role,
+          status: "pending",
+          updated_at: now.toISOString(),
+        }
+      : {
+          member_id: input.member_id,
+          team_id: teamId,
+          role: input.role,
+          status: "pending",
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+        };
+    this.writeJson(this.membershipPath(teamId, input.member_id), membership);
+
+    const inviteId = `invite-${randomUUID()}`;
+    const tokenSecret = randomBytes(24).toString("hex");
+    const claimToken = `${inviteId}.${tokenSecret}`;
+    const expiresAt = new Date(now.getTime() + (input.expires_in_days ?? DEFAULT_INVITE_EXPIRY_DAYS) * 24 * 60 * 60 * 1000)
+      .toISOString();
+    const invite: PersistedInvite = {
+      id: inviteId,
+      team_id: teamId,
+      member_id: input.member_id,
+      role: input.role,
+      display_name: input.display_name,
+      timezone: input.timezone,
+      status: "pending",
+      invited_by_worker_id: input.invited_by_worker_id,
+      created_at: now.toISOString(),
+      expires_at: expiresAt,
+      token_hash: this.hashInviteToken(claimToken),
+    };
+    this.writeJson(this.invitePath(invite.id), invite);
+
+    return {
+      invite: this.toPublicInvite(invite),
+      claim_token: claimToken,
+    };
+  }
+
+  getInvite(inviteId: string): Invite | undefined {
+    const invite = this.readJson<PersistedInvite>(this.invitePath(inviteId));
+    return invite ? this.toPublicInvite(invite) : undefined;
+  }
+
+  getTeamInvites(teamId: string): Invite[] {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+
+    return readdirSync(this.invitesDir)
+      .filter((entry) => entry.endsWith(".json"))
+      .map((entry) => this.readJson<PersistedInvite>(join(this.invitesDir, entry))!)
+      .filter((invite) => invite?.team_id === teamId)
+      .map((invite) => this.toPublicInvite(invite))
+      .sort((a, b) => {
+        if (a.created_at === b.created_at) {
+          return a.id.localeCompare(b.id);
+        }
+        return b.created_at.localeCompare(a.created_at);
+      });
+  }
+
+  revokeInvite(inviteId: string, input: InviteRevokeRequest): Invite {
+    const invite = this.readJson<PersistedInvite>(this.invitePath(inviteId));
+    if (!invite) {
+      throw new Error(`Invite not found: ${inviteId}`);
+    }
+    if (!this.getWorker(input.revoked_by_worker_id)) {
+      throw new Error(`Worker not found: ${input.revoked_by_worker_id}`);
+    }
+    this.assertMemberHasRole(input.revoked_by_worker_id, undefined, ["admin"]);
+
+    const effectiveStatus = this.getInviteEffectiveStatus(invite);
+    if (effectiveStatus === "claimed") {
+      throw new Error(`Invite already claimed: ${inviteId}`);
+    }
+    if (invite.status !== "revoked") {
+      invite.status = "revoked";
+      invite.revoked_at = new Date().toISOString();
+      this.writeJson(this.invitePath(invite.id), invite);
+    }
+
+    return this.toPublicInvite(invite);
+  }
+
+  claimInvite(input: InviteClaimRequest): InviteClaimResult {
+    const [inviteId] = input.claim_token.split(".", 1);
+    if (!inviteId) {
+      throw new Error("Invalid invite token");
+    }
+    const invite = this.readJson<PersistedInvite>(this.invitePath(inviteId));
+    if (!invite) {
+      throw new Error(`Invite not found: ${inviteId}`);
+    }
+    if (this.getInviteEffectiveStatus(invite) !== "pending") {
+      throw new Error(`Invite is not claimable: ${inviteId}`);
+    }
+    if (invite.token_hash !== this.hashInviteToken(input.claim_token)) {
+      throw new Error("Invalid invite token");
+    }
+
+    const membership = this.getTeamMembership(invite.team_id, invite.member_id);
+    if (!membership || membership.status !== "pending") {
+      throw new Error(`Pending membership not found for invite: ${inviteId}`);
+    }
+    if (this.getWorker(invite.member_id)) {
+      throw new Error(`Worker already exists: ${invite.member_id}`);
+    }
+
+    const member = this.createWorker({
+      id: invite.member_id,
+      display_name: invite.display_name,
+      role: invite.role,
+      timezone: invite.timezone,
+      active: true,
+    });
+    const agent = this.createWorkerAgent(member.id, {
+      id: input.agent_id,
+      label: input.agent_label,
+      connector_type: input.agent_connector_type,
+      active: true,
+    });
+
+    membership.status = "active";
+    membership.updated_at = new Date().toISOString();
+    this.writeJson(this.membershipPath(membership.team_id, membership.member_id), membership);
+
+    invite.status = "claimed";
+    invite.claimed_at = membership.updated_at;
+    this.writeJson(this.invitePath(invite.id), invite);
+
+    return {
+      invite: this.toPublicInvite(invite),
+      membership,
+      member,
+      agent,
+    };
+  }
+
   createWorker(input: WorkerCreate): Worker {
     const existing = this.getWorker(input.id);
     if (existing) {
@@ -460,6 +666,20 @@ export class ArtifactLoopEngine {
       .filter((f) => f.endsWith(".json"))
       .map((f) => this.readJson<Project>(join(this.projectsDir, f))!)
       .filter(Boolean)
+      .sort((a, b) => a.id.localeCompare(b.id));
+  }
+
+  getTeamProjects(teamId: string, requestedByWorkerId?: string): Project[] {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    if (requestedByWorkerId) {
+      this.assertCanReadTeamSurface(requestedByWorkerId, teamId);
+    }
+
+    return this.getProjects()
+      .filter((project) => project.team_id === teamId)
       .sort((a, b) => a.id.localeCompare(b.id));
   }
 
@@ -752,6 +972,102 @@ export class ArtifactLoopEngine {
 
   getProjectBrief(projectId: string): ProjectBrief {
     return this.buildProjectBrief(projectId);
+  }
+
+  getTeamSummary(teamId: string, requestedByWorkerId?: string): TeamSummary {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    if (requestedByWorkerId) {
+      this.assertCanReadTeamSurface(requestedByWorkerId, teamId);
+    }
+
+    const projects = this.getTeamProjects(teamId);
+    const projectSummaries = projects.map((project) => this.getProjectSummary(project.id));
+    const counts_by_status = Object.fromEntries(
+      CANONICAL_STATUSES.map((status) => [status, 0]),
+    ) as Record<CanonicalStatus, number>;
+    const active_members_by_role: Record<TeamMembershipRole, number> = {
+      admin: 0,
+      lead: 0,
+      worker: 0,
+    };
+    const attention = {
+      blocked_projects: [] as TeamProjectListItem[],
+      needs_input_projects: [] as TeamProjectListItem[],
+      ready_for_review_projects: [] as TeamProjectListItem[],
+    };
+    const projectItems: TeamProjectListItem[] = [];
+    let totalTasks = 0;
+    let activeProjects = 0;
+    let lastActivityAt: string | null = null;
+
+    for (const summary of projectSummaries) {
+      totalTasks += summary.total_tasks;
+      const item = this.toTeamProjectListItem(summary);
+      projectItems.push(item);
+      if (item.total_tasks === 0 || item.counts_by_status.done < item.total_tasks) {
+        activeProjects += 1;
+      }
+      if (item.blocked_count > 0) attention.blocked_projects.push(item);
+      if (item.needs_input_count > 0) attention.needs_input_projects.push(item);
+      if (item.ready_for_review_count > 0) attention.ready_for_review_projects.push(item);
+      if (item.last_activity_at && (!lastActivityAt || item.last_activity_at > lastActivityAt)) {
+        lastActivityAt = item.last_activity_at;
+      }
+      for (const status of CANONICAL_STATUSES) {
+        counts_by_status[status] += item.counts_by_status[status];
+      }
+    }
+
+    const memberships = this.getTeamMembers(teamId)
+      .filter((membership) => membership.status === "active");
+    for (const membership of memberships) {
+      active_members_by_role[membership.role] += 1;
+    }
+
+    const member_workload = memberships
+      .map((membership) => this.buildTeamMemberWorkload(teamId, membership))
+      .sort((a, b) => {
+        if ((b.recent_activity_at ?? "") === (a.recent_activity_at ?? "")) {
+          return a.member_id.localeCompare(b.member_id);
+        }
+        return (b.recent_activity_at ?? "").localeCompare(a.recent_activity_at ?? "");
+      });
+
+    this.sortTeamProjectItems(attention.blocked_projects);
+    this.sortTeamProjectItems(attention.needs_input_projects);
+    this.sortTeamProjectItems(attention.ready_for_review_projects);
+    this.sortTeamProjectItems(projectItems);
+
+    return {
+      team,
+      total_projects: projects.length,
+      active_projects: activeProjects,
+      total_tasks: totalTasks,
+      counts_by_status,
+      project_counts: {
+        blocked: attention.blocked_projects.length,
+        needs_input: attention.needs_input_projects.length,
+        ready_for_review: attention.ready_for_review_projects.length,
+        healthy: projectItems.filter((item) =>
+          item.blocked_count === 0 && item.needs_input_count === 0 && item.ready_for_review_count === 0,
+        ).length,
+      },
+      active_members_by_role,
+      member_workload,
+      attention,
+      projects: projectItems,
+      last_activity_at: lastActivityAt,
+    };
+  }
+
+  getTeamBrief(teamId: string, requestedByWorkerId?: string): TeamBrief {
+    if (requestedByWorkerId) {
+      this.assertCanReadTeamSurface(requestedByWorkerId, teamId);
+    }
+    return this.buildTeamBrief(teamId);
   }
 
   // ─── Assignments ──────────────────────────────────────────────────
@@ -1079,6 +1395,73 @@ export class ArtifactLoopEngine {
     return this.getProjectBriefRuns(projectId).at(-1);
   }
 
+  upsertTeamBriefSchedule(teamId: string, input: TeamBriefScheduleUpsert): TeamBriefSchedule {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    if (!this.getWorker(input.owner_worker_id)) {
+      throw new Error(`Worker not found: ${input.owner_worker_id}`);
+    }
+    this.assertMemberHasRole(input.owner_worker_id, teamId, ["admin", "lead"]);
+    if (input.delivery_hour_local < 0 || input.delivery_hour_local > 23) {
+      throw new Error(`Invalid delivery hour: ${String(input.delivery_hour_local)}`);
+    }
+
+    const existing = this.getTeamBriefSchedule(teamId);
+    const now = new Date();
+    const schedule: TeamBriefSchedule = {
+      team_id: teamId,
+      owner_worker_id: input.owner_worker_id,
+      timezone: input.timezone,
+      delivery_hour_local: input.delivery_hour_local,
+      enabled: input.enabled,
+      last_run_at: existing?.last_run_at,
+      next_run_at: input.enabled
+        ? this.computeNextRunAt(
+            input.timezone,
+            input.delivery_hour_local,
+            existing?.last_run_at ? new Date(existing.last_run_at) : now,
+          )
+        : undefined,
+    };
+
+    this.writeJson(join(this.teamBriefSchedulesDir, `${teamId}.json`), schedule);
+    return schedule;
+  }
+
+  getTeamBriefSchedule(teamId: string, requestedByWorkerId?: string): TeamBriefSchedule | undefined {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    if (requestedByWorkerId) {
+      this.assertCanReadTeamSurface(requestedByWorkerId, teamId);
+    }
+    return this.readJson<TeamBriefSchedule>(join(this.teamBriefSchedulesDir, `${teamId}.json`));
+  }
+
+  getTeamBriefRuns(teamId: string, requestedByWorkerId?: string): TeamBriefRun[] {
+    const team = this.getTeam(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    if (requestedByWorkerId) {
+      this.assertCanReadTeamSurface(requestedByWorkerId, teamId);
+    }
+    const dir = join(this.teamBriefRunsDir, teamId);
+    if (!existsSync(dir)) return [];
+    return readdirSync(dir)
+      .filter((entry) => entry.endsWith(".json"))
+      .map((entry) => this.readJson<TeamBriefRun>(join(dir, entry))!)
+      .filter(Boolean)
+      .sort((a, b) => a.generated_at.localeCompare(b.generated_at));
+  }
+
+  getLatestTeamBriefRun(teamId: string, requestedByWorkerId?: string): TeamBriefRun | undefined {
+    return this.getTeamBriefRuns(teamId, requestedByWorkerId).at(-1);
+  }
+
   runScheduledBriefs(now = new Date()): ScheduledBriefRunResult {
     const schedules = readdirSync(this.briefSchedulesDir)
       .filter((f) => f.endsWith(".json"))
@@ -1123,9 +1506,61 @@ export class ArtifactLoopEngine {
       generated.push(schedule.project_id);
     }
 
+    const teamSchedules = readdirSync(this.teamBriefSchedulesDir)
+      .filter((entry) => entry.endsWith(".json"))
+      .map((entry) => this.readJson<TeamBriefSchedule>(join(this.teamBriefSchedulesDir, entry))!)
+      .filter(Boolean);
+
+    const generatedTeams: string[] = [];
+    for (const schedule of teamSchedules) {
+      if (!schedule.enabled || !schedule.next_run_at) continue;
+      if (schedule.next_run_at > now.toISOString()) continue;
+
+      const previousRun = this.getLatestTeamBriefRun(schedule.team_id);
+      const team = this.getTeam(schedule.team_id);
+      if (!team) {
+        continue;
+      }
+      const window_start = previousRun?.generated_at ?? team.created_at;
+      const window_end = now.toISOString();
+      const brief = this.buildTeamBrief(schedule.team_id, {
+        movementWindowStart: window_start,
+        movementWindowEnd: window_end,
+      });
+      const briefRun: TeamBriefRun = {
+        id: `team-brief-run-${randomUUID()}`,
+        team_id: schedule.team_id,
+        generated_at: window_end,
+        window_start,
+        window_end,
+        brief,
+      };
+
+      const runDir = join(this.teamBriefRunsDir, schedule.team_id);
+      mkdirSync(runDir, { recursive: true });
+      this.writeJson(join(runDir, `${briefRun.id}.json`), briefRun);
+
+      schedule.last_run_at = window_end;
+      schedule.next_run_at = this.computeNextRunAt(schedule.timezone, schedule.delivery_hour_local, now);
+      this.writeJson(join(this.teamBriefSchedulesDir, `${schedule.team_id}.json`), schedule);
+
+      for (const membership of this.getTeamMembers(schedule.team_id)) {
+        if (membership.status !== "active") continue;
+        if (!["admin", "lead"].includes(membership.role)) continue;
+        this.createInboxItem({
+          recipient_worker_id: membership.member_id,
+          team_id: schedule.team_id,
+          kind: "brief",
+          payload_ref: { type: "team_brief_run", id: briefRun.id },
+        }, window_end);
+      }
+      generatedTeams.push(schedule.team_id);
+    }
+
     return {
-      generated_count: generated.length,
+      generated_count: generated.length + generatedTeams.length,
       generated_project_ids: generated,
+      generated_team_ids: generatedTeams,
     };
   }
 
@@ -1303,6 +1738,173 @@ export class ArtifactLoopEngine {
     return derivationOutput;
   }
 
+  planAdoptExisting(input: AdoptionPlanRequest): AdoptionPlan {
+    const blockers: string[] = [];
+    if (this.getOrganization()) {
+      blockers.push("Organization already exists");
+    }
+    if (this.getTeams().length > 0) {
+      blockers.push("Teams already exist");
+    }
+    if (readdirSync(this.membershipsDir).some((entry) => entry.endsWith(".json"))) {
+      blockers.push("Team memberships already exist");
+    }
+
+    const workers = this.getWorkers();
+    const workerAgents = readdirSync(this.workerAgentsDir)
+      .filter((entry) => entry.endsWith(".json"))
+      .map((entry) => this.readJson<WorkerAgent>(join(this.workerAgentsDir, entry))!)
+      .filter(Boolean);
+    const projects = this.getProjects();
+    const tasks = this.getTasks();
+    const schedules = readdirSync(this.briefSchedulesDir)
+      .filter((entry) => entry.endsWith(".json"))
+      .map((entry) => this.readJson<ProjectBriefSchedule>(join(this.briefSchedulesDir, entry))!)
+      .filter(Boolean);
+
+    for (const project of projects) {
+      if (!project.owner_worker_id || !this.getWorker(project.owner_worker_id)) {
+        blockers.push(`Project owner missing for ${project.id}`);
+      }
+    }
+
+    const teamPlan = {
+      id: input.default_team.id,
+      name: input.default_team.name,
+      description: input.default_team.description,
+      worker_ids: workers.map((worker) => worker.id).sort((a, b) => a.localeCompare(b)),
+      project_ids: projects.map((project) => project.id).sort((a, b) => a.localeCompare(b)),
+    };
+
+    const membership_plans = workers
+      .map((worker) => ({
+        member_id: worker.id,
+        team_id: input.default_team.id,
+        role: (worker.role === "admin" || worker.role === "lead" ? worker.role : "worker") as TeamMembershipRole,
+        status: "active" as const,
+      }))
+      .sort((a, b) => a.member_id.localeCompare(b.member_id));
+
+    const project_backfills = projects
+      .map((project) => ({
+        project_id: project.id,
+        team_id: input.default_team.id,
+      }))
+      .sort((a, b) => a.project_id.localeCompare(b.project_id));
+
+    const schedule_actions = schedules
+      .map((schedule) => ({
+        project_id: schedule.project_id,
+        action: this.canRetainLegacyScheduleOwner(schedule.owner_worker_id) ? "retain" as const : "disable" as const,
+        reason: this.canRetainLegacyScheduleOwner(schedule.owner_worker_id)
+          ? undefined
+          : `Schedule owner is not a lead/admin candidate: ${schedule.owner_worker_id}`,
+      }))
+      .sort((a, b) => a.project_id.localeCompare(b.project_id));
+
+    return {
+      ready: blockers.length === 0,
+      blockers,
+      summary: {
+        workers: workers.length,
+        worker_agents: workerAgents.length,
+        projects: projects.length,
+        tasks: tasks.length,
+        brief_schedules: schedules.length,
+      },
+      organization: input.organization,
+      teams: [teamPlan],
+      membership_plans,
+      project_backfills,
+      schedule_actions,
+    };
+  }
+
+  applyAdoptExisting(input: AdoptionPlanRequest): AdoptionApplyResult {
+    const plan = this.planAdoptExisting(input);
+    if (!plan.ready) {
+      throw new Error(`Adoption plan is blocked: ${plan.blockers.join("; ")}`);
+    }
+
+    const now = new Date().toISOString();
+    const organization: Organization = {
+      id: input.organization.id,
+      name: input.organization.name,
+      timezone: input.organization.timezone,
+      created_at: now,
+      updated_at: now,
+    };
+    this.writeJson(this.organizationPath, organization);
+
+    const teams: Team[] = plan.teams.map((teamPlan) => {
+      const team: Team = {
+        id: teamPlan.id,
+        organization_id: organization.id,
+        name: teamPlan.name,
+        description: teamPlan.description,
+        created_at: now,
+        updated_at: now,
+      };
+      this.writeJson(join(this.teamsDir, `${team.id}.json`), team);
+      return team;
+    });
+
+    const memberships = plan.membership_plans.map((membershipPlan) => {
+      const membership: TeamMembership = {
+        member_id: membershipPlan.member_id,
+        team_id: membershipPlan.team_id,
+        role: membershipPlan.role,
+        status: "active",
+        created_at: now,
+        updated_at: now,
+      };
+      this.writeJson(this.membershipPath(membership.team_id, membership.member_id), membership);
+      return membership;
+    });
+
+    for (const backfill of plan.project_backfills) {
+      const project = this.getProject(backfill.project_id);
+      if (!project) continue;
+      project.team_id = backfill.team_id;
+      project.updated_at = now;
+      this.writeJson(join(this.projectsDir, `${project.id}.json`), project);
+    }
+
+    const disabledScheduleProjectIds: string[] = [];
+    for (const action of plan.schedule_actions) {
+      if (action.action !== "disable") continue;
+      const schedule = this.readJson<ProjectBriefSchedule>(join(this.briefSchedulesDir, `${action.project_id}.json`));
+      if (!schedule) continue;
+      schedule.enabled = false;
+      schedule.next_run_at = undefined;
+      this.writeJson(join(this.briefSchedulesDir, `${action.project_id}.json`), schedule);
+      disabledScheduleProjectIds.push(action.project_id);
+    }
+
+    const reportId = `adoption-${randomUUID()}`;
+    const reportPath = join(this.adoptionReportsDir, `${reportId}.json`);
+    const result: AdoptionApplyResult = {
+      applied: true,
+      report_id: reportId,
+      report_path: reportPath,
+      organization,
+      teams,
+      memberships,
+      disabled_schedule_project_ids: disabledScheduleProjectIds.sort((a, b) => a.localeCompare(b)),
+      plan,
+    };
+    this.writeJson(reportPath, result);
+    this.writeJson(this.adoptionStatusPath, result);
+    return result;
+  }
+
+  getAdoptionStatus(): AdoptionStatus {
+    const report = this.readJson<AdoptionApplyResult>(this.adoptionStatusPath);
+    return report
+      ? { has_report: true, report }
+      : { has_report: false };
+  }
+
   private membershipPath(teamId: string, memberId: string): string {
     return join(this.membershipsDir, `${teamId}__${memberId}.json`);
   }
@@ -1463,6 +2065,85 @@ export class ArtifactLoopEngine {
     };
   }
 
+  private buildTeamBrief(
+    teamId: string,
+    options: {
+      movementWindowStart?: string;
+      movementWindowEnd?: string;
+    } = {},
+  ): TeamBrief {
+    const summary = this.getTeamSummary(teamId);
+    const projects = this.getTeamProjects(teamId);
+    const recent_movement = projects
+      .flatMap((project) =>
+        this.getProjectTasks(project.id)
+          .flatMap((task) =>
+            this.getDerivationHistory(task.id)
+              .filter((run) =>
+                (!options.movementWindowStart || run.timestamp >= options.movementWindowStart) &&
+                (!options.movementWindowEnd || run.timestamp <= options.movementWindowEnd),
+              )
+              .map<TeamBriefMovementItem>((run) => ({
+                project_id: project.id,
+                task_id: task.id,
+                task_title: task.title,
+                assignee_human_id: task.assignee_human_id,
+                assignee_agent_id: task.assignee_agent_id,
+                changed_at: run.timestamp,
+                from_status: run.prior_state,
+                to_status: run.output_state,
+                rules_applied: run.rules_applied,
+              })),
+          ),
+      )
+      .sort((a, b) => b.changed_at.localeCompare(a.changed_at))
+      .slice(0, BRIEF_MOVEMENT_LIMIT);
+
+    const lead_attention_items: TeamBriefAttentionItem[] = [
+      ...summary.attention.blocked_projects.map((project) => ({
+        kind: "blocked" as const,
+        project,
+        reason: "Project has blocked work that may need intervention.",
+      })),
+      ...summary.attention.needs_input_projects.map((project) => ({
+        kind: "needs_input" as const,
+        project,
+        reason: "Project has work waiting on input.",
+      })),
+      ...summary.attention.ready_for_review_projects.map((project) => ({
+        kind: "ready_for_review" as const,
+        project,
+        reason: "Project has work ready for review.",
+      })),
+    ];
+
+    const generated_at =
+      options.movementWindowEnd ??
+      recent_movement[0]?.changed_at ??
+      summary.last_activity_at ??
+      summary.team.updated_at;
+
+    return {
+      team: summary.team,
+      generated_at,
+      snapshot: {
+        total_projects: summary.total_projects,
+        active_projects: summary.active_projects,
+        total_tasks: summary.total_tasks,
+        counts_by_status: summary.counts_by_status,
+        last_activity_at: summary.last_activity_at,
+      },
+      blocked_projects: summary.attention.blocked_projects,
+      needs_input_projects: summary.attention.needs_input_projects,
+      ready_for_review_projects: summary.attention.ready_for_review_projects,
+      project_rollup: summary.projects,
+      by_member: summary.member_workload,
+      recent_movement,
+      lead_attention_items,
+      rendered_text: this.renderTeamBriefText(summary, recent_movement, lead_attention_items),
+    };
+  }
+
   private computeNextRunAt(timezone: string, deliveryHourLocal: number, after: Date): string {
     const start = new Date(after.getTime() + 60_000);
     for (let minutes = 0; minutes < 60 * 24 * 3; minutes += 1) {
@@ -1556,6 +2237,128 @@ export class ArtifactLoopEngine {
         }
         return b.recent_activity_at.localeCompare(a.recent_activity_at);
       });
+  }
+
+  private renderTeamBriefText(
+    summary: TeamSummary,
+    recentMovement: TeamBriefMovementItem[],
+    attentionItems: TeamBriefAttentionItem[],
+  ): string {
+    const lines: string[] = [];
+    lines.push(`Team Brief: ${summary.team.name} (${summary.team.id})`);
+    lines.push(
+      `Snapshot: ${summary.total_projects} project(s) | active ${summary.active_projects} | tasks ${summary.total_tasks} | blocked ${summary.project_counts.blocked} | needs_input ${summary.project_counts.needs_input} | ready_for_review ${summary.project_counts.ready_for_review}`,
+    );
+
+    if (recentMovement.length > 0) {
+      lines.push("Recent movement:");
+      for (const item of recentMovement) {
+        const agentSuffix = item.assignee_agent_id ? ` / ${item.assignee_agent_id}` : "";
+        lines.push(
+          `- ${item.changed_at}: ${item.project_id}/${item.task_id} ${item.from_status} -> ${item.to_status} (${item.assignee_human_id}${agentSuffix})`,
+        );
+      }
+    } else {
+      lines.push("Recent movement: none");
+    }
+
+    lines.push("Project rollup:");
+    if (summary.projects.length === 0) {
+      lines.push("- none");
+    } else {
+      for (const project of summary.projects) {
+        lines.push(
+          `- ${project.project_id}: tasks=${project.total_tasks} blocked=${project.blocked_count} needs_input=${project.needs_input_count} ready_for_review=${project.ready_for_review_count}`,
+        );
+      }
+    }
+
+    lines.push("By member:");
+    if (summary.member_workload.length === 0) {
+      lines.push("- none");
+    } else {
+      for (const member of summary.member_workload) {
+        lines.push(
+          `- ${member.member_id} (${member.role}): tasks=${member.task_count} projects=${member.project_ids.length} latest=${member.recent_activity_at ?? "none"}`,
+        );
+      }
+    }
+
+    lines.push("Lead attention:");
+    if (attentionItems.length === 0) {
+      lines.push("- none");
+    } else {
+      for (const item of attentionItems) {
+        lines.push(`- ${item.kind}: ${item.project.project_id}`);
+      }
+    }
+
+    return lines.join("\n");
+  }
+
+  private assertCanReadTeamSurface(memberId: string, teamId: string): void {
+    const memberships = this.getMembershipsForMember(memberId)
+      .filter((membership) => membership.status === "active");
+    if (memberships.some((membership) => membership.role === "admin")) {
+      return;
+    }
+    if (memberships.some((membership) => membership.team_id === teamId && ["admin", "lead"].includes(membership.role))) {
+      return;
+    }
+    throw new Error(`Member lacks required team role: ${memberId} in ${teamId}`);
+  }
+
+  private buildTeamMemberWorkload(teamId: string, membership: TeamMembership): TeamMemberWorkload {
+    const counts_by_status = Object.fromEntries(
+      CANONICAL_STATUSES.map((status) => [status, 0]),
+    ) as Record<CanonicalStatus, number>;
+    const tasks = this.getTeamProjects(teamId)
+      .flatMap((project) => this.getProjectTasks(project.id))
+      .filter((task) => task.assignee_human_id === membership.member_id);
+
+    const projectIds = new Set<string>();
+    let recent_activity_at: string | null = null;
+    for (const task of tasks) {
+      const status = this.resolveTaskStatus(task);
+      counts_by_status[status] += 1;
+      if (task.project_id) {
+        projectIds.add(task.project_id);
+      }
+      if (!recent_activity_at || task.last_activity_at > recent_activity_at) {
+        recent_activity_at = task.last_activity_at;
+      }
+    }
+
+    return {
+      member_id: membership.member_id,
+      role: membership.role,
+      project_ids: [...projectIds].sort((a, b) => a.localeCompare(b)),
+      task_count: tasks.length,
+      counts_by_status,
+      recent_activity_at,
+    };
+  }
+
+  private toTeamProjectListItem(summary: ProjectSummary): TeamProjectListItem {
+    return {
+      project_id: summary.project.id,
+      title: summary.project.title,
+      total_tasks: summary.total_tasks,
+      counts_by_status: summary.counts_by_status,
+      blocked_count: summary.buckets.blocked.length,
+      needs_input_count: summary.buckets.needs_input.length,
+      ready_for_review_count: summary.buckets.ready_for_review.length,
+      last_activity_at: summary.last_activity_at,
+    };
+  }
+
+  private sortTeamProjectItems(items: TeamProjectListItem[]): TeamProjectListItem[] {
+    return items.sort((a, b) => {
+      if ((a.last_activity_at ?? "") === (b.last_activity_at ?? "")) {
+        return a.project_id.localeCompare(b.project_id);
+      }
+      return (b.last_activity_at ?? "").localeCompare(a.last_activity_at ?? "");
+    });
   }
 
   private renderProjectBriefText(
@@ -1662,6 +2465,45 @@ export class ArtifactLoopEngine {
       }
       return b.last_activity_at.localeCompare(a.last_activity_at);
     });
+  }
+
+  private invitePath(inviteId: string): string {
+    return join(this.invitesDir, `${inviteId}.json`);
+  }
+
+  private hashInviteToken(token: string): string {
+    return createHash("sha256")
+      .update(token)
+      .digest("hex");
+  }
+
+  private getInviteEffectiveStatus(invite: PersistedInvite): InviteStatus {
+    if (invite.status === "pending" && invite.expires_at < new Date().toISOString()) {
+      return "expired";
+    }
+    return invite.status;
+  }
+
+  private toPublicInvite(invite: PersistedInvite): Invite {
+    return {
+      id: invite.id,
+      team_id: invite.team_id,
+      member_id: invite.member_id,
+      role: invite.role,
+      display_name: invite.display_name,
+      timezone: invite.timezone,
+      status: this.getInviteEffectiveStatus(invite),
+      invited_by_worker_id: invite.invited_by_worker_id,
+      created_at: invite.created_at,
+      expires_at: invite.expires_at,
+      claimed_at: invite.claimed_at,
+      revoked_at: invite.revoked_at,
+    };
+  }
+
+  private canRetainLegacyScheduleOwner(workerId: string): boolean {
+    const worker = this.getWorker(workerId);
+    return worker?.role === "admin" || worker?.role === "lead";
   }
 
   private readJson<T>(path: string): T | undefined {

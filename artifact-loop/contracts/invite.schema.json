@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "invite.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "team_id",
+    "member_id",
+    "role",
+    "display_name",
+    "timezone",
+    "status",
+    "invited_by_worker_id",
+    "created_at",
+    "expires_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "team_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "member_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "role": { "$ref": "_defs.schema.json#/definitions/team_membership_role" },
+    "display_name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "status": { "$ref": "_defs.schema.json#/definitions/invite_status" },
+    "invited_by_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "expires_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "claimed_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "revoked_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

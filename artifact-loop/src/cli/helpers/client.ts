@@ -8,6 +8,12 @@ import type {
   InboxItem,
   IngestRequest,
   IngestResult,
+  Invite,
+  InviteClaimRequest,
+  InviteClaimResult,
+  InviteCreate,
+  InviteCreateResult,
+  InviteRevokeRequest,
   NormalizedArtifact,
   Organization,
   OrganizationBootstrapRequest,
@@ -29,7 +35,12 @@ import type {
   TaskMessageCreate,
   TaskState,
   Team,
+  TeamBrief,
+  TeamBriefRun,
+  TeamBriefSchedule,
+  TeamBriefScheduleUpsert,
   TeamCreate,
+  TeamSummary,
   TeamMembership,
   TeamMembershipCreate,
   UsageStats,
@@ -41,7 +52,6 @@ import type {
   Assignment,
   AssignmentCreate,
   ProjectCreate,
-  ScheduledBriefRunResult,
 } from "../../types.js";
 
 const DEFAULT_REMOTE_TIMEOUT_MS = 10_000;
@@ -54,6 +64,18 @@ export interface ArtifactLoopClient {
   getTeam(teamId: string): Promise<Team | undefined>;
   addTeamMember(teamId: string, input: TeamMembershipCreate): Promise<TeamMembership>;
   getTeamMembers(teamId: string): Promise<TeamMembership[]>;
+  createTeamInvite(teamId: string, input: InviteCreate): Promise<InviteCreateResult>;
+  getTeamInvites(teamId: string): Promise<Invite[]>;
+  getInvite(inviteId: string): Promise<Invite | undefined>;
+  revokeInvite(inviteId: string, input: InviteRevokeRequest): Promise<Invite>;
+  claimInvite(input: InviteClaimRequest): Promise<InviteClaimResult>;
+  getTeamProjects(teamId: string, requestedByWorkerId: string): Promise<Project[]>;
+  getTeamSummary(teamId: string, requestedByWorkerId: string): Promise<TeamSummary>;
+  getTeamBrief(teamId: string, requestedByWorkerId: string): Promise<TeamBrief>;
+  upsertTeamBriefSchedule(teamId: string, input: TeamBriefScheduleUpsert): Promise<TeamBriefSchedule>;
+  getTeamBriefSchedule(teamId: string, requestedByWorkerId: string): Promise<TeamBriefSchedule | undefined>;
+  getTeamBriefRuns(teamId: string, requestedByWorkerId: string): Promise<TeamBriefRun[]>;
+  getLatestTeamBriefRun(teamId: string, requestedByWorkerId: string): Promise<TeamBriefRun | undefined>;
   getTask(taskId: string): Promise<Task | undefined>;
   getTaskState(taskId: string): Promise<TaskState | undefined>;
   getTaskArtifacts(taskId: string): Promise<NormalizedArtifact[]>;
@@ -244,6 +266,84 @@ class RemoteArtifactLoopClient implements ArtifactLoopClient {
 
   getTeamMembers(teamId: string): Promise<TeamMembership[]> {
     return this.request<TeamMembership[]>(`/teams/${encodeURIComponent(teamId)}/members`, undefined, []);
+  }
+
+  createTeamInvite(teamId: string, input: InviteCreate): Promise<InviteCreateResult> {
+    return this.request<InviteCreateResult>(`/teams/${encodeURIComponent(teamId)}/invites`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input),
+    });
+  }
+
+  getTeamInvites(teamId: string): Promise<Invite[]> {
+    return this.request<Invite[]>(`/teams/${encodeURIComponent(teamId)}/invites`, undefined, []);
+  }
+
+  getInvite(inviteId: string): Promise<Invite | undefined> {
+    return this.request<Invite | undefined>(`/invites/${encodeURIComponent(inviteId)}`, undefined, undefined);
+  }
+
+  revokeInvite(inviteId: string, input: InviteRevokeRequest): Promise<Invite> {
+    return this.request<Invite>(`/invites/${encodeURIComponent(inviteId)}/revoke`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input),
+    });
+  }
+
+  claimInvite(input: InviteClaimRequest): Promise<InviteClaimResult> {
+    return this.request<InviteClaimResult>("/invites/claim", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input),
+    });
+  }
+
+  getTeamProjects(teamId: string, requestedByWorkerId: string): Promise<Project[]> {
+    const params = new URLSearchParams({ requested_by_worker_id: requestedByWorkerId });
+    return this.request<Project[]>(`/teams/${encodeURIComponent(teamId)}/projects?${params.toString()}`, undefined, []);
+  }
+
+  getTeamSummary(teamId: string, requestedByWorkerId: string): Promise<TeamSummary> {
+    const params = new URLSearchParams({ requested_by_worker_id: requestedByWorkerId });
+    return this.request<TeamSummary>(`/teams/${encodeURIComponent(teamId)}/summary?${params.toString()}`);
+  }
+
+  getTeamBrief(teamId: string, requestedByWorkerId: string): Promise<TeamBrief> {
+    const params = new URLSearchParams({ requested_by_worker_id: requestedByWorkerId });
+    return this.request<TeamBrief>(`/teams/${encodeURIComponent(teamId)}/brief?${params.toString()}`);
+  }
+
+  upsertTeamBriefSchedule(teamId: string, input: TeamBriefScheduleUpsert): Promise<TeamBriefSchedule> {
+    return this.request<TeamBriefSchedule>(`/teams/${encodeURIComponent(teamId)}/brief-schedule`, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input),
+    });
+  }
+
+  getTeamBriefSchedule(teamId: string, requestedByWorkerId: string): Promise<TeamBriefSchedule | undefined> {
+    const params = new URLSearchParams({ requested_by_worker_id: requestedByWorkerId });
+    return this.request<TeamBriefSchedule | undefined>(
+      `/teams/${encodeURIComponent(teamId)}/brief-schedule?${params.toString()}`,
+      undefined,
+      undefined,
+    );
+  }
+
+  getTeamBriefRuns(teamId: string, requestedByWorkerId: string): Promise<TeamBriefRun[]> {
+    const params = new URLSearchParams({ requested_by_worker_id: requestedByWorkerId });
+    return this.request<TeamBriefRun[]>(`/teams/${encodeURIComponent(teamId)}/brief-runs?${params.toString()}`, undefined, []);
+  }
+
+  getLatestTeamBriefRun(teamId: string, requestedByWorkerId: string): Promise<TeamBriefRun | undefined> {
+    const params = new URLSearchParams({ requested_by_worker_id: requestedByWorkerId });
+    return this.request<TeamBriefRun | undefined>(
+      `/teams/${encodeURIComponent(teamId)}/brief-runs/latest?${params.toString()}`,
+      undefined,
+      undefined,
+    );
   }
 
   getTask(taskId: string): Promise<Task | undefined> {
@@ -493,6 +593,54 @@ class LocalArtifactLoopClient implements ArtifactLoopClient {
 
   getTeamMembers(teamId: string): Promise<TeamMembership[]> {
     return Promise.resolve(this.engine.getTeamMembers(teamId));
+  }
+
+  createTeamInvite(teamId: string, input: InviteCreate): Promise<InviteCreateResult> {
+    return Promise.resolve(this.engine.createTeamInvite(teamId, input));
+  }
+
+  getTeamInvites(teamId: string): Promise<Invite[]> {
+    return Promise.resolve(this.engine.getTeamInvites(teamId));
+  }
+
+  getInvite(inviteId: string): Promise<Invite | undefined> {
+    return Promise.resolve(this.engine.getInvite(inviteId));
+  }
+
+  revokeInvite(inviteId: string, input: InviteRevokeRequest): Promise<Invite> {
+    return Promise.resolve(this.engine.revokeInvite(inviteId, input));
+  }
+
+  claimInvite(input: InviteClaimRequest): Promise<InviteClaimResult> {
+    return Promise.resolve(this.engine.claimInvite(input));
+  }
+
+  getTeamProjects(teamId: string, requestedByWorkerId: string): Promise<Project[]> {
+    return Promise.resolve(this.engine.getTeamProjects(teamId, requestedByWorkerId));
+  }
+
+  getTeamSummary(teamId: string, requestedByWorkerId: string): Promise<TeamSummary> {
+    return Promise.resolve(this.engine.getTeamSummary(teamId, requestedByWorkerId));
+  }
+
+  getTeamBrief(teamId: string, requestedByWorkerId: string): Promise<TeamBrief> {
+    return Promise.resolve(this.engine.getTeamBrief(teamId, requestedByWorkerId));
+  }
+
+  upsertTeamBriefSchedule(teamId: string, input: TeamBriefScheduleUpsert): Promise<TeamBriefSchedule> {
+    return Promise.resolve(this.engine.upsertTeamBriefSchedule(teamId, input));
+  }
+
+  getTeamBriefSchedule(teamId: string, requestedByWorkerId: string): Promise<TeamBriefSchedule | undefined> {
+    return Promise.resolve(this.engine.getTeamBriefSchedule(teamId, requestedByWorkerId));
+  }
+
+  getTeamBriefRuns(teamId: string, requestedByWorkerId: string): Promise<TeamBriefRun[]> {
+    return Promise.resolve(this.engine.getTeamBriefRuns(teamId, requestedByWorkerId));
+  }
+
+  getLatestTeamBriefRun(teamId: string, requestedByWorkerId: string): Promise<TeamBriefRun | undefined> {
+    return Promise.resolve(this.engine.getLatestTeamBriefRun(teamId, requestedByWorkerId));
   }
 
   getTask(taskId: string): Promise<Task | undefined> {

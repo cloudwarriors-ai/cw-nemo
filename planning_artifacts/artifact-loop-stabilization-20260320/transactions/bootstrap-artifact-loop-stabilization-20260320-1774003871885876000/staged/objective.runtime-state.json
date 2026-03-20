@@ -1,0 +1,42 @@
+{
+  "authoritative_artifacts": {
+    "execution_plan": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-plan.json",
+    "kernel_runtime_state": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.kernel-runtime-state.json",
+    "packet_dag": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-dag.json",
+    "schedule": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.schedule.json",
+    "status": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.status.json"
+  },
+  "closure_state": "",
+  "compatibility_artifacts": {
+    "operator_view": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.operator-view.json",
+    "summary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.summary.json",
+    "support_confidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.support-confidence.json",
+    "transition_history": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transition-history.jsonl",
+    "verification_results": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.verification-results.jsonl"
+  },
+  "controller_mode": "enforce",
+  "current_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+  "current_frontier": [
+    "packet-build-org-surface-smoke"
+  ],
+  "current_packet": "packet-build-org-surface-smoke",
+  "derived_support_status": "supported",
+  "last_verifier_result": {},
+  "lifecycle_status": "revise",
+  "material_optional_work_reasons": [],
+  "material_optional_work_remaining": false,
+  "next_recommended_packet": "packet-build-org-surface-smoke",
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "required_work_reasons": [
+    "required_packets_pending"
+  ],
+  "required_work_remaining": true,
+  "route_hint": "R3",
+  "safe_momentum_available": true,
+  "schema_version": "objective-runtime-state.v1",
+  "stop_allowed": false,
+  "stop_reason": "required_packets_pending",
+  "track_id": "artifact-loop-stabilization-20260320",
+  "unsupported_closure_risk": "none",
+  "updated_at": "2026-03-20T10:51:11+00:00"
+}

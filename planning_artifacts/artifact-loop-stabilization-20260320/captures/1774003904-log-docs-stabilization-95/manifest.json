@@ -1,0 +1,40 @@
+{
+  "captured_at": "2026-03-20T10:51:44+00:00",
+  "command_argv": [
+    "bash",
+    "-lc",
+    "rg -n \"org-surface-smoke|review:lead-surfaces|pending memberships|CLI-only|derived-only|Stage 1|Stage 2|Stage 3|eligible\" /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md"
+  ],
+  "cwd": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+  "duration_ms": 92,
+  "ended_at": "2026-03-20T10:51:44+00:00",
+  "env_whitelist": {
+    "HOME": "/Users/chadsimon",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/Users/chadsimon/.codex/tmp/arg0/codex-arg0vHab8f:/Users/chadsimon/.opencode/bin:/Users/chadsimon/.rbenv/shims:/Users/chadsimon/.rbenv/bin:/Users/chadsimon/.local/bin:/Users/chadsimon/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Applications/Codex.app/Contents/Resources",
+    "PWD": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+    "SHELL": "/bin/zsh",
+    "TMPDIR": "/var/folders/8g/yc19qrvx1p5f65_tdtpj2fqw0000gn/T/",
+    "USER": "chadsimon"
+  },
+  "exit_code": 0,
+  "name": "log-docs-stabilization",
+  "output_truncated": false,
+  "producer": "run_cmd_capture.v1",
+  "safety": {
+    "decision": "ok",
+    "override_reason": "",
+    "override_used": false
+  },
+  "schema_version": "run-cmd-capture.v1",
+  "stage": "95%",
+  "started_at": "2026-03-20T10:51:44+00:00",
+  "stderr_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003904-log-docs-stabilization-95/stderr.redacted.txt",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003904-log-docs-stabilization-95/stdout.redacted.txt",
+  "stdout_sha256": "e2d63dae64298cdd26b5a1750c3f58473ff273d59f4f7358620fae5d1ac9bf74",
+  "timeout_exceeded": false,
+  "timeout_sec": 300,
+  "track_id": "artifact-loop-stabilization-20260320"
+}

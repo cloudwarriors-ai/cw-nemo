@@ -1,0 +1,103 @@
+{
+  "features": [
+    {
+      "definition_of_done": {
+        "acceptance_checks": [
+          "CLI invite creation succeeds and exposes a claim token.",
+          "HTTP invite claim succeeds.",
+          "HTTP team summary and team brief reflect the same task state reached by the CLI coordination loop.",
+          "CLI adopt-existing dry-run, apply, and status succeed against seeded legacy data."
+        ],
+        "allowed_scope": [
+          "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+          "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+          "artifact-loop/package.json"
+        ],
+        "behavior_outcome": "One scenario run proves the stabilization path across the new org surfaces and writes a manifest plus summary bundle.",
+        "evidence_requirements": [
+          "org-surface-smoke capture manifest",
+          "scenario stdout capture"
+        ],
+        "objective_linkage": "stabilization",
+        "rollback_or_fallback": "Revert the new scenario and helper additions if the mixed-surface contract proves unstable.",
+        "verifier_acceptance_condition": "Reviewer confirms the new smoke proves the intended surfaces without widening shared_coordination_v1."
+      },
+      "evidence_refs": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-validate-stabilization"
+      ],
+      "priority": "critical",
+      "requirement_id": "REQ-001",
+      "status": "verified"
+    },
+    {
+      "definition_of_done": {
+        "acceptance_checks": [
+          "Team summary counts align with the reviewed project set.",
+          "Team brief includes the active scenario project and worker workload.",
+          "Latest team brief run is persisted and delivered to the schedule owner inbox."
+        ],
+        "allowed_scope": [
+          "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+          ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+        ],
+        "behavior_outcome": "The lead review emits project and team snapshots plus a review-summary.md that can identify semantic drift.",
+        "evidence_requirements": [
+          "lead surface review bundle",
+          "review-summary.md"
+        ],
+        "objective_linkage": "stabilization",
+        "rollback_or_fallback": "Remove the team-level review expansion if it cannot stay aligned with the current derived team surfaces.",
+        "verifier_acceptance_condition": "Reviewer confirms the new invariants validate team derivation semantics rather than duplicating product logic."
+      },
+      "evidence_refs": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "packet_ids": [
+        "packet-extend-lead-surface-review",
+        "packet-validate-stabilization"
+      ],
+      "priority": "critical",
+      "requirement_id": "REQ-002",
+      "status": "verified"
+    },
+    {
+      "definition_of_done": {
+        "acceptance_checks": [
+          "README links to the stabilization note.",
+          "The stabilization note lists exact smoke and review entrypoints.",
+          "The Tailscale rollout doc states the gate boundary and exit criteria for Stage 2/3."
+        ],
+        "allowed_scope": [
+          "artifact-loop/docs/org-stabilization-rollout.md",
+          "artifact-loop/docs/tailscale-rollout.md",
+          "artifact-loop/README.md"
+        ],
+        "behavior_outcome": "Operators can find one repo-tracked note that explains what shipped, how to run the stabilization passes, and when runtime work is allowed to resume.",
+        "evidence_requirements": [
+          "repo diff",
+          "doc grep capture"
+        ],
+        "objective_linkage": "stabilization",
+        "rollback_or_fallback": "Revert the doc-only changes if wording conflicts with the shipped product surfaces.",
+        "verifier_acceptance_condition": "Reviewer confirms the operator note is canonical and does not publish planning_artifacts as user-facing docs."
+      },
+      "evidence_refs": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "packet_ids": [
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ],
+      "priority": "core",
+      "requirement_id": "REQ-003",
+      "status": "verified"
+    }
+  ],
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "schema_version": "objective-feature-list.v1",
+  "track_id": "artifact-loop-stabilization-20260320"
+}

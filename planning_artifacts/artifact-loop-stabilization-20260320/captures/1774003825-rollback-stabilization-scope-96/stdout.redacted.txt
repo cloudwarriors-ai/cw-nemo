@@ -1,0 +1,23 @@
+ .../artifact-loop-lead-surface-review/SKILL.md     |   9 +-
+ artifact-loop/README.md                            |  90 ++-
+ artifact-loop/contracts/_defs.schema.json          |   6 +-
+ artifact-loop/contracts/inbox-item.schema.json     |   5 +-
+ artifact-loop/docs/tailscale-rollout.md            |  22 +
+ artifact-loop/package.json                         |   1 +
+ .../scripts/scenarios/lead_surface_review_v1.sh    | 115 ++-
+ .../scenarios/lib/shared-coordination-common.sh    |  84 ++
+ .../src/__tests__/cli/organization-loop.test.ts    | 205 ++++-
+ artifact-loop/src/__tests__/contracts.test.ts      | 356 +++++++++
+ .../src/__tests__/engine.organization.test.ts      | 143 ++++
+ .../src/__tests__/service.organization.test.ts     |  74 ++
+ artifact-loop/src/cli/cli.ts                       |   2 +
+ artifact-loop/src/cli/commands/org-commands.ts     |  76 +-
+ artifact-loop/src/cli/commands/team-commands.ts    | 222 +++++-
+ artifact-loop/src/cli/helpers/client.ts            | 150 +++-
+ artifact-loop/src/cli/helpers/format.ts            | 137 +++-
+ artifact-loop/src/engine.ts                        | 846 ++++++++++++++++++++-
+ artifact-loop/src/index.ts                         |  20 +
+ artifact-loop/src/service/schema-validator.ts      |  12 +
+ artifact-loop/src/service/server.ts                | 139 ++++
+ artifact-loop/src/types.ts                         | 232 +++++-
+ 22 files changed, 2922 insertions(+), 24 deletions(-)

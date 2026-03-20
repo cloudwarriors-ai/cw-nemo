@@ -1,21 +1,27 @@
 {
-  "bootstrap_commands": [],
-  "checkpoint_attempted_at": "",
-  "checkpoint_block_evidence": "",
-  "checkpoint_block_reason": "",
-  "checkpoint_blocked": false,
+  "bootstrap_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+  ],
+  "checkpoint_attempted_at": "2026-03-20T05:03:51.453Z",
+  "checkpoint_block_evidence": "Dirty worktree contains unrelated existing artifact-loop changes plus this new session-hub package.",
+  "checkpoint_block_reason": "unrelated_dirty_state",
+  "checkpoint_blocked": true,
   "checkpoint_commit": "",
   "checkpoint_id": "agent-session-hub-20260320-checkpoint-000",
   "checkpoint_strategy": "git_checkpoint_required",
   "clean_state_assertions": [
-    "Runtime state is resumable from objective runtime artifacts."
+    "Fresh governed state can resume from planning_artifacts without reconstructing prior chat context."
   ],
   "current_frontier": [],
   "escalation_candidates": [],
   "feature_ledger_ref": "objective.feature-list.json",
   "handoff_notes": "Resume objective-agent-session-hub-20260320 from runtime artifacts without relying on chat history.",
   "last_forward_movement": "session_initialized",
-  "last_verified_packet_ids": [],
+  "last_verified_packet_ids": [
+    "packet-build-session-service",
+    "packet-build-session-cli",
+    "packet-validate-session-flow"
+  ],
   "next_recommended_packet": "",
   "objective_id": "objective-agent-session-hub-20260320",
   "open_risks": [],
@@ -133,6 +139,8 @@
   "stagnation_risk": "low",
   "track_id": "agent-session-hub-20260320",
   "ui_evidence_required": false,
-  "updated_at": "2026-03-20T04:54:43+00:00",
-  "validation_commands": []
+  "updated_at": "2026-03-20T05:03:51.453Z",
+  "validation_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+  ]
 }

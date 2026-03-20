@@ -1,0 +1,20 @@
+{
+  "blocked_fields": [],
+  "content": "Pre-plan session scaffolding artifacts emitted.",
+  "gate": "session-initializer",
+  "meta": {
+    "artifacts": {
+      "checkpoint": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.checkpoint.json",
+      "context_index": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.context-index.json",
+      "progress": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.progress.jsonl",
+      "session": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.session.json"
+    },
+    "track_id": "artifact-loop-stabilization-20260320",
+    "track_token": "artifact-loop-stabilization-20260320"
+  },
+  "missing_fields": [],
+  "next_step": "Run compile_plan.py, verify_plan.py, and validate_plan.py.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

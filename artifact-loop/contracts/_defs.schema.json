@@ -57,7 +57,11 @@
     },
     "team_membership_status": {
       "type": "string",
-      "enum": ["active", "inactive"]
+      "enum": ["pending", "active", "inactive"]
+    },
+    "invite_status": {
+      "type": "string",
+      "enum": ["pending", "claimed", "revoked", "expired"]
     },
     "task_confidence": {
       "type": "number",

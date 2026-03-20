@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "authority_sensitive": false,
+      "packet_id": "packet-validate-session-flow",
+      "reason": "checkpoint_blocked_by_unrelated_dirty_repo_state"
+    }
+  ],
+  "objective_id": "objective-agent-session-hub-20260320",
+  "schema_version": "objective-blockers.v1",
+  "track_id": "agent-session-hub-20260320"
+}

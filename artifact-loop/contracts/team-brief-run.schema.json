@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team-brief-run.schema.json",
+  "type": "object",
+  "required": ["id", "team_id", "generated_at", "window_start", "window_end", "brief"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "team_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "generated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "window_start": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "window_end": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "brief": { "$ref": "team-brief.schema.json" }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "allowed_scope_status": "within_scope",
+  "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-build-session-service.verdict.json",
+  "changed_files": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/store.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/server.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/test/service.test.js"
+  ],
+  "packet_id": "packet-build-session-service",
+  "runner_kind": "command",
+  "runtime_state": "accepted",
+  "strategy_name": "command_capture",
+  "support_status": "supported",
+  "unsupported_risk_reason": "",
+  "verifier_output": "accepted"
+}

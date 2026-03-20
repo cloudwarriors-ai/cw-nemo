@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team-brief.schema.json",
+  "type": "object",
+  "required": [
+    "team",
+    "generated_at",
+    "snapshot",
+    "blocked_projects",
+    "needs_input_projects",
+    "ready_for_review_projects",
+    "project_rollup",
+    "by_member",
+    "recent_movement",
+    "lead_attention_items",
+    "rendered_text"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "team": { "$ref": "team.schema.json" },
+    "generated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "snapshot": {
+      "type": "object",
+      "required": ["total_projects", "active_projects", "total_tasks", "counts_by_status", "last_activity_at"],
+      "additionalProperties": false,
+      "properties": {
+        "total_projects": { "type": "integer", "minimum": 0 },
+        "active_projects": { "type": "integer", "minimum": 0 },
+        "total_tasks": { "type": "integer", "minimum": 0 },
+        "counts_by_status": { "$ref": "team-project-list-item.schema.json#/properties/counts_by_status" },
+        "last_activity_at": {
+          "anyOf": [
+            { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "blocked_projects": { "type": "array", "items": { "$ref": "team-project-list-item.schema.json" } },
+    "needs_input_projects": { "type": "array", "items": { "$ref": "team-project-list-item.schema.json" } },
+    "ready_for_review_projects": { "type": "array", "items": { "$ref": "team-project-list-item.schema.json" } },
+    "project_rollup": { "type": "array", "items": { "$ref": "team-project-list-item.schema.json" } },
+    "by_member": { "$ref": "team-summary.schema.json#/properties/member_workload" },
+    "recent_movement": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "project_id",
+          "task_id",
+          "task_title",
+          "assignee_human_id",
+          "changed_at",
+          "from_status",
+          "to_status",
+          "rules_applied"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "task_title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+          "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "assignee_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "changed_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+          "from_status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+          "to_status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+          "rules_applied": {
+            "type": "array",
+            "items": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+          }
+        }
+      }
+    },
+    "lead_attention_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "project", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["blocked", "needs_input", "ready_for_review"]
+          },
+          "project": { "$ref": "team-project-list-item.schema.json" },
+          "reason": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+        }
+      }
+    },
+    "rendered_text": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+  }
+}

@@ -2,13 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { createProgram } from "../../cli/cli.js";
 import { createEngine } from "../../engine.js";
 
 let dataDir: string;
+
+function writeJson(path: string, value: unknown): void {
+  writeFileSync(path, JSON.stringify(value, null, 2) + "\n", "utf-8");
+}
 
 async function runCliAsync(args: string[]): Promise<{ logs: string; errors: string }> {
   const logs: string[] = [];
@@ -234,5 +238,204 @@ describe("artifact-loop organization CLI", () => {
       "run-scheduled-briefs",
       "--data-dir", dataDir,
     ]);
+  });
+
+  it("supports invite claim onboarding plus team summary and team brief commands locally", async () => {
+    await runCliAsync([
+      "org", "bootstrap",
+      "--org-id", "org-core",
+      "--org-name", "Core Org",
+      "--org-timezone", "America/New_York",
+      "--team-id", "team-core",
+      "--team-name", "Core Team",
+      "--team-description", "CLI org team",
+      "--member-id", "lead-1",
+      "--member-name", "Lead",
+      "--member-timezone", "America/New_York",
+      "--agent-id", "lead-agent-1",
+      "--agent-label", "Lead Agent",
+      "--agent-connector", "lead-cli",
+      "--data-dir", dataDir,
+    ]);
+
+    const invite = await runCliAsync([
+      "team", "invite", "team-core",
+      "--member", "worker-claim",
+      "--role", "worker",
+      "--name", "Claim Worker",
+      "--timezone", "America/New_York",
+      "--by", "lead-1",
+      "--json",
+      "--data-dir", dataDir,
+    ]);
+    const inviteResult = JSON.parse(invite.logs) as { claim_token: string };
+
+    await runCliAsync([
+      "invite", "claim",
+      "--token", inviteResult.claim_token,
+      "--agent-id", "worker-claim-agent",
+      "--agent-label", "Claim Agent",
+      "--agent-connector", "remote",
+      "--data-dir", dataDir,
+    ]);
+
+    await runCliAsync([
+      "project", "create",
+      "--id", "proj-claim",
+      "--team", "team-core",
+      "--title", "Claim Project",
+      "--description", "Invite claim project",
+      "--owner-worker", "lead-1",
+      "--goal", "Validate invite claim flow",
+      "--scope", "lead flow",
+      "--deliverable", "Invite claim",
+      "--constraint", "No auth",
+      "--definition-of-done", "Lead can assign invited worker",
+      "--data-dir", dataDir,
+    ]);
+
+    const engine = createEngine({ dataDir });
+    engine.createTask({
+      id: "task-claim",
+      title: "Claim task",
+      description: "Claim task",
+      assignee_human_id: "worker-claim",
+      assignee_agent_id: "worker-claim-agent",
+      status: "not_started",
+      acceptance_criteria: "done",
+      acceptance_signals: [],
+      depends_on: [],
+    });
+    engine.assignTaskToProject("proj-claim", "task-claim");
+    engine.applyOverride("task-claim", {
+      status: "ready_for_review",
+      reason: "done",
+      by: "lead-1",
+      timestamp: "2026-03-19T12:00:00.000Z",
+    });
+
+    const teamSummary = await runCliAsync([
+      "team", "summary", "team-core",
+      "--by", "lead-1",
+      "--data-dir", dataDir,
+    ]);
+    expect(teamSummary.logs).toContain("Projects: total=1 active=1");
+
+    await runCliAsync([
+      "team", "schedule-brief", "team-core",
+      "--owner-worker", "lead-1",
+      "--timezone", "America/New_York",
+      "--delivery-hour", "9",
+      "--data-dir", dataDir,
+    ]);
+    const schedule = engine.getTeamBriefSchedule("team-core");
+    expect(schedule?.next_run_at).toBeTruthy();
+    engine.runScheduledBriefs(new Date(schedule!.next_run_at!));
+    const teamBrief = await runCliAsync([
+      "team", "brief", "team-core",
+      "--by", "lead-1",
+      "--latest-run",
+      "--data-dir", dataDir,
+    ]);
+    expect(teamBrief.logs).toContain("Team Brief: Core Team");
+  });
+
+  it("supports the adopt-existing CLI flow end to end", async () => {
+    mkdirSync(join(dataDir, "workers"), { recursive: true });
+    mkdirSync(join(dataDir, "worker-agents"), { recursive: true });
+    mkdirSync(join(dataDir, "projects"), { recursive: true });
+    mkdirSync(join(dataDir, "tasks"), { recursive: true });
+    mkdirSync(join(dataDir, "state"), { recursive: true });
+    mkdirSync(join(dataDir, "brief-schedules"), { recursive: true });
+
+    writeJson(join(dataDir, "workers", "lead-legacy.json"), {
+      id: "lead-legacy",
+      display_name: "Legacy Lead",
+      role: "lead",
+      timezone: "America/New_York",
+      active: true,
+      created_at: "2026-03-19T12:00:00.000Z",
+      updated_at: "2026-03-19T12:00:00.000Z",
+    });
+    writeJson(join(dataDir, "worker-agents", "lead-agent-legacy.json"), {
+      id: "lead-agent-legacy",
+      worker_id: "lead-legacy",
+      label: "Legacy Lead Agent",
+      connector_type: "remote",
+      active: true,
+      created_at: "2026-03-19T12:00:00.000Z",
+      updated_at: "2026-03-19T12:00:00.000Z",
+    });
+    writeJson(join(dataDir, "projects", "proj-legacy.json"), {
+      id: "proj-legacy",
+      title: "Legacy Project",
+      description: "Legacy coordination",
+      owner_worker_id: "lead-legacy",
+      created_at: "2026-03-19T12:00:00.000Z",
+      updated_at: "2026-03-19T12:00:00.000Z",
+    });
+    writeJson(join(dataDir, "tasks", "task-legacy.json"), {
+      id: "task-legacy",
+      title: "Legacy Task",
+      description: "Legacy task",
+      project_id: "proj-legacy",
+      assignee_human_id: "lead-legacy",
+      status: "not_started",
+      acceptance_criteria: "done",
+      acceptance_signals: [],
+      depends_on: [],
+      last_activity_at: "2026-03-19T12:10:00.000Z",
+    });
+    writeJson(join(dataDir, "state", "task-legacy.json"), {
+      status: "ready_for_review",
+      task_confidence: 1,
+      binding_confidence: 1,
+      missing_inputs: [],
+    });
+    writeJson(join(dataDir, "brief-schedules", "proj-legacy.json"), {
+      project_id: "proj-legacy",
+      owner_worker_id: "lead-legacy",
+      timezone: "America/New_York",
+      delivery_hour_local: 9,
+      enabled: true,
+      next_run_at: "2026-03-20T13:00:00.000Z",
+    });
+
+    const dryRun = await runCliAsync([
+      "org", "adopt-existing",
+      "--org-id", "org-legacy",
+      "--org-name", "Legacy Org",
+      "--org-timezone", "America/New_York",
+      "--team-id", "team-legacy",
+      "--team-name", "Legacy Team",
+      "--team-description", "Adopted team",
+      "--data-dir", dataDir,
+    ]);
+    expect(dryRun.logs).toContain("Adoption plan: ready");
+
+    const applied = await runCliAsync([
+      "org", "adopt-existing",
+      "--org-id", "org-legacy",
+      "--org-name", "Legacy Org",
+      "--org-timezone", "America/New_York",
+      "--team-id", "team-legacy",
+      "--team-name", "Legacy Team",
+      "--team-description", "Adopted team",
+      "--apply",
+      "--data-dir", dataDir,
+    ]);
+    expect(applied.logs).toContain("Applied adoption report");
+
+    const status = await runCliAsync([
+      "org", "adoption-status",
+      "--data-dir", dataDir,
+    ]);
+    expect(status.logs).toContain("Adoption status: applied");
+
+    const engine = createEngine({ dataDir });
+    expect(engine.getOrganization()?.id).toBe("org-legacy");
+    expect(engine.getProject("proj-legacy")?.team_id).toBe("team-legacy");
+    const summary = engine.getTeamSummary("team-legacy", "lead-legacy");
+    expect(summary.total_projects).toBe(1);
   });
 });

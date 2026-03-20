@@ -252,4 +252,147 @@ describe("engine organization loop", () => {
     const leadInbox = engine.getInboxItems({ recipient_worker_id: "lead-1", statuses: ["pending"] });
     expect(leadInbox.some((item) => item.kind === "brief")).toBe(true);
   });
+
+  it("supports invite claim activation and invite reissue after revoke", () => {
+    const engine = createEngine({ dataDir });
+    bootstrapOrg(engine);
+
+    const invite = engine.createTeamInvite("team-core", {
+      member_id: "worker-claim",
+      role: "worker",
+      display_name: "Claim Worker",
+      timezone: "America/New_York",
+      invited_by_worker_id: "lead-1",
+    });
+    expect(invite.invite.status).toBe("pending");
+    expect(engine.getTeamMembership("team-core", "worker-claim")?.status).toBe("pending");
+
+    const revoked = engine.revokeInvite(invite.invite.id, {
+      revoked_by_worker_id: "lead-1",
+    });
+    expect(revoked.status).toBe("revoked");
+
+    const reissued = engine.createTeamInvite("team-core", {
+      member_id: "worker-claim",
+      role: "worker",
+      display_name: "Claim Worker",
+      timezone: "America/New_York",
+      invited_by_worker_id: "lead-1",
+    });
+    const claimed = engine.claimInvite({
+      claim_token: reissued.claim_token,
+      agent_id: "worker-claim-agent",
+      agent_label: "Claim Agent",
+      agent_connector_type: "remote",
+    });
+    expect(claimed.invite.status).toBe("claimed");
+    expect(claimed.membership.status).toBe("active");
+    expect(claimed.member.id).toBe("worker-claim");
+    expect(claimed.agent.worker_id).toBe("worker-claim");
+    expect(() => engine.claimInvite({
+      claim_token: reissued.claim_token,
+      agent_id: "worker-claim-agent-2",
+      agent_label: "Claim Agent 2",
+      agent_connector_type: "remote",
+    })).toThrowError(`Invite is not claimable: ${reissued.invite.id}`);
+  });
+
+  it("builds team summaries and scheduled team briefs from project truth", () => {
+    const engine = createEngine({ dataDir });
+    bootstrapOrg(engine);
+    engine.createWorkerAgent("worker-1", {
+      id: "worker-agent-1",
+      label: "Worker Agent",
+      connector_type: "remote",
+    });
+
+    engine.createProject({
+      id: "proj-alpha",
+      team_id: "team-core",
+      title: "Alpha",
+      description: "Alpha project",
+      owner_worker_id: "lead-1",
+      definition: {
+        goal: "Alpha goal",
+        scope: ["scope"],
+        deliverables: ["deliverable"],
+        constraints: [],
+        definition_of_done: "done",
+      },
+    });
+    engine.createTask({
+      id: "task-alpha",
+      title: "Alpha task",
+      description: "Alpha task",
+      assignee_human_id: "worker-1",
+      assignee_agent_id: "worker-agent-1",
+      status: "not_started",
+      acceptance_criteria: "done",
+      acceptance_signals: [],
+      depends_on: [],
+    });
+    engine.assignTaskToProject("proj-alpha", "task-alpha");
+    engine.applyOverride("task-alpha", {
+      status: "blocked",
+      reason: "waiting",
+      by: "lead-1",
+      timestamp: "2026-03-19T12:00:00.000Z",
+    });
+
+    engine.createProject({
+      id: "proj-beta",
+      team_id: "team-core",
+      title: "Beta",
+      description: "Beta project",
+      owner_worker_id: "lead-1",
+      definition: {
+        goal: "Beta goal",
+        scope: ["scope"],
+        deliverables: ["deliverable"],
+        constraints: [],
+        definition_of_done: "done",
+      },
+    });
+    engine.createTask({
+      id: "task-beta",
+      title: "Beta task",
+      description: "Beta task",
+      assignee_human_id: "worker-1",
+      assignee_agent_id: "worker-agent-1",
+      status: "not_started",
+      acceptance_criteria: "done",
+      acceptance_signals: [],
+      depends_on: [],
+    });
+    engine.assignTaskToProject("proj-beta", "task-beta");
+    engine.applyOverride("task-beta", {
+      status: "ready_for_review",
+      reason: "done",
+      by: "lead-1",
+      timestamp: "2026-03-19T12:05:00.000Z",
+    });
+
+    const summary = engine.getTeamSummary("team-core", "lead-1");
+    expect(summary.total_projects).toBe(2);
+    expect(summary.total_tasks).toBe(2);
+    expect(summary.project_counts.blocked).toBe(1);
+    expect(summary.project_counts.ready_for_review).toBe(1);
+    expect(summary.active_members_by_role.worker).toBe(1);
+    expect(summary.member_workload[0]?.member_id).toBe("worker-1");
+
+    const brief = engine.getTeamBrief("team-core", "lead-1");
+    expect(brief.project_rollup.map((project) => project.project_id)).toEqual(["proj-beta", "proj-alpha"]);
+    expect(brief.rendered_text).toContain("Team Brief: Core Team");
+
+    const schedule = engine.upsertTeamBriefSchedule("team-core", {
+      owner_worker_id: "lead-1",
+      timezone: "America/New_York",
+      delivery_hour_local: 9,
+      enabled: true,
+    });
+    const result = engine.runScheduledBriefs(new Date(schedule.next_run_at!));
+    expect(result.generated_team_ids).toEqual(["team-core"]);
+    const leadInbox = engine.getInboxItems({ recipient_worker_id: "lead-1", statuses: ["pending"] });
+    expect(leadInbox.some((item) => item.payload_ref.type === "team_brief_run")).toBe(true);
+  });
 });

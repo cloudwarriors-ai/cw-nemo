@@ -13,6 +13,7 @@
     "build": "tsc",
     "check": "tsc --noEmit",
     "review:lead-surfaces": "bash ./scripts/scenarios/lead_surface_review_v1.sh",
+    "scenario:org-surface-smoke": "bash ./scripts/scenarios/org_surface_smoke_v1.sh",
     "scenario:shared-coordination": "bash ./scripts/scenarios/shared_coordination_v1.sh",
     "scenario:tailscale-shared-coordination": "bash ./scripts/scenarios/tailscale_shared_coordination_v1.sh",
     "test": "vitest run",

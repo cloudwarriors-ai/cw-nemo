@@ -53,6 +53,90 @@ run_json() {
   "$@"
 }
 
+http_json() {
+  local method="$1"
+  local url="$2"
+  local body="${3:-}"
+  if [[ -n "$body" ]]; then
+    curl -fsS -X "$method" "$url" \
+      -H "content-type: application/json" \
+      --data "$body"
+    return
+  fi
+  curl -fsS -X "$method" "$url"
+}
+
+seed_legacy_adoption_fixture() {
+  local legacy_data_dir="$1"
+  mkdir -p "$legacy_data_dir"
+  node --input-type=module -e '
+    import { mkdirSync, writeFileSync } from "node:fs";
+    import { join } from "node:path";
+
+    const root = process.argv[1];
+    const writeJson = (path, value) => {
+      writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+    };
+
+    for (const dir of ["workers", "worker-agents", "projects", "tasks", "state", "brief-schedules"]) {
+      mkdirSync(join(root, dir), { recursive: true });
+    }
+
+    writeJson(join(root, "workers", "lead-legacy.json"), {
+      id: "lead-legacy",
+      display_name: "Legacy Lead",
+      role: "lead",
+      timezone: "America/New_York",
+      active: true,
+      created_at: "2026-03-19T12:00:00.000Z",
+      updated_at: "2026-03-19T12:00:00.000Z",
+    });
+    writeJson(join(root, "worker-agents", "lead-agent-legacy.json"), {
+      id: "lead-agent-legacy",
+      worker_id: "lead-legacy",
+      label: "Legacy Lead Agent",
+      connector_type: "remote",
+      active: true,
+      created_at: "2026-03-19T12:00:00.000Z",
+      updated_at: "2026-03-19T12:00:00.000Z",
+    });
+    writeJson(join(root, "projects", "proj-legacy.json"), {
+      id: "proj-legacy",
+      title: "Legacy Project",
+      description: "Legacy coordination",
+      owner_worker_id: "lead-legacy",
+      created_at: "2026-03-19T12:00:00.000Z",
+      updated_at: "2026-03-19T12:00:00.000Z",
+    });
+    writeJson(join(root, "tasks", "task-legacy.json"), {
+      id: "task-legacy",
+      title: "Legacy Task",
+      description: "Legacy task",
+      project_id: "proj-legacy",
+      assignee_human_id: "lead-legacy",
+      status: "not_started",
+      acceptance_criteria: "done",
+      acceptance_signals: [],
+      depends_on: [],
+      last_activity_at: "2026-03-19T12:10:00.000Z",
+    });
+    writeJson(join(root, "state", "task-legacy.json"), {
+      status: "ready_for_review",
+      task_confidence: 1,
+      binding_confidence: 1,
+      missing_inputs: [],
+    });
+    writeJson(join(root, "brief-schedules", "proj-legacy.json"), {
+      project_id: "proj-legacy",
+      owner_worker_id: "lead-legacy",
+      timezone: "America/New_York",
+      delivery_hour_local: 9,
+      enabled: true,
+      next_run_at: "2026-03-20T13:00:00.000Z",
+    });
+  ' "$legacy_data_dir"
+}
+
 validate_current_brief() {
   scenario_log "Validating current brief"
   CURRENT_BRIEF_JSON="$(run_json node bin/artifact-loop.js project brief "$PROJECT_ID" --service-url "$SERVICE_URL" --json)"

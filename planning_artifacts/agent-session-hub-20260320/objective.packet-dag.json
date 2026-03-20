@@ -1,0 +1,24 @@
+{
+  "schema_version": "objective-packet-dag.v1",
+  "objective_id": "objective-agent-session-hub-20260320",
+  "track_id": "agent-session-hub-20260320",
+  "packets": [
+    {
+      "packet_id": "packet-build-session-service",
+      "dependencies": []
+    },
+    {
+      "packet_id": "packet-build-session-cli",
+      "dependencies": [
+        "packet-build-session-service"
+      ]
+    },
+    {
+      "packet_id": "packet-validate-session-flow",
+      "dependencies": [
+        "packet-build-session-service",
+        "packet-build-session-cli"
+      ]
+    }
+  ]
+}

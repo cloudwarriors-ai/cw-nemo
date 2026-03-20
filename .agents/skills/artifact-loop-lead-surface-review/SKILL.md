@@ -1,6 +1,6 @@
 ---
 name: artifact-loop-lead-surface-review
-description: Run the Artifact Loop lead-surface stabilization review when the user wants to validate or inspect the lead-facing project summary, worker grouping, brief, inbox, and task-message semantics after the shared coordination loop.
+description: Run the Artifact Loop lead-surface stabilization review when the user wants to validate or inspect the lead-facing project and team summaries, worker grouping, briefs, inbox, and task-message semantics after the shared coordination loop.
 metadata:
   short-description: Run Artifact Loop lead-surface review flow
 ---
@@ -26,7 +26,12 @@ What the script does:
   - latest persisted brief run
   - task messages
   - worker inbox
-- checks that those surfaces stay semantically aligned
+- team projects
+- team summary
+- current team brief
+- latest persisted team brief run
+- team brief schedule
+- checks that both the project and team lead surfaces stay semantically aligned
 - writes a compact `review-summary.md` into the review bundle
 
 Important nuance:

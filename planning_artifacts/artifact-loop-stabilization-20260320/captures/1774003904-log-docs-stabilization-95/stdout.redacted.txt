@@ -1,0 +1,43 @@
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:9:Stage 1 is implemented here. Stages 2 and 3 are intentionally deferred.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:13:Do not start Stage 2 or Stage 3 because this repo branch says they are "next."
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:15:They remain blocked until Stage 1 is proven on Doug's actual target host.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:17:The runtime track becomes eligible only after all of the following are true:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:29:## Stage 1 Prerequisites
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:52:## Stage 1A — Doug Host Local Hub
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:85:## Stage 1B — Tailscale Serve Exposure
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:115:## Stage 1C — Shared Hub Initialization
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:153:This creates the baseline team and actors used by the Stage 1 remote acceptance scenario.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:155:## Stage 1D — Remote Shared Coordination Validation
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:189:## Stage 1 Acceptance Criteria
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:191:Stage 1 is complete when:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:198:## Stage 2 — Remote OpenClaw Gateway Profile
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:207:Stage 2 is not eligible to start until the Runtime Gate Boundary above is satisfied.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:209:## Stage 3 — Combined Coordination + Runtime Acceptance
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md:216:Stage 3 is not eligible to start until Stage 2 exists and the Runtime Gate Boundary above has already passed.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:11:- Slice B: invite creation, pending memberships, invite claim, revoke, and claim-time first-agent activation
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:13:- Slice D: CLI-only `org adopt-existing` dry-run, apply, and adoption status for wrapping legacy coordination data into the org model
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:20:- adopt-existing remains CLI-only and local to the data dir being migrated
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:28:npm run scenario:org-surface-smoke
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:29:npm run review:lead-surfaces
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:37:- `scenario:org-surface-smoke`
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:44:- `review:lead-surfaces`
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:107:- Team summaries and briefs are derived-only read models.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:108:- `org adopt-existing` is CLI-only; there is no mutating HTTP migration endpoint in this iteration.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:109:- This pass does not implement Tailscale Stage 2 or Stage 3.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:132:Stage 2 and Stage 3 remain blocked until Doug completes Stage 1 on the target host and the shared tailnet URL is proven from another machine.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:134:Runtime work becomes eligible only after all of the following are true:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md:137:2. Doug runs the Stage 1 host scripts successfully on his machine.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:13:npm run scenario:org-surface-smoke
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:14:npm run review:lead-surfaces
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:22:- `npm run scenario:org-surface-smoke` runs the broader stabilization smoke that mixes CLI and direct HTTP validation for invite claim, team read models, scheduled team briefs, and CLI-only adopt-existing flow.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:23:- `npm run review:lead-surfaces` reuses the shared-coordination scenario, captures the lead-facing project and team read surfaces, and asserts the semantics that are still stabilizing across inbox, messages, summaries, worker grouping, and brief output.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:25:- `npm run scenario:tailscale-shared-coordination` runs the shared-coordination path against an externally hosted Artifact Loop service URL and is intended for the Stage 1 Tailscale rollout.
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:30:Stage 1 of the Doug-hosted Tailscale rollout is documented in [docs/tailscale-rollout.md](/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md).
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:32:The Stage 1 operator surfaces are:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:56:npm run scenario:org-surface-smoke
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:57:npm run review:lead-surfaces
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:67:- `scenario:org-surface-smoke` is the mixed-surface stabilization pass:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:73:  - seeds an isolated legacy fixture and runs CLI-only adopt-existing dry-run/apply/status
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:74:- `review:lead-surfaces` is the lead-side stabilization pass:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:412:Team summaries and briefs stay derived-only:
+/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md:419:Legacy file-backed coordination data can be wrapped into the organization model with a CLI-only migration path:

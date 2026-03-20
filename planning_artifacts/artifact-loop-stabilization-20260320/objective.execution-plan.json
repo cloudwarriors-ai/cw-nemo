@@ -1,0 +1,150 @@
+{
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "schema_version": "execution-plan.v1",
+  "track_id": "artifact-loop-stabilization-20260320",
+  "units": [
+    {
+      "acceptance_checks": [
+        "CLI invite creation succeeds.",
+        "HTTP invite claim succeeds.",
+        "HTTP team summary and brief reflect the same task truth as the CLI coordination loop.",
+        "CLI adopt-existing succeeds against seeded legacy data."
+      ],
+      "allowed_scope": [
+        "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+        "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+        "artifact-loop/package.json"
+      ],
+      "candidate_files": [
+        "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+        "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+        "artifact-loop/package.json"
+      ],
+      "completion_test": "Reviewer confirms the smoke exercises the intended contracts and keeps shared_coordination_v1 canonical.",
+      "dependencies": [],
+      "escalation_on_failure": "retry_then_block",
+      "failure_signals": [
+        "Scenario reimplements too much of the canonical coordination flow.",
+        "HTTP route checks are absent or do not validate payload semantics.",
+        "Adoption proof depends on service endpoints instead of CLI-only commands."
+      ],
+      "max_retries": 2,
+      "mutation_budget": {
+        "max_attempts": 2,
+        "max_files": 3
+      },
+      "priority": "high",
+      "required": true,
+      "unit_id": "packet-build-org-surface-smoke",
+      "unit_type": "command_capture",
+      "verification_scope": "local"
+    },
+    {
+      "acceptance_checks": [
+        "Review bundle captures the new team files.",
+        "Invariants prove team totals and worker workload align with project truth.",
+        "Latest team brief run is persisted and delivered to the owner inbox."
+      ],
+      "allowed_scope": [
+        "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+        ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+      ],
+      "candidate_files": [
+        "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+        ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+      ],
+      "completion_test": "Reviewer confirms the review validates derived team behavior rather than inventing a second state path.",
+      "dependencies": [
+        "packet-build-org-surface-smoke"
+      ],
+      "escalation_on_failure": "retry_then_block",
+      "failure_signals": [
+        "Review bundle lacks team-level outputs.",
+        "Invariants depend on text rendering instead of JSON semantics.",
+        "Skill doc still describes project-only review coverage."
+      ],
+      "max_retries": 2,
+      "mutation_budget": {
+        "max_attempts": 2,
+        "max_files": 2
+      },
+      "priority": "high",
+      "required": true,
+      "unit_id": "packet-extend-lead-surface-review",
+      "unit_type": "command_capture",
+      "verification_scope": "local"
+    },
+    {
+      "acceptance_checks": [
+        "README links to the note.",
+        "The note includes the exact stabilization entrypoints and org operator commands.",
+        "The runtime gate is consistent between the note and tailscale-rollout.md."
+      ],
+      "allowed_scope": [
+        "artifact-loop/docs/org-stabilization-rollout.md",
+        "artifact-loop/docs/tailscale-rollout.md",
+        "artifact-loop/README.md"
+      ],
+      "candidate_files": [
+        "artifact-loop/docs/org-stabilization-rollout.md",
+        "artifact-loop/docs/tailscale-rollout.md",
+        "artifact-loop/README.md"
+      ],
+      "completion_test": "Reviewer confirms the note is the canonical operator-facing source of truth for this stabilization pass.",
+      "dependencies": [
+        "packet-extend-lead-surface-review"
+      ],
+      "escalation_on_failure": "retry_then_block",
+      "failure_signals": [
+        "Canonical operator guidance remains in planning_artifacts.",
+        "Docs contradict the current runtime gate.",
+        "README does not surface the new stabilization entrypoints."
+      ],
+      "max_retries": 2,
+      "mutation_budget": {
+        "max_attempts": 2,
+        "max_files": 3
+      },
+      "priority": "high",
+      "required": true,
+      "unit_id": "packet-operator-rollout-docs",
+      "unit_type": "command_capture",
+      "verification_scope": "local"
+    },
+    {
+      "acceptance_checks": [
+        "All listed validation commands pass.",
+        "Smoke and review captures exist under the stabilization track.",
+        "Governed finalize gate returns ok=true."
+      ],
+      "allowed_scope": [
+        "artifact-loop",
+        "planning_artifacts/artifact-loop-stabilization-20260320"
+      ],
+      "candidate_files": [
+        "artifact-loop",
+        "planning_artifacts/artifact-loop-stabilization-20260320"
+      ],
+      "completion_test": "Reviewer confirms evidence covers the whole stabilization objective and no required gate is skipped.",
+      "dependencies": [
+        "packet-operator-rollout-docs"
+      ],
+      "escalation_on_failure": "retry_then_block",
+      "failure_signals": [
+        "Existing package checks fail.",
+        "New smoke or review entrypoints fail.",
+        "Finalize gate reports blocked or revise."
+      ],
+      "max_retries": 2,
+      "mutation_budget": {
+        "max_attempts": 2,
+        "max_files": 2
+      },
+      "priority": "high",
+      "required": true,
+      "unit_id": "packet-validate-stabilization",
+      "unit_type": "command_capture",
+      "verification_scope": "broad"
+    }
+  ]
+}

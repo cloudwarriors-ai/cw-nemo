@@ -1,0 +1,21 @@
+{
+  "changed_files": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/client.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/cli.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/bin/session-hub.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/test/cli.test.js"
+  ],
+  "cycle_id": "objective-agent-session-hub-20260320-cycle-final",
+  "evidence_refs": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-surface-load-root-50/manifest.json",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-flow-tests-root-75/manifest.json",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-session-hub-tests-root-100/manifest.json"
+  ],
+  "objective_id": "objective-agent-session-hub-20260320",
+  "packet_id": "packet-build-session-cli",
+  "runtime_state": "accepted",
+  "schema_version": "objective-packet-result.v1",
+  "track_id": "agent-session-hub-20260320",
+  "updated_at": "2026-03-20T05:02:53.829Z",
+  "verifier_output": "accepted"
+}

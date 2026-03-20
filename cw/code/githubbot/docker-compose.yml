@@ -1,0 +1,92 @@
+version: '3.3'
+services:
+  githubbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: githubbot:latest
+    container_name: githubbot
+    command: ["daphne", "-b", "0.0.0.0", "-p", "5000", "github_bot_project.asgi:application"]
+    environment:
+      - DJANGO_SETTINGS_MODULE=github_bot_project.settings
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./:/code
+    networks:
+      - proxy
+      - backend
+    restart: always
+    depends_on:
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+
+      - "traefik.http.routers.githubbot.entrypoints=websecure"
+      - "traefik.http.routers.githubbot.tls=true"
+      - "traefik.http.routers.githubbot.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.githubbot.rule=Host(`github.cloudwarriors.ai`)"
+      - "traefik.http.services.githubbot.loadbalancer.server.port=5000"
+
+      - "traefik.http.routers.githubbot-http.entrypoints=web"
+      - "traefik.http.routers.githubbot-http.rule=Host(`github.cloudwarriors.ai`)"
+      - "traefik.http.routers.githubbot-http.middlewares=redirect-to-https"
+
+  redis:
+    image: redis:7-alpine
+    container_name: githubbot-redis
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - redis-data:/data
+
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: githubbot:latest
+    container_name: githubbot-celery-worker
+    command: ["python", "-m", "celery", "-A", "github_bot_project", "worker", "-l", "info", "--concurrency=2"]
+    environment:
+      - DJANGO_SETTINGS_MODULE=github_bot_project.settings
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    volumes:
+      - ./:/code
+    networks:
+      - backend
+    restart: always
+    depends_on:
+      - redis
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: githubbot:latest
+    container_name: githubbot-celery-beat
+    command: ["python", "-m", "celery", "-A", "github_bot_project", "beat", "-l", "info"]
+    environment:
+      - DJANGO_SETTINGS_MODULE=github_bot_project.settings
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    volumes:
+      - ./:/code
+    networks:
+      - backend
+    restart: always
+    depends_on:
+      - redis
+
+networks:
+  proxy:
+    external: true
+  backend:
+    driver: bridge
+
+volumes:
+  redis-data:

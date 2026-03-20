@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GitHub Bot{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #e5e5e5;
+        }
+        .pagination-link {
+            @apply px-3 py-1 mx-1 rounded;
+        }
+        .pagination-link.active {
+            @apply bg-blue-600 text-white;
+        }
+        .pagination-link:not(.active) {
+            @apply bg-gray-700 text-gray-300 hover:bg-gray-600;
+        }
+        .webhook-card {
+            background-color: #2d2d2d;
+            border: 1px solid #404040;
+        }
+        .webhook-card:hover {
+            background-color: #363636;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <nav class="bg-gray-800 shadow-lg mb-8">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/events/" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Events</a>
+                    <a href="/webhooks/" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Legacy Events</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="mt-8 py-4 bg-gray-900">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            GitHub Bot &copy; {% now "Y" %}
+        </div>
+    </footer>
+</body>
+</html>

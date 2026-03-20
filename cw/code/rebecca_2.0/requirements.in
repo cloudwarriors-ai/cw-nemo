@@ -1,0 +1,34 @@
+# requirements.in - Unpinned dependencies for pip-compile
+#
+# To regenerate requirements.txt:
+#   pip install pip-tools
+#   pip-compile requirements.in --output-file=requirements.txt
+#
+# To update all dependencies:
+#   pip-compile requirements.in --upgrade --output-file=requirements.txt
+
+# Core dependencies
+PyGithub
+requests
+python-dotenv
+pydantic  # Input validation for API routes
+
+# Bot dependencies (Phase 1)
+flask
+gunicorn
+flask-sock  # WebSocket support for Output Media
+openpyxl  # Excel report generation
+
+# Testing
+pytest
+pytest-cov
+pytest-asyncio
+
+# LiveKit + Simli Avatar (Phase 5)
+livekit-agents[simli]
+livekit-plugins-deepgram
+livekit-plugins-cartesia
+livekit-plugins-openai
+
+# Zoom Meeting SDK (optional)
+zoom-meeting-sdk

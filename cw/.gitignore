@@ -1,0 +1,22 @@
+# CW runtime secrets
+.env
+
+# CW persistent data (mounted volumes)
+.data/
+
+# Extension build artifacts / dependencies
+extensions/*/node_modules/
+extensions/*/dist/
+!extensions/claude-mem/dist/
+
+# Python
+code/*/__pycache__/
+code/*/*.pyc
+code/*/.venv/
+
+# Swabble build artifacts
+Swabble/.build/
+Swabble/.swiftpm/
+
+# OS
+.DS_Store

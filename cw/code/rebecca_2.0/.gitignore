@@ -1,0 +1,45 @@
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Data/Database
+data/
+*.db
+*.sqlite
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+=*
+tmpclaude-*
+
+# Claude Code local settings
+*.local.json
+.claude/session_limits.json
+
+# Local docker-compose with environment-specific domains
+docker-compose.yml

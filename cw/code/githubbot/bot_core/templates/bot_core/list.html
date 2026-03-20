@@ -1,0 +1,159 @@
+{% extends "bot_core/base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-200 mb-8">{{ title }}</h1>
+    
+    <div class="space-y-4">
+        {% for event in events %}
+        <div class="bg-gray-800 rounded-lg shadow-lg p-4 hover:bg-gray-700 transition-colors duration-200">
+            <div class="flex items-start space-x-4">
+                {% if event.actor_avatar %}
+                <img src="{{ event.actor_avatar }}" alt="User avatar" class="w-10 h-10 rounded-full">
+                {% else %}
+                <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                    <span class="text-gray-300 text-sm">?</span>
+                </div>
+                {% endif %}
+                
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        {% if event.html_url %}
+                        <a href="{{ event.html_url }}" target="_blank" class="text-blue-400 hover:text-blue-300">
+                            {{ event.summary }}
+                        </a>
+                        {% else %}
+                        <span class="text-gray-300">
+                            {{ event.summary }}
+                        </span>
+                        {% endif %}
+                        <span class="text-gray-400 text-sm">
+                            {{ event.created_at|timesince }} ago
+                        </span>
+                    </div>
+                    
+                    <div class="mt-2 flex items-center space-x-2 text-sm">
+                        <span class="px-2 py-1 bg-gray-700 rounded text-gray-300">
+                            {{ event.repository }}
+                        </span>
+                        <span class="px-2 py-1 bg-gray-700 rounded text-gray-300">
+                            {{ event.type }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8">
+            <p class="text-gray-400">No events found</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="mt-8 text-center">
+        <p class="text-gray-400">
+            Showing the most recent {{ events|length }} events
+        </p>
+    </div>
+</div>
+
+<script>
+    // Create WebSocket connection
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const eventsSocket = new WebSocket(
+        `${protocol}//${window.location.host}/ws/github/events/`
+    );
+
+    // Function to format the event HTML
+    function formatEventHtml(data) {
+        const avatarHtml = data.actor_avatar ? 
+            `<img src="${data.actor_avatar}" alt="User avatar" class="w-10 h-10 rounded-full">` :
+            `<div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                <span class="text-gray-300 text-sm">?</span>
+            </div>`;
+
+        const summaryHtml = data.html_url ?
+            `<a href="${data.html_url}" target="_blank" class="text-blue-400 hover:text-blue-300">
+                ${data.summary}
+            </a>` :
+            `<span class="text-gray-300">
+                ${data.summary}
+            </span>`;
+
+        return `
+            <div class="bg-gray-800 rounded-lg shadow-lg p-4 hover:bg-gray-700 transition-colors duration-200 opacity-0 transform translate-y-4" style="animation: slideIn 0.3s ease-out forwards;">
+                <div class="flex items-start space-x-4">
+                    ${avatarHtml}
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            ${summaryHtml}
+                            <span class="text-gray-400 text-sm">just now</span>
+                        </div>
+                        <div class="mt-2 flex items-center space-x-2 text-sm">
+                            <span class="px-2 py-1 bg-gray-700 rounded text-gray-300">
+                                ${data.repository}
+                            </span>
+                            <span class="px-2 py-1 bg-gray-700 rounded text-gray-300">
+                                ${data.type}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Handle incoming messages
+    eventsSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const eventHtml = formatEventHtml(data);
+        
+        // Add new event to the top of the list
+        const eventsList = document.querySelector('.space-y-4');
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = eventHtml;
+        const newEvent = tempDiv.firstElementChild;
+        
+        eventsList.insertBefore(newEvent, eventsList.firstChild);
+        
+        // Remove the last event if we have more than 50
+        const events = eventsList.querySelectorAll('.bg-gray-800');
+        if (events.length > 50) {
+            events[events.length - 1].remove();
+        }
+
+        // Update the count
+        const countElement = document.querySelector('.text-gray-400');
+        if (countElement) {
+            const currentCount = eventsList.querySelectorAll('.bg-gray-800').length;
+            countElement.textContent = `Showing the most recent ${currentCount} events`;
+        }
+    };
+
+    // Handle connection errors
+    eventsSocket.onclose = function(e) {
+        console.error('GitHub events socket closed unexpectedly');
+        // Try to reconnect after 5 seconds
+        setTimeout(() => {
+            window.location.reload();
+        }, 5000);
+    };
+
+    eventsSocket.onerror = function(e) {
+        console.error('WebSocket error:', e);
+    };
+</script>
+
+<style>
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(1rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}

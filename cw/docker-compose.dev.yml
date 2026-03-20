@@ -1,0 +1,30 @@
+# Dev overrides — Traefik labels, bind mounts for hot reload
+services:
+  cw-nemo:
+    user: root
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=3072
+    volumes:
+      # Bind-mount extensions for live editing
+      - ./extensions:/opt/cw-extensions
+    mem_limit: 4g
+    memswap_limit: 4g
+    labels:
+      - "traefik.enable=true"
+      # Main UI/API
+      - "traefik.http.routers.cw-nemo.rule=Host(`molty-dev.cloudwarriors.ai`)"
+      - "traefik.http.routers.cw-nemo.entrypoints=websecure"
+      - "traefik.http.routers.cw-nemo.tls.certresolver=letsencrypt"
+      - "traefik.http.services.cw-nemo.loadbalancer.server.port=18789"
+      # Zoom webhook (port 4000) — higher priority to match before main router
+      - "traefik.http.routers.cw-nemo-zoom.rule=Host(`molty-dev.cloudwarriors.ai`) && PathPrefix(`/zoom/`)"
+      - "traefik.http.routers.cw-nemo-zoom.priority=100"
+      - "traefik.http.routers.cw-nemo-zoom.entrypoints=websecure"
+      - "traefik.http.routers.cw-nemo-zoom.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cw-nemo-zoom.service=cw-nemo-zoom"
+      - "traefik.http.services.cw-nemo-zoom.loadbalancer.server.port=4000"
+
+networks:
+  default:
+    name: proxy
+    external: true

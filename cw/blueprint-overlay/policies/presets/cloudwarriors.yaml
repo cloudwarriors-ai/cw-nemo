@@ -1,0 +1,85 @@
+# CloudWarriors network policy overlay for OpenShell sandbox.
+# Merged on top of NemoClaw's default policy at container startup.
+#
+# Allows outbound access to CW platform services and AI provider APIs
+# that are not included in the upstream NemoClaw policy.
+
+version: "1"
+name: cloudwarriors
+
+rules:
+  # ── CW Platform Services ───────────────────────────────────────
+  - name: zoomwarriors-api
+    direction: outbound
+    action: allow
+    destinations:
+      - "*.api.zoomwarriors.com"
+    ports: [443]
+    protocol: tcp
+
+  - name: tesseract-api
+    direction: outbound
+    action: allow
+    destinations:
+      - "api.tesseract.pscx.ai"
+    ports: [443]
+    protocol: tcp
+
+  - name: project-pulse
+    direction: outbound
+    action: allow
+    destinations:
+      - "projectpulse.pscx.ai"
+    ports: [443]
+    protocol: tcp
+
+  - name: bighead-api
+    direction: outbound
+    action: allow
+    destinations:
+      - "bighead"
+    ports: [8000]
+    protocol: tcp
+
+  # ── AI Provider APIs ───────────────────────────────────────────
+  - name: anthropic-api
+    direction: outbound
+    action: allow
+    destinations:
+      - "api.anthropic.com"
+    ports: [443]
+    protocol: tcp
+
+  - name: openrouter-api
+    direction: outbound
+    action: allow
+    destinations:
+      - "openrouter.ai"
+    ports: [443]
+    protocol: tcp
+
+  - name: openai-api
+    direction: outbound
+    action: allow
+    destinations:
+      - "api.openai.com"
+    ports: [443]
+    protocol: tcp
+
+  # ── Internal Services ──────────────────────────────────────────
+  - name: chromadb
+    direction: outbound
+    action: allow
+    destinations:
+      - "claude-mem-chroma"
+    ports: [8000]
+    protocol: tcp
+
+  # ── Zoom Webhooks (inbound) ────────────────────────────────────
+  - name: zoom-webhooks
+    direction: inbound
+    action: allow
+    sources:
+      - "0.0.0.0/0"
+    ports: [4000]
+    protocol: tcp

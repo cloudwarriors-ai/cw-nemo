@@ -1,0 +1,37 @@
+services:
+  cw-nemo:
+    build:
+      context: ..
+      dockerfile: cw/Dockerfile.cw
+    env_file: .env
+    volumes:
+      - ../.data/openclaw:/sandbox/.openclaw
+      - ../.data/claude-mem:/sandbox/.claude-mem
+    ports:
+      - "18789:18789"    # Gateway / web UI
+      - "18790:18790"    # Bridge (inter-bot comms)
+      - "4000:4000"      # Zoom webhook receiver
+      - "37777:37777"    # Auxiliary
+      - "1455:1455"      # Auxiliary
+    networks: [default, tesseract-network]
+    restart: unless-stopped
+
+  claude-mem-chroma:
+    image: chromadb/chroma:1.0.0
+    volumes:
+      - ../.data/claude-mem/vector-db:/data
+    restart: unless-stopped
+
+  githubbot:
+    build: code/githubbot
+    env_file: .env
+    restart: unless-stopped
+
+  rebecca:
+    build: code/rebecca_2.0
+    env_file: .env
+    restart: unless-stopped
+
+networks:
+  tesseract-network:
+    external: true

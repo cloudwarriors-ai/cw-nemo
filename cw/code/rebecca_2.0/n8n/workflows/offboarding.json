@@ -1,0 +1,204 @@
+{
+  "name": "Intern Offboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "offboarding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "offboarding"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { \"intern_id\": $json.body.intern_id, \"intern_name\": $json.body.intern_name, \"end_date\": $json.body.end_date, \"reason\": $json.body.reason, \"execution_id\": $json.body.execution_id } }}",
+        "options": {}
+      },
+      "id": "set-variables",
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"status\": \"accepted\", \"execution_id\": $json.execution_id, \"message\": \"Offboarding workflow started for \" + $json.intern_name } }}",
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"general\", \"message\": \"Offboarding initiated for \" + $json.intern_name + \" (end date: \" + $json.end_date + \").\\n\\nOffboarding checklist:\\n- [ ] Complete any in-progress tasks or hand off\\n- [ ] Document any work in progress\\n- [ ] Return any equipment\\n- [ ] Complete exit interview\\n- [ ] Update contact information for alumni network\" } }}",
+        "options": {}
+      },
+      "id": "send-checklist",
+      "name": "Send Offboarding Checklist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [650, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"devops\", \"message\": \"IT Action Required: Please schedule access revocation for \" + $('Extract Data').item.json.intern_name + \" effective \" + $('Extract Data').item.json.end_date + \".\\n\\nSystems to review:\\n- GitHub organization access\\n- Cloud platform access\\n- Internal tools and dashboards\" } }}",
+        "options": {}
+      },
+      "id": "notify-it",
+      "name": "Notify IT for Access Revocation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [850, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "unit": "days",
+        "value": "={{ Math.max(1, Math.floor((new Date($('Extract Data').item.json.end_date) - new Date()) / (1000 * 60 * 60 * 24))) }}"
+      },
+      "id": "wait-until-end",
+      "name": "Wait Until End Date",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/api/zoom/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"channel\": \"general\", \"message\": \"Today is \" + $('Extract Data').item.json.intern_name + \"'s last day with us!\\n\\nThank you for all your contributions to the team. We wish you the best in your future endeavors!\\n\\nPlease reach out if you'd like to stay connected with the Cloud Warriors alumni network.\" } }}",
+        "options": {}
+      },
+      "id": "send-farewell",
+      "name": "Send Farewell Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1250, 400],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.QA_BOT_URL }}/n8n/callback",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"execution_id\": $('Extract Data').item.json.execution_id, \"status\": \"completed\", \"secret\": $env.N8N_CALLBACK_SECRET, \"result\": { \"intern_name\": $('Extract Data').item.json.intern_name, \"end_date\": $('Extract Data').item.json.end_date, \"steps_completed\": [\"checklist\", \"it_notification\", \"farewell\"] } } }}",
+        "options": {}
+      },
+      "id": "notify-complete",
+      "name": "Notify QA Bot Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1450, 400],
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Offboarding Checklist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Offboarding Checklist": {
+      "main": [
+        [
+          {
+            "node": "Notify IT for Access Revocation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify IT for Access Revocation": {
+      "main": [
+        [
+          {
+            "node": "Wait Until End Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Until End Date": {
+      "main": [
+        [
+          {
+            "node": "Send Farewell Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Farewell Message": {
+      "main": [
+        [
+          {
+            "node": "Notify QA Bot Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "qa-bot"
+    },
+    {
+      "name": "intern-management"
+    }
+  ],
+  "triggerCount": 0
+}

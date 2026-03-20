@@ -3,7 +3,8 @@
 
 import { resolve } from "node:path";
 import type { Command } from "commander";
-import { clearSession } from "../helpers/session.js";
+import { clearSession, getSession } from "../helpers/session.js";
+import { recordTaskUseEvent } from "../helpers/usage.js";
 
 export function registerTaskUnuse(taskCmd: Command): void {
   taskCmd
@@ -12,7 +13,11 @@ export function registerTaskUnuse(taskCmd: Command): void {
     .option("--data-dir <dir>", "Data directory")
     .action((opts: { dataDir?: string }) => {
       const dataDir = resolve(opts.dataDir ?? ".artifact-loop");
+      const previousTaskId = getSession(dataDir)?.current_task_id;
       clearSession(dataDir);
+      if (previousTaskId) {
+        recordTaskUseEvent(dataDir, "clear", undefined, previousTaskId);
+      }
       console.log("Cleared current task");
     });
 }

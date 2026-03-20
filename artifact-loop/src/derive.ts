@@ -24,6 +24,7 @@ import type {
   MissingInput,
   NormalizedArtifact,
   SignalPayload,
+  SignalStatusView,
   TaskState,
 } from "./types.js";
 
@@ -62,6 +63,34 @@ function isWithinWindow(
   const artifactTime = new Date(artifactTimestamp).getTime();
   const windowStart = now.getTime() - DERIVATION_WINDOW_MS;
   return artifactTime >= windowStart;
+}
+
+function isDerivationRelevantArtifact(
+  artifact: NormalizedArtifact,
+  acceptanceSignals: AcceptanceSignal[],
+): boolean {
+  const payload = artifact.signal_payload;
+
+  if (payload.type === "git_diff_summary") {
+    return false;
+  }
+
+  if (payload.type === "manual_event") {
+    return payload.event_type === "missing_input" || payload.event_type === "input_provided";
+  }
+
+  if (payload.type === "runtime_event") {
+    return (
+      payload.event_type === "missing_dependency" ||
+      payload.event_type === "missing_external_resource"
+    );
+  }
+
+  if (!("signal_id" in payload)) {
+    return false;
+  }
+
+  return acceptanceSignals.some((signal) => signal.id === payload.signal_id);
 }
 
 /**
@@ -116,6 +145,19 @@ interface SignalEvaluation {
   hasEvidence: boolean;
 }
 
+function toSignalStatusView(
+  signal: AcceptanceSignal,
+  evaluation: SignalEvaluation | undefined,
+): SignalStatusView {
+  if (evaluation?.failed) {
+    return { signal, status: "failed" };
+  }
+  if (evaluation?.satisfied) {
+    return { signal, status: "satisfied" };
+  }
+  return { signal, status: "not_yet_satisfied" };
+}
+
 /**
  * Evaluate all acceptance signals against current artifacts within the derivation window.
  *
@@ -157,6 +199,22 @@ function evaluateSignals(
   }
 
   return results;
+}
+
+export function evaluateSignalStatuses(
+  acceptanceSignals: AcceptanceSignal[],
+  normalizedArtifacts: NormalizedArtifact[],
+  now: Date = new Date(),
+): SignalStatusView[] {
+  const eligibleArtifacts = normalizedArtifacts.filter(
+    (artifact) =>
+      isDerivationEligible(artifact) &&
+      isWithinWindow(artifact.timestamp, now) &&
+      isDerivationRelevantArtifact(artifact, acceptanceSignals),
+  );
+
+  const evaluations = evaluateSignals(acceptanceSignals, eligibleArtifacts, now);
+  return acceptanceSignals.map((signal) => toSignalStatusView(signal, evaluations.get(signal.id)));
 }
 
 /**
@@ -218,8 +276,11 @@ export function derive(input: DerivationInput): DerivationOutput {
   const eligibleArtifacts = normalizedArtifacts.filter(
     (a) => isDerivationEligible(a) && isWithinWindow(a.timestamp, now),
   );
+  const derivationArtifacts = eligibleArtifacts.filter((artifact) =>
+    isDerivationRelevantArtifact(artifact, acceptanceSignals),
+  );
 
-  if (eligibleArtifacts.length === 0) {
+  if (derivationArtifacts.length === 0) {
     return {
       nextState: { ...priorState },
       transitionOccurred: false,
@@ -227,7 +288,7 @@ export function derive(input: DerivationInput): DerivationOutput {
   }
 
   // ─── Evaluate signals ────────────────────────────────────────────
-  const signalEvals = evaluateSignals(acceptanceSignals, normalizedArtifacts, now);
+  const signalEvals = evaluateSignals(acceptanceSignals, derivationArtifacts, now);
 
   const requiredSignals = acceptanceSignals.filter((s) => s.required);
   const requiredNonMerge = requiredSignals.filter((s) => s.category !== "merge");
@@ -253,12 +314,12 @@ export function derive(input: DerivationInput): DerivationOutput {
 
   // ─── Detect missing inputs ──────────────────────────────────────
   // Check if any artifacts indicate missing input conditions
-  const newMissingInputs = detectMissingInputs(normalizedArtifacts, now);
+  const newMissingInputs = detectMissingInputs(derivationArtifacts, now);
 
   // Check if existing missing inputs have been resolved by new artifacts
   const resolvedMissing = resolveExistingMissingInputs(
     priorState.missing_inputs,
-    normalizedArtifacts,
+    derivationArtifacts,
     now,
   );
 
@@ -298,7 +359,7 @@ export function derive(input: DerivationInput): DerivationOutput {
   }
   // Rule 6: Some evidence of progress → in_progress
   else if (
-    eligibleArtifacts.length > 0 &&
+    derivationArtifacts.length > 0 &&
     priorState.status === "not_started"
   ) {
     nextStatus = "in_progress";
@@ -312,7 +373,7 @@ export function derive(input: DerivationInput): DerivationOutput {
     nextStatus,
   );
 
-  const bindingConfidence = computeBindingConfidence(eligibleArtifacts);
+  const bindingConfidence = computeBindingConfidence(derivationArtifacts);
 
   // ─── Build output ────────────────────────────────────────────────
   const nextState: TaskState = {
@@ -326,13 +387,13 @@ export function derive(input: DerivationInput): DerivationOutput {
 
   if (transitionOccurred) {
     const derivationRun: DerivationRun = {
-      id: generateRunId(),
-      timestamp: now.toISOString(),
-      task_id: "", // caller must fill
-      input_artifact_ids: eligibleArtifacts.map((a) => a.id),
-      rules_applied: rulesApplied,
-      prior_state: priorState.status,
-      output_state: nextStatus,
+        id: generateRunId(),
+        timestamp: now.toISOString(),
+        task_id: "", // caller must fill
+        input_artifact_ids: derivationArtifacts.map((a) => a.id),
+        rules_applied: rulesApplied,
+        prior_state: priorState.status,
+        output_state: nextStatus,
     };
 
     return { nextState, transitionOccurred, derivationRun };

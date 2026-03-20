@@ -1,0 +1,538 @@
+{
+  "compiled_contract": {
+    "authority_map": [
+      {
+        "authority_id": "AUTH-001",
+        "resolution": "Allowed within the workspace; no external systems or destructive git operations are required.",
+        "scope": "Create a new session-hub package and governed planning artifacts only.",
+        "type": "local_repo_change"
+      }
+    ],
+    "autonomous_session_readiness": {
+      "next_executable_frontier": [
+        "packet-build-session-service"
+      ],
+      "readiness_gaps": [],
+      "safe_momentum_ready": true,
+      "status": "execution_ready"
+    },
+    "autonomy_level": "L2_supervised_autonomous",
+    "clarification_governor": {
+      "allowed_topics": [
+        "product_meaning",
+        "authority_security_boundaries",
+        "missing_success_criteria",
+        "non_discoverable_tradeoffs"
+      ],
+      "default_batch_limit": 1,
+      "new_authority_boundary_required_for_mid_execution_clarification": true,
+      "repo_discoverable_questions_forbidden": true
+    },
+    "constraints": [
+      "Keep the implementation isolated to a new session-hub package.",
+      "Use file-backed persistence only.",
+      "Use plain HTTP + JSON request/response contracts and a --service-url based client flow.",
+      "Preserve a minimal operator surface: serve, connect, send, read."
+    ],
+    "decomposition_policy": {
+      "bounded_contexts": [
+        "session-hub package",
+        "planning artifacts"
+      ],
+      "packetization": "Use one implementation packet and one validation packet."
+    },
+    "definition_of_done": [
+      {
+        "category": "correctness",
+        "criterion": "Agents can connect to the same session and exchange persisted messages through the shared service using only session id, agent id, and service URL.",
+        "id": "dod-correctness",
+        "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+      },
+      {
+        "category": "tests",
+        "criterion": "Automated tests cover direct service usage and CLI flows with persisted local client state.",
+        "id": "dod-tests",
+        "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+      },
+      {
+        "category": "security",
+        "criterion": "The service remains minimal and explicit about having no built-in auth so callers do not assume protected transport or identity verification.",
+        "id": "dod-security",
+        "verification": "rg -n \"no built-in auth|Tailscale\" /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/README.md /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src"
+      },
+      {
+        "category": "observability",
+        "criterion": "Human-readable CLI output and JSON output let operators confirm the active session, sender, and message history.",
+        "id": "dod-observability",
+        "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+      },
+      {
+        "category": "rollback",
+        "criterion": "The new package is isolated enough that rollback is a bounded deletion/revert of session-hub files only.",
+        "id": "dod-rollback",
+        "verification": "bash -lc 'git diff --stat -- session-hub'"
+      }
+    ],
+    "dependencies": [
+      "Node.js >= 20 for fetch and node:test support"
+    ],
+    "evidence_plan": [
+      {
+        "evidence": "planning_artifacts/agent-session-hub-20260320/captures/*-session-hub-tests-100/manifest.json",
+        "name": "session-hub tests",
+        "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+      },
+      {
+        "evidence": "planning_artifacts/agent-session-hub-20260320/captures/*-log-session-hub-diff-75/manifest.json",
+        "name": "session-hub diff scope",
+        "verification": "git diff --stat -- session-hub"
+      },
+      {
+        "evidence": "planning_artifacts/agent-session-hub-20260320/captures/*-rollback-session-hub-contract-100/manifest.json",
+        "name": "session-hub rollback scope",
+        "verification": "git diff --name-only -- session-hub"
+      }
+    ],
+    "frontier_map": [
+      {
+        "execution_mode": "sequence_required",
+        "packet_id": "packet-build-session-service"
+      },
+      {
+        "execution_mode": "sequence_required",
+        "packet_id": "packet-build-session-cli"
+      },
+      {
+        "execution_mode": "sequence_required",
+        "packet_id": "packet-validate-session-flow"
+      }
+    ],
+    "integration_map": [
+      {
+        "evidence": [
+          "planning_artifacts/agent-session-hub-20260320/captures"
+        ],
+        "integration_id": "INT-001",
+        "packet_ids": [
+          "packet-build-session-service"
+        ],
+        "touchpoint": "Shared HTTP session service and file-backed persistence.",
+        "verification": [
+          "session-hub/test/service.test.js"
+        ]
+      },
+      {
+        "evidence": [
+          "planning_artifacts/agent-session-hub-20260320/captures"
+        ],
+        "integration_id": "INT-002",
+        "packet_ids": [
+          "packet-build-session-cli",
+          "packet-validate-session-flow"
+        ],
+        "touchpoint": "CLI local client-state resolution against the remote service URL.",
+        "verification": [
+          "session-hub/test/cli.test.js"
+        ]
+      }
+    ],
+    "intent_contract": {
+      "ambiguity_classification": [
+        {
+          "classification": "technical_reversible",
+          "item_id": "amb-001",
+          "statement": "The network layer is assumed to be provided externally by Tailscale; the package only needs to be Tailscale-reachable by host and port."
+        }
+      ],
+      "authority_sensitive_decisions": [],
+      "non_goals": [
+        "Do not add project coordination, assignments, inboxes, briefs, derivation logic, or task state machines.",
+        "Do not add authentication, Tailscale APIs, or tunnel orchestration in this iteration.",
+        "Do not retrofit the Artifact Loop coordination model into this separate package."
+      ],
+      "objective": "Create a file-backed HTTP service and CLI that support session connect, send, and read flows using a shared service URL.",
+      "objective_shape_status": "accepted_rewritten",
+      "success_criteria": [
+        "A service can create or update a session and persist messages under sessions/<id>.json and messages/<session-id>/*.json.",
+        "CLI clients can connect to a session with an agent id, persist that local client session state, and then send and read messages without retyping the session on every command.",
+        "End-to-end tests prove a remote client can connect, send, and read through the HTTP service."
+      ]
+    },
+    "migration_fallback_policy": {
+      "compat_fallback_allowed": false,
+      "manifest_rollback_path": "planning_artifacts/agent-session-hub-20260320/captures/rollback-session-hub-contract/manifest.json",
+      "max_fallback_invocations": 0
+    },
+    "momentum_map": [
+      {
+        "isolates_blocker": false,
+        "movement_type": "closure_advancing",
+        "packet_id": "packet-build-session-service",
+        "resolves_dependency_classification": true,
+        "unlocks_packets": [
+          "packet-build-session-cli"
+        ]
+      },
+      {
+        "isolates_blocker": false,
+        "movement_type": "closure_advancing",
+        "packet_id": "packet-build-session-cli",
+        "resolves_dependency_classification": true,
+        "unlocks_packets": [
+          "packet-validate-session-flow"
+        ]
+      },
+      {
+        "isolates_blocker": false,
+        "movement_type": "closure_advancing",
+        "packet_id": "packet-validate-session-flow",
+        "resolves_dependency_classification": false,
+        "unlocks_packets": []
+      }
+    ],
+    "non_goals": [
+      "No transport encryption or identity layer inside the app",
+      "No background presence daemon",
+      "No websocket or realtime push transport",
+      "No task/project/brief coordination model"
+    ],
+    "objective": "Implement a separate minimal session messaging service and CLI so agents can connect to a shared session and exchange messages over a Tailscale-reachable HTTP endpoint.",
+    "objective_closure_policy": {
+      "allowed_states": [
+        "OBJECTIVE_COMPLETE",
+        "OBJECTIVE_COMPLETE_BOUNDARY_SHRUNK",
+        "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED"
+      ],
+      "boundary_shrink_allowed": false
+    },
+    "objective_requirements": [
+      {
+        "definition_of_done": {
+          "acceptance_checks": [
+            "Health endpoint responds.",
+            "Connect creates or updates a session.",
+            "Message posts are persisted under the session id."
+          ],
+          "allowed_scope": [
+            "session-hub/src/store.js",
+            "session-hub/src/server.js"
+          ],
+          "behavior_outcome": "A service started on a reachable host:port persists sessions and session messages on disk.",
+          "evidence_requirements": [
+            "Service integration test evidence"
+          ],
+          "objective_linkage": "session-messaging",
+          "rollback_or_fallback": "Remove the new package if the service contract proves incorrect.",
+          "verifier_acceptance_condition": "Reviewer confirms only minimal session/message behavior was added."
+        },
+        "description": "Provide a shared file-backed HTTP service for session connect and message persistence.",
+        "priority": "critical",
+        "requirement_id": "REQ-001"
+      },
+      {
+        "definition_of_done": {
+          "acceptance_checks": [
+            "connect persists local state",
+            "send resolves the current session from local state when omitted",
+            "read returns persisted messages from the service"
+          ],
+          "allowed_scope": [
+            "session-hub/src/client.js",
+            "session-hub/src/cli.js",
+            "session-hub/bin/session-hub.js"
+          ],
+          "behavior_outcome": "A client can connect once and then send and read without retyping the session id for each command.",
+          "evidence_requirements": [
+            "CLI integration test evidence"
+          ],
+          "objective_linkage": "session-messaging",
+          "rollback_or_fallback": "Revert the new CLI if local client state handling is unreliable.",
+          "verifier_acceptance_condition": "Reviewer confirms the CLI remains minimal and service-url driven."
+        },
+        "description": "Provide a CLI that can connect, send, and read against the shared service using local client session state.",
+        "priority": "critical",
+        "requirement_id": "REQ-002"
+      }
+    ],
+    "packets": [
+      {
+        "acceptance_checks": [
+          "Health endpoint responds.",
+          "Connect creates or updates a session.",
+          "Message posts are persisted under the session id."
+        ],
+        "allowed_scope": [
+          "session-hub/src/store.js",
+          "session-hub/src/server.js",
+          "session-hub/test/service.test.js"
+        ],
+        "automatable_acceptance": true,
+        "classification": "ready",
+        "constraints": [
+          "Stay inside the new package",
+          "Do not add auth or coordination state",
+          "Keep transport plain HTTP + JSON"
+        ],
+        "definition_of_done": {
+          "acceptance_checks": [
+            "Health endpoint responds.",
+            "Connect creates or updates a session.",
+            "Message posts are persisted under the session id."
+          ],
+          "allowed_scope": [
+            "session-hub/src/store.js",
+            "session-hub/src/server.js",
+            "session-hub/test/service.test.js"
+          ],
+          "behavior_outcome": "The new package provides the exact minimal session connect/send/read surface requested.",
+          "evidence_requirements": [
+            "Source diff",
+            "service test capture manifest"
+          ],
+          "objective_linkage": "REQ-001",
+          "rollback_or_fallback": "Delete or revert the isolated package if behavior regresses.",
+          "verifier_acceptance_condition": "Reviewer confirms the service remains a minimal session/message surface."
+        },
+        "dependencies": [],
+        "dependency_mode": "accepted_upstream",
+        "evidence_destination": "planning_artifacts/agent-session-hub-20260320/packet-build-session-service.json",
+        "execution_mode": "sequence_required",
+        "execution_strategy": "command_capture",
+        "failure_signals": [
+          "Messages are not written under the target session",
+          "Service read responses do not match the persisted session contents"
+        ],
+        "fallback_or_rollback": "Remove the new package if the isolated service contract proves wrong.",
+        "maintainable_completion_path": true,
+        "packet_class": "implementation",
+        "packet_id": "packet-build-session-service",
+        "packet_lane": "worker",
+        "parallelism_class": "serial",
+        "primary_behavior": "Implement the isolated session-hub package storage and HTTP service for session connect and message persistence.",
+        "product_meaning_resolved": true,
+        "prohibited_action_required": false,
+        "shared_surface_categories": [
+          "http-service",
+          "file-persistence"
+        ],
+        "strategy_inputs": {
+          "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+        },
+        "swarm_eligible": false,
+        "verifier_mapping": "Review the new package plus passing service integration tests."
+      },
+      {
+        "acceptance_checks": [
+          "connect persists local state",
+          "send resolves the current session from local state when omitted",
+          "read returns persisted messages from the service"
+        ],
+        "allowed_scope": [
+          "session-hub/src/client.js",
+          "session-hub/src/cli.js",
+          "session-hub/bin/session-hub.js",
+          "session-hub/test/cli.test.js"
+        ],
+        "automatable_acceptance": true,
+        "classification": "ready",
+        "constraints": [
+          "Stay inside the new package",
+          "Do not add auth or coordination state",
+          "Keep transport plain HTTP + JSON"
+        ],
+        "definition_of_done": {
+          "acceptance_checks": [
+            "connect persists local state",
+            "send resolves the current session from local state when omitted",
+            "read returns persisted messages from the service"
+          ],
+          "allowed_scope": [
+            "session-hub/src/client.js",
+            "session-hub/src/cli.js",
+            "session-hub/bin/session-hub.js",
+            "session-hub/test/cli.test.js"
+          ],
+          "behavior_outcome": "The CLI can connect once and then send/read against the service with local session state.",
+          "evidence_requirements": [
+            "Source diff",
+            "CLI test capture manifest"
+          ],
+          "objective_linkage": "REQ-002",
+          "rollback_or_fallback": "Delete or revert the CLI/client layer if behavior regresses.",
+          "verifier_acceptance_condition": "Reviewer confirms the CLI stays service-url driven and minimal."
+        },
+        "dependencies": [
+          "packet-build-session-service"
+        ],
+        "dependency_mode": "accepted_upstream",
+        "evidence_destination": "planning_artifacts/agent-session-hub-20260320/packet-build-session-cli.json",
+        "execution_mode": "sequence_required",
+        "execution_strategy": "command_capture",
+        "failure_signals": [
+          "CLI requires explicit session flags even after connect",
+          "Local client state and remote payloads disagree on session or agent identity"
+        ],
+        "fallback_or_rollback": "Revert the CLI/client layer if local-state resolution is unreliable.",
+        "maintainable_completion_path": true,
+        "packet_class": "implementation",
+        "packet_id": "packet-build-session-cli",
+        "packet_lane": "worker",
+        "parallelism_class": "serial",
+        "primary_behavior": "Implement the minimal CLI and remote client flow that persists local client session state and resolves session/agent context for send and read.",
+        "product_meaning_resolved": true,
+        "prohibited_action_required": false,
+        "shared_surface_categories": [
+          "cli",
+          "remote-client",
+          "local-state"
+        ],
+        "strategy_inputs": {
+          "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+        },
+        "swarm_eligible": false,
+        "verifier_mapping": "Review the new package plus passing CLI integration tests."
+      },
+      {
+        "acceptance_checks": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+        ],
+        "allowed_scope": [
+          "session-hub",
+          "planning_artifacts/agent-session-hub-20260320"
+        ],
+        "automatable_acceptance": true,
+        "classification": "ready",
+        "constraints": [
+          "Use the session-hub package root for test execution.",
+          "Do not rely on Artifact Loop test harnesses.",
+          "Keep rollback evidence bounded to the new package."
+        ],
+        "definition_of_done": {
+          "acceptance_checks": [
+            "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+          ],
+          "allowed_scope": [
+            "session-hub",
+            "planning_artifacts/agent-session-hub-20260320"
+          ],
+          "behavior_outcome": "Validation evidence proves the minimal remote session messaging flow and bounded scope.",
+          "evidence_requirements": [
+            "test capture",
+            "git diff capture",
+            "rollback scope capture"
+          ],
+          "objective_linkage": "REQ-001,REQ-002",
+          "rollback_or_fallback": "Revert the package if validation shows drift or broken remote flow.",
+          "verifier_acceptance_condition": "Reviewer confirms the package is minimal and the test evidence matches the requested architecture."
+        },
+        "dependencies": [
+          "packet-build-session-service",
+          "packet-build-session-cli"
+        ],
+        "dependency_mode": "accepted_upstream",
+        "evidence_destination": "planning_artifacts/agent-session-hub-20260320/packet-validate-session-flow.json",
+        "execution_mode": "sequence_required",
+        "execution_strategy": "validation_command",
+        "failure_signals": [
+          "Tests fail or require manual setup beyond the package itself.",
+          "Diff scope spills into existing product surfaces."
+        ],
+        "fallback_or_rollback": "Revert the isolated package or boundary-shrink if validation fails.",
+        "maintainable_completion_path": true,
+        "packet_class": "validation",
+        "packet_id": "packet-validate-session-flow",
+        "packet_lane": "validator",
+        "parallelism_class": "serial",
+        "primary_behavior": "Validate the end-to-end session messaging flow and capture bounded diff/rollback evidence.",
+        "product_meaning_resolved": true,
+        "prohibited_action_required": false,
+        "shared_surface_categories": [
+          "validation",
+          "rollback",
+          "scope-control"
+        ],
+        "strategy_inputs": {
+          "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test",
+          "validation_lane": "integration"
+        },
+        "swarm_eligible": false,
+        "verifier_mapping": "Captured test, diff, and rollback evidence plus reviewer confirmation of package isolation."
+      }
+    ],
+    "quality_bar": {
+      "evidence": "Close only after captured test, diff, and rollback manifests plus governed runtime artifacts exist.",
+      "maintainability": "Keep the package small and explicit, with separate store, server, client, and CLI modules.",
+      "policy_compliance": "Keep changes inside the workspace, preserve isolated package scope, and avoid destructive git operations."
+    },
+    "required_packets": [
+      "packet-build-session-service",
+      "packet-build-session-cli",
+      "packet-validate-session-flow"
+    ],
+    "rollback_plan": [
+      "Rollback is bounded to deleting or reverting the session-hub package and governed planning artifacts for this track."
+    ],
+    "scheduler_policy": {
+      "admission_rule": [
+        "packet validity",
+        "autonomy readiness",
+        "dependency readiness",
+        "conflict check",
+        "retry-budget check"
+      ],
+      "execution_shape": "single_lane",
+      "max_parallel_packets": 1,
+      "parallelism_policy": "serial_only",
+      "recompute_triggers": [
+        "verifier_verdict",
+        "packet_cancellation",
+        "repacketization",
+        "escalation_decision",
+        "boundary_shrink_decision"
+      ],
+      "terminal_stop_conditions": [
+        "objective_closed",
+        "escalation_required_no_runnable_packets",
+        "migration_defect_fallback_invoked",
+        "unrecoverable_graph_invalidity"
+      ]
+    },
+    "schema_version": "compiled-contract.v2.7",
+    "session_harness": {
+      "bootstrap_commands": [
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+      ],
+      "checkpoint_interval_minutes": 20,
+      "checkpoint_required": true,
+      "clean_state_assertions": [
+        "Fresh governed state can resume from planning_artifacts without reconstructing prior chat context."
+      ],
+      "context_index_required": true,
+      "estimated_packet_count": 3,
+      "expected_duration_minutes": 40,
+      "required": true,
+      "route_hint": "R2",
+      "ui_evidence_required": false,
+      "validation_commands": [
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+      ]
+    }
+  },
+  "contract_refs": {
+    "plan_schema_version": "plan.v1",
+    "plan_status": "execution_ready",
+    "session_harness_required": true
+  },
+  "objective_ref": "agent-session-hub-20260320",
+  "packet_ids": [
+    "packet-build-session-cli",
+    "packet-build-session-service",
+    "packet-validate-session-flow"
+  ],
+  "requirement_ids": [
+    "REQ-001",
+    "REQ-002"
+  ],
+  "schema_version": "compiled-contract.v2.7",
+  "track_id": "agent-session-hub-20260320"
+}

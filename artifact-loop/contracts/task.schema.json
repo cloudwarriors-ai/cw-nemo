@@ -19,6 +19,7 @@
     "id": { "$ref": "_defs.schema.json#/definitions/id" },
     "title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
     "description": { "type": "string" },
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
     "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
     "assignee_agent_id": {
       "$ref": "_defs.schema.json#/definitions/id",

@@ -11,12 +11,13 @@ export function buildRawArtifact(
   type: string,
   payload: SignalPayload,
   summary: string,
+  source = "cli",
 ): RawArtifact {
   return {
     id: randomUUID(),
     type,
     timestamp: new Date().toISOString(),
-    source: "cli",
+    source,
     pointer: payload.type,
     summary,
     raw_payload: payload,

@@ -4,6 +4,7 @@
 import { resolve } from "node:path";
 import type { Command } from "commander";
 import { getSession, setSession } from "../helpers/session.js";
+import { recordTaskUseEvent } from "../helpers/usage.js";
 
 export function registerTaskUse(taskCmd: Command): void {
   taskCmd
@@ -26,7 +27,13 @@ export function registerTaskUse(taskCmd: Command): void {
 
       // Set current task (validates existence)
       try {
+        const previous = getSession(dataDir)?.current_task_id;
         setSession(dataDir, taskId);
+        if (!previous) {
+          recordTaskUseEvent(dataDir, "set", taskId);
+        } else if (previous !== taskId) {
+          recordTaskUseEvent(dataDir, "change", taskId, previous);
+        }
         console.log(`Now using task: ${taskId}`);
       } catch (err) {
         console.error((err as Error).message);

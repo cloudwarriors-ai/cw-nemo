@@ -3,4 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { main } from "../dist/src/cli/cli.js";
-main();
+main().catch((err) => {
+  console.error(err instanceof Error ? err.message : String(err));
+  process.exitCode = 1;
+});

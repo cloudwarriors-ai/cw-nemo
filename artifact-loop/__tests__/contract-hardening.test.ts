@@ -230,6 +230,9 @@ describe("Quarantine Scenarios", () => {
       raw_artifact_id: "raw-q1",
       primary_task_id: "task-1",
       session_id: "sess-1",
+      artifact_source: "cli",
+      worker_id: "worker-1",
+      context_source: "explicit_lock",
       timestamp: "2026-03-19T12:00:00Z",
       normalization_state: "quarantined",
       binding_confidence: 0.3,
@@ -263,6 +266,15 @@ describe("Binding Precedence", () => {
       start_time: "2026-03-19T10:00:00Z",
       artifact_ids: ["na-1"],
       context_source: "branch_inference",
+    });
+
+    assertValid("task-session.schema.json", {
+      id: "sess-session-default",
+      task_id: "task-1",
+      worker_id: "agent-1",
+      start_time: "2026-03-19T10:00:00Z",
+      artifact_ids: ["na-1"],
+      context_source: "session_default",
     });
 
     // Both are structurally valid. Precedence (explicit_lock > branch_inference)

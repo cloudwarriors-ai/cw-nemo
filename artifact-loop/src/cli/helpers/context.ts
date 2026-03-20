@@ -8,11 +8,17 @@ import type { NormalizationContext } from "../../types.js";
  * Build a NormalizationContext from CLI args.
  * --task is the explicit lock target. Worker defaults to $USER.
  */
-export function buildContext(opts: { task: string; worker?: string }): NormalizationContext {
+export function buildContext(opts: {
+  task: string;
+  worker?: string;
+  workerAgent?: string;
+  fromSession?: boolean;
+}): NormalizationContext {
   return {
     primary_task_id: opts.task,
     session_id: `cli-${randomUUID()}`,
     worker_id: opts.worker ?? process.env.USER ?? "unknown",
-    context_source: "explicit_lock",
+    worker_agent_id: opts.workerAgent ?? process.env.ARTIFACT_LOOP_WORKER_AGENT_ID,
+    context_source: opts.fromSession ? "session_default" : "explicit_lock",
   };
 }

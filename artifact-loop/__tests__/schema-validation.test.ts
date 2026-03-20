@@ -114,6 +114,9 @@ describe("normalized-artifact.schema.json", () => {
     raw_artifact_id: "raw-1",
     primary_task_id: "task-1",
     session_id: "sess-1",
+    artifact_source: "cli",
+    worker_id: "worker-1",
+    context_source: "explicit_lock",
     timestamp: "2026-03-19T12:00:00Z",
     normalization_state: "normalized",
     binding_confidence: 0.95,
@@ -150,6 +153,27 @@ describe("normalized-artifact.schema.json", () => {
         signal_id: "sig-3",
         exit_code: 0,
         stdout: "ok",
+      },
+    });
+  });
+
+  it("accepts valid git_diff_summary artifact", () => {
+    assertValid(schema, {
+      ...validTestResult,
+      id: "na-3b",
+      signal_payload: {
+        type: "git_diff_summary",
+        mode: "working_tree",
+        files: [
+          {
+            path: "src/index.ts",
+            change_type: "modified",
+          },
+          {
+            path: "src/new.ts",
+            change_type: "created",
+          },
+        ],
       },
     });
   });
@@ -369,6 +393,7 @@ describe("task.schema.json", () => {
   it("accepts task with optional agent and override", () => {
     assertValid(schema, {
       ...validTask,
+      project_id: "proj-core",
       assignee_agent_id: "agent-1",
       override: {
         status: "blocked",
@@ -385,6 +410,181 @@ describe("task.schema.json", () => {
 
   it("rejects missing required fields", () => {
     assertInvalid(schema, { id: "task-1", title: "Test" });
+  });
+});
+
+describe("project.schema.json", () => {
+  const schema = "project.schema.json";
+
+  const validProject = {
+    id: "proj-core",
+    team_id: "team-core",
+    title: "Core Project",
+    description: "Lead-readable coordination surface",
+    owner_worker_id: "lead-1",
+    created_at: "2026-03-19T12:00:00Z",
+    updated_at: "2026-03-19T12:00:00Z",
+  };
+
+  it("accepts valid project", () => {
+    assertValid(schema, validProject);
+  });
+
+  it("rejects missing required fields", () => {
+    assertInvalid(schema, { id: "proj-core", title: "Core Project" });
+  });
+});
+
+describe("project-create.schema.json", () => {
+  const schema = "project-create.schema.json";
+
+  it("accepts valid project creation", () => {
+    assertValid(schema, {
+      id: "proj-core",
+      team_id: "team-core",
+      title: "Core Project",
+      description: "Lead-readable coordination surface",
+      owner_worker_id: "lead-1",
+    });
+  });
+
+  it("rejects missing required fields", () => {
+    assertInvalid(schema, { id: "proj-core" });
+  });
+});
+
+describe("project-task-link-create.schema.json", () => {
+  const schema = "project-task-link-create.schema.json";
+
+  it("accepts valid project task link", () => {
+    assertValid(schema, { task_id: "feat-http" });
+  });
+
+  it("rejects missing task_id", () => {
+    assertInvalid(schema, {});
+  });
+});
+
+describe("project-brief.schema.json", () => {
+  const schema = "project-brief.schema.json";
+
+  const validBrief = {
+    project: {
+      id: "proj-core",
+      team_id: "team-core",
+      title: "Core Project",
+      description: "Lead-readable coordination surface",
+      owner_worker_id: "lead-1",
+      created_at: "2026-03-19T12:00:00Z",
+      updated_at: "2026-03-19T12:00:00Z",
+    },
+    generated_at: "2026-03-19T12:05:00Z",
+    snapshot: {
+      total_tasks: 1,
+      counts_by_status: {
+        not_started: 0,
+        in_progress: 0,
+        needs_input: 0,
+        blocked: 0,
+        ready_for_review: 1,
+        done: 0,
+      },
+      last_activity_at: "2026-03-19T12:00:00Z",
+    },
+    recent_movement: [
+      {
+        task_id: "feat-http",
+        task_title: "HTTP Feature",
+        assignee_human_id: "chad",
+        assignee_agent_id: "agent-1",
+        changed_at: "2026-03-19T12:00:00Z",
+        from_status: "not_started",
+        to_status: "ready_for_review",
+        rules_applied: ["required_signals_satisfied"],
+      },
+    ],
+    blocked: [],
+    needs_input: [],
+    ready_for_review: [
+      {
+        id: "feat-http",
+        title: "HTTP Feature",
+        status: "ready_for_review",
+        assignee_human_id: "chad",
+        assignee_agent_id: "agent-1",
+        last_activity_at: "2026-03-19T12:00:00Z",
+      },
+    ],
+    by_human: [
+      {
+        assignee_human_id: "chad",
+        tasks: [
+          {
+            id: "feat-http",
+            title: "HTTP Feature",
+            status: "ready_for_review",
+            assignee_human_id: "chad",
+            assignee_agent_id: "agent-1",
+            last_activity_at: "2026-03-19T12:00:00Z",
+          },
+        ],
+      },
+    ],
+    by_agent: [
+      {
+        assignee_agent_id: "agent-1",
+        tasks: [
+          {
+            id: "feat-http",
+            title: "HTTP Feature",
+            status: "ready_for_review",
+            assignee_human_id: "chad",
+            assignee_agent_id: "agent-1",
+            last_activity_at: "2026-03-19T12:00:00Z",
+          },
+        ],
+      },
+    ],
+    by_worker: [
+      {
+        worker_id: "worker-1",
+        tasks: [
+          {
+            id: "feat-http",
+            title: "HTTP Feature",
+            status: "ready_for_review",
+            assignee_human_id: "chad",
+            assignee_agent_id: "agent-1",
+            last_activity_at: "2026-03-19T12:00:00Z",
+          },
+        ],
+        recent_activity_at: "2026-03-19T12:00:00Z",
+        artifact_count: 1,
+      },
+    ],
+    lead_attention_items: [
+      {
+        kind: "ready_for_review",
+        task: {
+          id: "feat-http",
+          title: "HTTP Feature",
+          status: "ready_for_review",
+          assignee_human_id: "chad",
+          assignee_agent_id: "agent-1",
+          last_activity_at: "2026-03-19T12:00:00Z",
+        },
+        reason: "Task is ready for review.",
+      },
+    ],
+    rendered_text: "Project Brief: Core Project (proj-core)",
+  };
+
+  it("accepts valid project brief", () => {
+    assertValid(schema, validBrief);
+  });
+
+  it("rejects missing required fields", () => {
+    assertInvalid(schema, { project: validBrief.project });
   });
 });
 
@@ -445,6 +645,10 @@ describe("task-session.schema.json", () => {
 
   it("accepts valid session", () => {
     assertValid(schema, validSession);
+  });
+
+  it("accepts session with session_default context source", () => {
+    assertValid(schema, { ...validSession, context_source: "session_default" });
   });
 
   it("accepts session with end_time", () => {

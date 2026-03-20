@@ -1,0 +1,16 @@
+{
+  "id": "na-b296cf14-5a1b-4c00-bd63-090d34c7a3d6",
+  "raw_artifact_id": "b296cf14-5a1b-4c00-bd63-090d34c7a3d6",
+  "primary_task_id": "validate-real-work-capture",
+  "session_id": "cli-d5323b75-115e-46ee-9570-83d4685efabd",
+  "timestamp": "2026-03-19T21:08:18.184Z",
+  "normalization_state": "normalized",
+  "binding_confidence": 1,
+  "signal_payload": {
+    "type": "command_result",
+    "signal_id": "sig-check",
+    "exit_code": 0,
+    "stdout": "\n> artifact-loop@0.1.0 check\n> tsc --noEmit\n\n",
+    "stderr": ""
+  }
+}

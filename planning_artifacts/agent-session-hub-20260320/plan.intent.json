@@ -1,0 +1,41 @@
+{
+  "autonomy_level": "L2_supervised_autonomous",
+  "clarification_governor": {
+    "allowed_topics": [
+      "product_meaning",
+      "authority_security_boundaries",
+      "missing_success_criteria",
+      "non_discoverable_tradeoffs"
+    ],
+    "default_batch_limit": 1,
+    "new_authority_boundary_required_for_mid_execution_clarification": true,
+    "repo_discoverable_questions_forbidden": true
+  },
+  "intent_contract": {
+    "ambiguity_classification": [
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-001",
+        "statement": "The network layer is assumed to be provided externally by Tailscale; the package only needs to be Tailscale-reachable by host and port."
+      }
+    ],
+    "authority_sensitive_decisions": [],
+    "non_goals": [
+      "No transport encryption or identity layer inside the app",
+      "No background presence daemon",
+      "No websocket or realtime push transport",
+      "No task/project/brief coordination model"
+    ],
+    "objective": "Create a file-backed HTTP service and CLI that support session connect, send, and read flows using a shared service URL.",
+    "objective_shape_status": "accepted_rewritten",
+    "success_criteria": [
+      "A service can create or update a session and persist messages under sessions/<id>.json and messages/<session-id>/*.json.",
+      "CLI clients can connect to a session with an agent id, persist that local client session state, and then send and read messages without retyping the session on every command.",
+      "End-to-end tests prove a remote client can connect, send, and read through the HTTP service."
+    ]
+  },
+  "objective_intent_ref": "objective.intent.json",
+  "objective_ref": "agent-session-hub-20260320",
+  "schema_version": "plan-intent.v1",
+  "track_id": "agent-session-hub-20260320"
+}

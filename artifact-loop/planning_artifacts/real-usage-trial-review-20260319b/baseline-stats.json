@@ -1,0 +1,20 @@
+{
+  "task_use": {
+    "set": 0,
+    "change": 0,
+    "clear": 0
+  },
+  "command_resolution": {
+    "explicit_lock": 0,
+    "session_default": 0,
+    "explicit_over_session_override": 0
+  },
+  "artifacts_by_type": {},
+  "override_by_resulting_status": {},
+  "evidence_buckets": {
+    "manual_only": 0,
+    "automatic_any": 0,
+    "merge_only": 0,
+    "none": 2
+  }
+}

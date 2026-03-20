@@ -1,0 +1,13 @@
+{
+  "id": "dr-1-1773956504667",
+  "timestamp": "2026-03-19T21:41:44.666Z",
+  "task_id": "validate-signal-visibility",
+  "input_artifact_ids": [
+    "na-be807b2b-2199-4a69-8d63-85af846b01e5"
+  ],
+  "rules_applied": [
+    "progress_detected"
+  ],
+  "prior_state": "not_started",
+  "output_state": "in_progress"
+}

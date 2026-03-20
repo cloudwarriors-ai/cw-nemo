@@ -8,6 +8,9 @@
     "raw_artifact_id",
     "primary_task_id",
     "session_id",
+    "artifact_source",
+    "worker_id",
+    "context_source",
     "signal_payload",
     "normalization_state",
     "binding_confidence",
@@ -22,6 +25,10 @@
       "description": "Single task ID this artifact is bound to"
     },
     "session_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "artifact_source": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "worker_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "context_source": { "$ref": "_defs.schema.json#/definitions/context_source" },
     "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
     "normalization_state": { "$ref": "_defs.schema.json#/definitions/normalization_state" },
     "binding_confidence": { "$ref": "_defs.schema.json#/definitions/binding_confidence" },
@@ -31,6 +38,7 @@
         { "$ref": "#/definitions/test_result" },
         { "$ref": "#/definitions/file_change" },
         { "$ref": "#/definitions/command_result" },
+        { "$ref": "#/definitions/git_diff_summary" },
         { "$ref": "#/definitions/merge_result" },
         { "$ref": "#/definitions/manual_event" },
         { "$ref": "#/definitions/runtime_event" }
@@ -74,6 +82,36 @@
         "exit_code": { "type": "integer" },
         "stdout": { "type": "string" },
         "stderr": { "type": "string" }
+      }
+    },
+    "git_diff_summary": {
+      "type": "object",
+      "required": ["type", "mode", "files"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "git_diff_summary" },
+        "mode": {
+          "type": "string",
+          "enum": ["working_tree", "staged"]
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "change_type"],
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "change_type": {
+                "type": "string",
+                "enum": ["created", "modified", "deleted"]
+              },
+              "previous_path": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "base_ref": { "type": "string", "minLength": 1 },
+        "head_ref": { "type": "string", "minLength": 1 }
       }
     },
     "merge_result": {

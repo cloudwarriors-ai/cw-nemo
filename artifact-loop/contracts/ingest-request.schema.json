@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ingest-request.schema.json",
+  "type": "object",
+  "description": "HTTP request contract for artifact ingestion.",
+  "required": ["artifact", "context"],
+  "additionalProperties": false,
+  "properties": {
+    "artifact": { "$ref": "artifact.schema.json" },
+    "context": { "$ref": "normalization-context.schema.json" }
+  }
+}

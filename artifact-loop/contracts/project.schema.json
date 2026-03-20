@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project.schema.json",
+  "type": "object",
+  "description": "Persisted project domain model.",
+  "required": ["id", "team_id", "title", "description", "owner_worker_id", "created_at", "updated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "team_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "description": { "type": "string" },
+    "owner_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "definition": { "$ref": "project-definition.schema.json" },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "updated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

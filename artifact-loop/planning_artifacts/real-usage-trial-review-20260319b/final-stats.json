@@ -1,0 +1,24 @@
+{
+  "task_use": {
+    "set": 1,
+    "change": 1,
+    "clear": 0
+  },
+  "command_resolution": {
+    "explicit_lock": 1,
+    "session_default": 10,
+    "explicit_over_session_override": 1
+  },
+  "artifacts_by_type": {
+    "test_result": 1,
+    "command_result": 1,
+    "git_diff_summary": 1
+  },
+  "override_by_resulting_status": {},
+  "evidence_buckets": {
+    "manual_only": 0,
+    "automatic_any": 1,
+    "merge_only": 0,
+    "none": 1
+  }
+}

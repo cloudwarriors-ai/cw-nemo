@@ -1,0 +1,203 @@
+{
+  "id": "na-ec514190-0d29-47fd-82d2-b9120f0249a1",
+  "raw_artifact_id": "ec514190-0d29-47fd-82d2-b9120f0249a1",
+  "primary_task_id": "validate-real-work-capture",
+  "session_id": "cli-7980bdb3-126d-4c65-ab98-03203b8a43ea",
+  "timestamp": "2026-03-19T21:09:12.502Z",
+  "normalization_state": "normalized",
+  "binding_confidence": 1,
+  "signal_payload": {
+    "type": "git_diff_summary",
+    "mode": "working_tree",
+    "files": [
+      {
+        "path": "artifact-loop/__tests__/contract-hardening.test.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/__tests__/schema-validation.test.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/contracts/_defs.schema.json",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/contracts/normalized-artifact.schema.json",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/__tests__/cli/emit-test-run.test.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/cli.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/emit-merge.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/emit-note.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/emit-test-run.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/emit-test.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/task-history.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/task-status.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/task-unuse.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/task-use.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/helpers/context.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/helpers/format.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/cli/helpers/session.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/derive.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/engine.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/index.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/src/types.ts",
+        "change_type": "modified"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319/trial-data/state/review-trial-findings.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319/trial-data/state/validate-real-work-capture.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319/trial-data/tasks/review-trial-findings.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319/trial-data/tasks/validate-real-work-capture.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/baseline-stats.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/artifacts/validate-real-work-capture/na-2c1ce82f-39ca-41c0-861c-0315213dd61e.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/artifacts/validate-real-work-capture/na-b296cf14-5a1b-4c00-bd63-090d34c7a3d6.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/derivations/validate-real-work-capture/dr-1-1773954498185.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/derivations/validate-real-work-capture/dr-1-1773954536798.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/session.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/state/review-trial-findings.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/state/validate-real-work-capture.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/tasks/review-trial-findings.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/tasks/validate-real-work-capture.json",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/planning_artifacts/real-usage-trial-review-20260319b/trial-data/usage/events.jsonl",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/__tests__/cli/e2e/real-work-capture.test.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/__tests__/cli/emit-git-diff.test.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/__tests__/cli/run.test.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/__tests__/cli/stats.test.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/emit-git-diff.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/run.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/cli/commands/stats.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/cli/helpers/git-diff.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/cli/helpers/run-command.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/cli/helpers/usage.ts",
+        "change_type": "created"
+      },
+      {
+        "path": "artifact-loop/src/usage-store.ts",
+        "change_type": "created"
+      }
+    ]
+  }
+}

@@ -10,6 +10,13 @@ interface Session {
   set_at: string;
 }
 
+export interface ResolvedTaskTarget {
+  taskId: string;
+  fromSession: boolean;
+  contextSource: "explicit_lock" | "session_default";
+  overrideSession: boolean;
+}
+
 function sessionPath(dataDir: string): string {
   return join(dataDir, "session.json");
 }
@@ -52,11 +59,29 @@ export function clearSession(dataDir: string): void {
  * Precedence: flag > session > error.
  */
 export function resolveTaskId(opts: { task?: string; dataDir?: string }): string {
-  if (opts.task) return opts.task;
+  return resolveTaskTarget(opts).taskId;
+}
 
+export function resolveTaskTarget(opts: { task?: string; dataDir?: string }): ResolvedTaskTarget {
   const dataDir = resolve(opts.dataDir ?? ".artifact-loop");
   const session = getSession(dataDir);
-  if (session?.current_task_id) return session.current_task_id;
+
+  if (opts.task) {
+    return {
+      taskId: opts.task,
+      fromSession: false,
+      contextSource: "explicit_lock",
+      overrideSession: session?.current_task_id !== undefined,
+    };
+  }
+  if (session?.current_task_id) {
+    return {
+      taskId: session.current_task_id,
+      fromSession: true,
+      contextSource: "session_default",
+      overrideSession: false,
+    };
+  }
 
   throw new Error(
     'No task specified. Use --task <id> or run: artifact-loop task use <id>',

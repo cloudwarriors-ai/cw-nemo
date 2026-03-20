@@ -1,0 +1,22 @@
+{
+  "blocked_fields": [],
+  "content": "Canonical objective intent artifact emitted.",
+  "gate": "intent-compiler",
+  "meta": {
+    "artifacts": {
+      "intent": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/plan.intent.json",
+      "objective_intent": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.intent.json",
+      "readiness": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/plan.readiness.json"
+    },
+    "clarification_needed": false,
+    "clarification_reasons": [],
+    "objective_shape_status": "accepted_rewritten",
+    "track_id": "agent-session-hub-20260320",
+    "track_token": "agent-session-hub-20260320"
+  },
+  "missing_fields": [],
+  "next_step": "Run initialize_session.py using objective.intent.json, then compile_plan.py.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

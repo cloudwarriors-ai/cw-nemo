@@ -45,11 +45,19 @@
     },
     "context_source": {
       "type": "string",
-      "enum": ["explicit_lock", "explicit_event", "branch_inference"]
+      "enum": ["explicit_lock", "session_default", "explicit_event", "branch_inference"]
     },
     "missing_input_type": {
       "type": "string",
       "enum": ["dependency", "human_decision", "external_resource"]
+    },
+    "team_membership_role": {
+      "type": "string",
+      "enum": ["admin", "lead", "worker"]
+    },
+    "team_membership_status": {
+      "type": "string",
+      "enum": ["active", "inactive"]
     },
     "task_confidence": {
       "type": "number",

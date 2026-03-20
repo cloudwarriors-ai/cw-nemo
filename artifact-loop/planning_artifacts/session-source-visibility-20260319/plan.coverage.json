@@ -1,0 +1,119 @@
+{
+  "integration_map": [
+    {
+      "evidence": [
+        "worker-build capture",
+        "test-vitest capture"
+      ],
+      "integration_id": "INT-001",
+      "packet_ids": [
+        "packet-emit-and-read-formatting"
+      ],
+      "touchpoint": "artifact-loop CLI command handlers and shared human-output formatter helpers.",
+      "verification": [
+        "npm run check",
+        "emit/task read vitest assertions"
+      ]
+    },
+    {
+      "evidence": [
+        "worker-build capture",
+        "test-vitest capture"
+      ],
+      "integration_id": "INT-002",
+      "packet_ids": [
+        "packet-verify-cli-contracts"
+      ],
+      "touchpoint": "artifact-loop dist-backed executable entrypoint used by emit-test-run.test.ts.",
+      "verification": [
+        "npm run build",
+        "npm test"
+      ]
+    }
+  ],
+  "objective_coverage_map": [
+    {
+      "evidence": [
+        "Emit command source diff",
+        "test-vitest capture manifest"
+      ],
+      "packet_ids": [
+        "packet-emit-and-read-formatting"
+      ],
+      "requirement_id": "REQ-001",
+      "verification": [
+        "Update emit command assertions and run npm test."
+      ]
+    },
+    {
+      "evidence": [
+        "task-read/session workflow diffs",
+        "test-vitest capture manifest"
+      ],
+      "packet_ids": [
+        "packet-emit-and-read-formatting",
+        "packet-verify-cli-contracts"
+      ],
+      "requirement_id": "REQ-002",
+      "verification": [
+        "Update formatter/read-path assertions and run npm test."
+      ]
+    },
+    {
+      "evidence": [
+        "worker-build capture manifest",
+        "verifier-check capture manifest",
+        "test-vitest capture manifest"
+      ],
+      "packet_ids": [
+        "packet-verify-cli-contracts"
+      ],
+      "requirement_id": "REQ-003",
+      "verification": [
+        "Run npm run build, npm run check, and npm test against the artifact-loop package."
+      ]
+    }
+  ],
+  "objective_ref": "session-source-visibility-20260319",
+  "packet_ids": [
+    "packet-emit-and-read-formatting",
+    "packet-verify-cli-contracts"
+  ],
+  "requirement_ids": [
+    "REQ-001",
+    "REQ-002",
+    "REQ-003"
+  ],
+  "requirement_risk_rank": [
+    {
+      "associated_packet_ids": [
+        "packet-emit-and-read-formatting"
+      ],
+      "evidence_type": "CLI output tests",
+      "failure_impact": "Users could continue emitting evidence to the wrong task without noticing the resolved target.",
+      "priority": "core",
+      "requirement_id": "REQ-001"
+    },
+    {
+      "associated_packet_ids": [
+        "packet-emit-and-read-formatting",
+        "packet-verify-cli-contracts"
+      ],
+      "evidence_type": "Formatter and task-read tests",
+      "failure_impact": "Task read surfaces would remain ambiguous and could undermine trust in session-based targeting.",
+      "priority": "core",
+      "requirement_id": "REQ-002"
+    },
+    {
+      "associated_packet_ids": [
+        "packet-verify-cli-contracts"
+      ],
+      "evidence_type": "Build plus bin-backed regression tests",
+      "failure_impact": "The executable CLI could diverge from source behavior and leave one shipped path stale.",
+      "priority": "critical",
+      "requirement_id": "REQ-003"
+    }
+  ],
+  "schema_version": "plan-coverage.v1",
+  "track_id": "session-source-visibility-20260319"
+}

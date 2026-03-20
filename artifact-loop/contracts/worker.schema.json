@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "worker.schema.json",
+  "type": "object",
+  "required": ["id", "display_name", "role", "timezone", "active", "created_at", "updated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "display_name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "role": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "active": { "type": "boolean" },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "updated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

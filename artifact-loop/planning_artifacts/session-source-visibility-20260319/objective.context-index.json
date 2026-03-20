@@ -1,0 +1,19 @@
+{
+  "active_objective_docs": [
+    "planning_artifacts/session-source-visibility-20260319/objective.intent.json"
+  ],
+  "categories": {
+    "active_objective_docs": [],
+    "architecture_docs": [],
+    "design_docs": [],
+    "execution_docs": [],
+    "schema_contract_docs": [],
+    "security_policy_docs": [],
+    "test_runbook_docs": []
+  },
+  "objective_id": "objective-session-source-visibility-20260319",
+  "schema_version": "objective-context-index.v1",
+  "source": "generated",
+  "source_path": "",
+  "track_id": "session-source-visibility-20260319"
+}

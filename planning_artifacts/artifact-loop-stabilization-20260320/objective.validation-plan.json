@@ -1,0 +1,140 @@
+{
+  "changed_files": [
+    ".agents/skills/artifact-loop-lead-surface-review/SKILL.md",
+    "artifact-loop",
+    "artifact-loop/README.md",
+    "artifact-loop/docs/org-stabilization-rollout.md",
+    "artifact-loop/docs/tailscale-rollout.md",
+    "artifact-loop/package.json",
+    "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+    "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+    "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+    "planning_artifacts/artifact-loop-stabilization-20260320"
+  ],
+  "coverage": {
+    "generated_lane_count": 0,
+    "manual_blocker_count": 0,
+    "required_lane_count": 0
+  },
+  "escalated_review_required": false,
+  "generated_packets": [],
+  "lanes": [
+    {
+      "capability_confidence": "high",
+      "capability_source": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/package.json"
+      ],
+      "commands": [
+        "npm run test"
+      ],
+      "generated_packet_ids": [],
+      "lane": "tests",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "medium",
+      "capability_source": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/pyproject.toml"
+      ],
+      "commands": [
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+        "pyright"
+      ],
+      "generated_packet_ids": [],
+      "lane": "types_build",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+      ],
+      "generated_packet_ids": [],
+      "lane": "lint",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for lint.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+        "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces"
+      ],
+      "generated_packet_ids": [],
+      "lane": "smoke_e2e",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for smoke_e2e.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [],
+      "generated_packet_ids": [],
+      "lane": "migration_schema",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for schema_check.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [],
+      "generated_packet_ids": [],
+      "lane": "security_sensitive_review",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    }
+  ],
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "required_packets": [
+    "packet-build-org-surface-smoke",
+    "packet-extend-lead-surface-review",
+    "packet-operator-rollout-docs",
+    "packet-validate-stabilization"
+  ],
+  "route_hint": "R3",
+  "schema_version": "objective-validation-plan.v1",
+  "track_id": "artifact-loop-stabilization-20260320",
+  "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw"
+}

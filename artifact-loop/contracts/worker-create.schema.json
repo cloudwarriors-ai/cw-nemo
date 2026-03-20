@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "worker-create.schema.json",
+  "type": "object",
+  "required": ["id", "display_name", "role", "timezone"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "display_name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "role": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "active": { "type": "boolean" }
+  }
+}

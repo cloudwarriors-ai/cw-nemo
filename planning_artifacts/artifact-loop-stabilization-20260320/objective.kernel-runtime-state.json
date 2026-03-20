@@ -1,0 +1,48 @@
+{
+  "active_unit_id": "packet-build-org-surface-smoke",
+  "active_unit_ids": [
+    "packet-build-org-surface-smoke"
+  ],
+  "budget": {
+    "remaining_mutations": 10,
+    "remaining_retries": 8,
+    "remaining_steps": 12
+  },
+  "completed_units": [],
+  "evidence_refs": [],
+  "failed_attempts": [],
+  "halt": {
+    "reason": "none",
+    "terminal": false
+  },
+  "last_action": null,
+  "last_verification_id": null,
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "schema_version": "runtime-state.v1",
+  "state": "ready",
+  "track_id": "artifact-loop-stabilization-20260320",
+  "transition_history": [
+    {
+      "evidence_refs": [],
+      "from": "bootstrapped",
+      "guard": "execution_plan_compiled",
+      "guard_result": true,
+      "schema_version": "transition-history-record.v1",
+      "step_id": "bootstrap-000",
+      "timestamp": "2026-03-20T10:51:11+00:00",
+      "to": "planning_complete",
+      "trigger": "runtime_bootstrap"
+    },
+    {
+      "evidence_refs": [],
+      "from": "planning_complete",
+      "guard": "exists_actionable_unit || stop_allowed",
+      "guard_result": true,
+      "schema_version": "transition-history-record.v1",
+      "step_id": "bootstrap-001",
+      "timestamp": "2026-03-20T10:51:11+00:00",
+      "to": "ready",
+      "trigger": "runtime_bootstrap"
+    }
+  ]
+}

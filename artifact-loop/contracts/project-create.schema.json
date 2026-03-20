@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-create.schema.json",
+  "type": "object",
+  "description": "Input schema for project creation.",
+  "required": ["id", "team_id", "title", "description", "owner_worker_id"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "team_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "description": { "type": "string" },
+    "owner_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "definition": { "$ref": "project-definition.schema.json" }
+  }
+}

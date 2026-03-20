@@ -1,15 +1,19 @@
-.PHONY: check lint format lint-ts lint-py format-ts format-py docs docs-strict docs-live docs-clean
+.PHONY: check lint format lint-ts lint-py lint-contracts format-ts format-py docs docs-strict docs-live docs-clean
 
-check: lint-ts lint-py
+
+check: lint-ts lint-py lint-contracts
 	@echo "All checks passed."
 
-lint: lint-ts lint-py
+lint: lint-ts lint-py lint-contracts
 
 lint-ts:
 	cd nemoclaw && npm run check
 
 lint-py:
 	cd nemoclaw-blueprint && $(MAKE) check
+
+lint-contracts:
+	cd artifact-loop && npx tsc --noEmit
 
 format: format-ts format-py
 

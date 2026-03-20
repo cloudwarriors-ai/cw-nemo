@@ -1,0 +1,22 @@
+{
+  "blocked_fields": [],
+  "content": "Frontloaded plan compiler artifacts emitted.",
+  "gate": "plan-compiler",
+  "meta": {
+    "artifacts": {
+      "compiler": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/plan.compiler.json",
+      "coverage": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/plan.coverage.json",
+      "gaps": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/plan.gaps.json",
+      "intent": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/plan.intent.json",
+      "objective_intent": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.intent.json",
+      "readiness": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/plan.readiness.json"
+    },
+    "track_id": "session-source-visibility-20260319",
+    "track_token": "session-source-visibility-20260319"
+  },
+  "missing_fields": [],
+  "next_step": "Run verify_plan.py or validate_plan.py.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

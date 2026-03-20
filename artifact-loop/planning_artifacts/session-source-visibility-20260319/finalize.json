@@ -1,0 +1,16 @@
+{
+  "accepted_type": "ACCEPTED_BLOCKED",
+  "blocked_fields": [],
+  "migration_fallback_used": false,
+  "missing_fields": [],
+  "next_step": "Gate passed. Finalization allowed.",
+  "objective_closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+  "ok": true,
+  "reason": "approved",
+  "review_status_seen": "approve",
+  "review_status_trusted": false,
+  "status": "approve",
+  "track_id": "session-source-visibility-20260319",
+  "track_token": "session-source-visibility-20260319",
+  "type": "planning_gate_finalize"
+}

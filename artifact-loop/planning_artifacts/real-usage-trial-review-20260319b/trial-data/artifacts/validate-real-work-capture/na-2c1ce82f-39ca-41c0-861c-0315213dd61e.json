@@ -1,0 +1,16 @@
+{
+  "id": "na-2c1ce82f-39ca-41c0-861c-0315213dd61e",
+  "raw_artifact_id": "2c1ce82f-39ca-41c0-861c-0315213dd61e",
+  "primary_task_id": "validate-real-work-capture",
+  "session_id": "cli-a1ff5be9-93a4-4081-96a3-69a53a584aff",
+  "timestamp": "2026-03-19T21:08:56.796Z",
+  "normalization_state": "normalized",
+  "binding_confidence": 1,
+  "signal_payload": {
+    "type": "test_result",
+    "signal_id": "sig-tests",
+    "passed": true,
+    "output": "\n> artifact-loop@0.1.0 test\n> vitest run\n\n\n RUN  v4.1.0 /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop\n\n\n Test Files  15 passed (15)\n      Tests  146 passed (146)\n   Start at  17:08:56\n   Duration  716ms (transform 1.17s, setup 0ms, import 1.88s, tests 2.04s, environment 1ms)\n\n",
+    "error": ""
+  }
+}

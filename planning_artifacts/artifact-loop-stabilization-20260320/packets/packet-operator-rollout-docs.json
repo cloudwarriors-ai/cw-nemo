@@ -1,0 +1,73 @@
+{
+  "acceptance_checks": [
+    "README links to the note.",
+    "The note includes the exact stabilization entrypoints and org operator commands.",
+    "The runtime gate is consistent between the note and tailscale-rollout.md."
+  ],
+  "allowed_scope": [
+    "artifact-loop/docs/org-stabilization-rollout.md",
+    "artifact-loop/docs/tailscale-rollout.md",
+    "artifact-loop/README.md"
+  ],
+  "automatable_acceptance": true,
+  "cancelled_by": "",
+  "classification": "ready",
+  "constraints": [
+    "Do not imply that Stage 2 or 3 is implemented.",
+    "Do not publish planning_artifacts as canonical user docs.",
+    "Keep the note operator-facing and branch-local."
+  ],
+  "definition_of_done": {
+    "acceptance_checks": [
+      "README links to the note.",
+      "The note includes the exact stabilization entrypoints and org operator commands.",
+      "The runtime gate is consistent between the note and tailscale-rollout.md."
+    ],
+    "allowed_scope": [
+      "artifact-loop/docs/org-stabilization-rollout.md",
+      "artifact-loop/docs/tailscale-rollout.md",
+      "artifact-loop/README.md"
+    ],
+    "behavior_outcome": "Operators can find one repo-tracked note that explains the current org rollout state and runtime gate.",
+    "evidence_requirements": [
+      "doc diff",
+      "grep capture"
+    ],
+    "objective_linkage": "REQ-003",
+    "rollback_or_fallback": "Revert the doc changes if they misstate the shipped surfaces.",
+    "verifier_acceptance_condition": "Reviewer confirms the note is the canonical operator-facing source of truth for this stabilization pass."
+  },
+  "dependencies": [
+    "packet-extend-lead-surface-review"
+  ],
+  "dependency_mode": "accepted_upstream",
+  "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-operator-rollout-docs.json",
+  "execution_mode": "sequence_required",
+  "execution_strategy": "command_capture",
+  "failure_signals": [
+    "Canonical operator guidance remains in planning_artifacts.",
+    "Docs contradict the current runtime gate.",
+    "README does not surface the new stabilization entrypoints."
+  ],
+  "fallback_or_rollback": "Revert the doc updates if they conflict with the current shipped product surfaces.",
+  "last_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-002",
+  "last_verifier_output": "accepted",
+  "maintainable_completion_path": true,
+  "packet_class": "implementation",
+  "packet_id": "packet-operator-rollout-docs",
+  "packet_lane": "worker",
+  "parallelism_class": "serial",
+  "primary_behavior": "Add the canonical repo-tracked stabilization rollout note and align README and tailscale-rollout docs with the current runtime gate.",
+  "product_meaning_resolved": true,
+  "prohibited_action_required": false,
+  "runtime_state": "accepted",
+  "shared_surface_categories": [
+    "docs",
+    "operator-surface"
+  ],
+  "strategy_inputs": {
+    "command": "rg -n \"org-surface-smoke|review:lead-surfaces|Stage 1|Stage 2|Stage 3\" /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md"
+  },
+  "swarm_eligible": false,
+  "verifier_mapping": "Review the new rollout note and aligned README/runtime gate wording."
+}

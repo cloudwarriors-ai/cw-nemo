@@ -1,0 +1,14 @@
+{
+  "id": "dr-1-1773954536798",
+  "timestamp": "2026-03-19T21:08:56.797Z",
+  "task_id": "validate-real-work-capture",
+  "input_artifact_ids": [
+    "na-2c1ce82f-39ca-41c0-861c-0315213dd61e",
+    "na-b296cf14-5a1b-4c00-bd63-090d34c7a3d6"
+  ],
+  "rules_applied": [
+    "readiness_evaluation"
+  ],
+  "prior_state": "in_progress",
+  "output_state": "ready_for_review"
+}

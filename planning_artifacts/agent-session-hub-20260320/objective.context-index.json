@@ -1,0 +1,30 @@
+{
+  "active_objective_docs": [
+    "planning_artifacts/agent-session-hub-20260320/objective.intent.json"
+  ],
+  "categories": {
+    "active_objective_docs": [],
+    "architecture_docs": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/_ext/json_output/core/hierarchy_builder.py",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/_ext/search_assets/enhanced-search.css",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/_ext/search_assets/modules/SearchEngine.js",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/_ext/search_assets/modules/SearchInterface.js",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/_ext/search_assets/modules/SearchPageManager.js",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/_ext/search_assets/templates/search.html",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/about/overview.md",
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/reference/architecture.md"
+    ],
+    "design_docs": [],
+    "execution_docs": [],
+    "schema_contract_docs": [],
+    "security_policy_docs": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/docs/network-policy/customize-network-policy.md"
+    ],
+    "test_runbook_docs": []
+  },
+  "objective_id": "objective-agent-session-hub-20260320",
+  "schema_version": "objective-context-index.v1",
+  "source": "generated",
+  "source_path": "",
+  "track_id": "agent-session-hub-20260320"
+}

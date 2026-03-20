@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-definition.schema.json",
+  "type": "object",
+  "required": ["goal", "scope", "deliverables", "constraints", "definition_of_done"],
+  "additionalProperties": false,
+  "properties": {
+    "goal": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "scope": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+    },
+    "deliverables": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+    },
+    "definition_of_done": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+  }
+}

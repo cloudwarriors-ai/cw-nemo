@@ -1,0 +1,45 @@
+{
+  "autonomous_session_readiness": {
+    "next_executable_frontier": [
+      "packet-emit-and-read-formatting"
+    ],
+    "readiness_gaps": [],
+    "safe_momentum_ready": true,
+    "status": "execution_ready"
+  },
+  "frontier_map": [
+    {
+      "execution_mode": "sequence_required",
+      "packet_id": "packet-emit-and-read-formatting"
+    },
+    {
+      "execution_mode": "sequence_required",
+      "packet_id": "packet-verify-cli-contracts"
+    }
+  ],
+  "momentum_map": [
+    {
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-emit-and-read-formatting",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-verify-cli-contracts"
+      ]
+    },
+    {
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-verify-cli-contracts",
+      "resolves_dependency_classification": false,
+      "unlocks_packets": []
+    }
+  ],
+  "objective_ref": "session-source-visibility-20260319",
+  "required_packets": [
+    "packet-emit-and-read-formatting",
+    "packet-verify-cli-contracts"
+  ],
+  "schema_version": "plan-readiness.v1",
+  "track_id": "session-source-visibility-20260319"
+}

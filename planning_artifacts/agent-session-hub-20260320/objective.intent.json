@@ -1,0 +1,85 @@
+{
+  "ambiguity_classification": [
+    {
+      "classification": "technical_reversible",
+      "item_id": "amb-001",
+      "statement": "The network layer is assumed to be provided externally by Tailscale; the package only needs to be Tailscale-reachable by host and port."
+    }
+  ],
+  "audience": [],
+  "authority_sensitive_decisions": [],
+  "clarification_batch_count": 0,
+  "clarification_governor": {
+    "allowed_topics": [
+      "product_meaning",
+      "authority_security_boundaries",
+      "missing_success_criteria",
+      "non_discoverable_tradeoffs"
+    ],
+    "default_batch_limit": 1,
+    "new_authority_boundary_required_for_mid_execution_clarification": true,
+    "repo_discoverable_questions_forbidden": true
+  },
+  "clarification_needed": false,
+  "clarification_questions": [],
+  "clarification_reasons": [],
+  "discoverable_resolution_log": [],
+  "discoverable_unknowns": [],
+  "intent_contract": {
+    "ambiguity_classification": [
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-001",
+        "statement": "The network layer is assumed to be provided externally by Tailscale; the package only needs to be Tailscale-reachable by host and port."
+      }
+    ],
+    "authority_sensitive_decisions": [],
+    "non_goals": [
+      "No transport encryption or identity layer inside the app",
+      "No background presence daemon",
+      "No websocket or realtime push transport",
+      "No task/project/brief coordination model"
+    ],
+    "objective": "Create a file-backed HTTP service and CLI that support session connect, send, and read flows using a shared service URL.",
+    "objective_shape_status": "accepted_rewritten",
+    "success_criteria": [
+      "A service can create or update a session and persist messages under sessions/<id>.json and messages/<session-id>/*.json.",
+      "CLI clients can connect to a session with an agent id, persist that local client session state, and then send and read messages without retyping the session on every command.",
+      "End-to-end tests prove a remote client can connect, send, and read through the HTTP service."
+    ]
+  },
+  "known_unknowns": [
+    "The network layer is assumed to be provided externally by Tailscale; the package only needs to be Tailscale-reachable by host and port."
+  ],
+  "normalization_source": "plan_contract",
+  "objective": "Create a file-backed HTTP service and CLI that support session connect, send, and read flows using a shared service URL.",
+  "objective_id": "objective-agent-session-hub-20260320",
+  "objective_shape_status": "accepted_rewritten",
+  "raw_request": "Implement a separate minimal session messaging service and CLI so agents can connect to a shared session and exchange messages over a Tailscale-reachable HTTP endpoint.",
+  "schema_version": "objective-intent.v1",
+  "scope_boundaries": {
+    "in_scope": [
+      "session-hub/package.json",
+      "session-hub/bin",
+      "session-hub/src",
+      "session-hub/test",
+      "session-hub/README.md",
+      "planning_artifacts/agent-session-hub-20260320"
+    ],
+    "out_of_scope": [
+      "artifact-loop",
+      "nemoclaw",
+      "nemoclaw-blueprint",
+      "Any Tailscale control-plane integration",
+      "Any auth, RBAC, inbox, or coordination workflow beyond session messages"
+    ]
+  },
+  "source_type": "plan_json",
+  "success_criteria": [
+    "A service can create or update a session and persist messages under sessions/<id>.json and messages/<session-id>/*.json.",
+    "CLI clients can connect to a session with an agent id, persist that local client session state, and then send and read messages without retyping the session on every command.",
+    "End-to-end tests prove a remote client can connect, send, and read through the HTTP service."
+  ],
+  "track_id": "agent-session-hub-20260320",
+  "track_token": "agent-session-hub-20260320"
+}

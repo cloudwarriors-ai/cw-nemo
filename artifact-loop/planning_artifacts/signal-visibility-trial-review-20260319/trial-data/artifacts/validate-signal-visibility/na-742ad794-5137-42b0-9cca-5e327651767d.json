@@ -1,0 +1,16 @@
+{
+  "id": "na-742ad794-5137-42b0-9cca-5e327651767d",
+  "raw_artifact_id": "742ad794-5137-42b0-9cca-5e327651767d",
+  "primary_task_id": "validate-signal-visibility",
+  "session_id": "cli-7c1532b2-1edb-4135-bb9a-22f8b72eda44",
+  "timestamp": "2026-03-19T21:41:52.623Z",
+  "normalization_state": "normalized",
+  "binding_confidence": 1,
+  "signal_payload": {
+    "type": "test_result",
+    "signal_id": "sig-tests",
+    "passed": true,
+    "output": "\n> artifact-loop@0.1.0 test\n> vitest run\n\n\n RUN  v4.1.0 /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop\n\nok\n\n Test Files  15 passed (15)\n      Tests  151 passed (151)\n   Start at  17:41:52\n   Duration  566ms (transform 1.02s, setup 0ms, import 1.76s, tests 1.62s, environment 1ms)\n\n",
+    "error": ""
+  }
+}

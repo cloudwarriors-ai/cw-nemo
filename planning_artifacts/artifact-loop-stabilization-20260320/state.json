@@ -1,0 +1,17 @@
+{
+  "expires_at": "2026-03-21T11:00:52+00:00",
+  "impl": {
+    "best_score": 58,
+    "last_score": 58,
+    "loop": 1,
+    "stagnant_loops": 0
+  },
+  "plan": {
+    "best_score": 26,
+    "last_score": 26,
+    "loop": 4,
+    "stagnant_loops": 0
+  },
+  "schema_version": "progress.v1",
+  "updated_at": "2026-03-20T11:00:52+00:00"
+}

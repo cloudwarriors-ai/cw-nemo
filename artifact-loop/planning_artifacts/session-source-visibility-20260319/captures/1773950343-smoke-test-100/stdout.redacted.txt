@@ -1,0 +1,24 @@
+
+> artifact-loop@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90m/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop[39m
+
+ [32m✓[39m __tests__/invariants.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m __tests__/enrichment.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m __tests__/contract-hardening.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/golden-path.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/session-workflow.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/failure-escape.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/task-read.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/session.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-commands.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m __tests__/schema-validation.test.ts [2m([22m[2m76 tests[22m[2m)[22m[33m 303[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-test-run.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 389[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m137 passed[39m[22m[90m (137)[39m
+[2m   Start at [22m 15:59:03
+[2m   Duration [22m 611ms[2m (transform 902ms, setup 0ms, import 1.30s, tests 990ms, environment 1ms)[22m
+

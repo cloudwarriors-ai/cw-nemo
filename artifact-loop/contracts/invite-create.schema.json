@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "invite-create.schema.json",
+  "type": "object",
+  "required": ["member_id", "role", "display_name", "timezone", "invited_by_worker_id"],
+  "additionalProperties": false,
+  "properties": {
+    "member_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "role": { "$ref": "_defs.schema.json#/definitions/team_membership_role" },
+    "display_name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "invited_by_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "expires_in_days": { "type": "integer", "minimum": 1 }
+  }
+}

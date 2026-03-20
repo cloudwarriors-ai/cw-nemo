@@ -1,0 +1,120 @@
+{
+  "integration_map": [
+    {
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "integration_id": "INT-001",
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-extend-lead-surface-review"
+      ],
+      "touchpoint": "Artifact Loop CLI and HTTP service surfaces for invite, claim, project coordination, team summary/brief, and brief runs.",
+      "verification": [
+        "scenario:org-surface-smoke",
+        "review:lead-surfaces"
+      ]
+    },
+    {
+      "evidence": [
+        "artifact-loop/docs/org-stabilization-rollout.md",
+        "artifact-loop/docs/tailscale-rollout.md"
+      ],
+      "integration_id": "INT-002",
+      "packet_ids": [
+        "packet-operator-rollout-docs"
+      ],
+      "touchpoint": "Artifact Loop operator docs and rollout instructions for the newly shipped org surfaces and runtime gate.",
+      "verification": [
+        "README/doc grep validation"
+      ]
+    }
+  ],
+  "objective_coverage_map": [
+    {
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-validate-stabilization"
+      ],
+      "requirement_id": "REQ-001",
+      "verification": [
+        "npm run scenario:org-surface-smoke"
+      ]
+    },
+    {
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "packet_ids": [
+        "packet-extend-lead-surface-review",
+        "packet-validate-stabilization"
+      ],
+      "requirement_id": "REQ-002",
+      "verification": [
+        "npm run review:lead-surfaces"
+      ]
+    },
+    {
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ],
+      "packet_ids": [
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ],
+      "requirement_id": "REQ-003",
+      "verification": [
+        "README/doc grep validation"
+      ]
+    }
+  ],
+  "objective_ref": "artifact-loop-stabilization-20260320",
+  "packet_ids": [
+    "packet-build-org-surface-smoke",
+    "packet-extend-lead-surface-review",
+    "packet-operator-rollout-docs",
+    "packet-validate-stabilization"
+  ],
+  "requirement_ids": [
+    "REQ-001",
+    "REQ-002",
+    "REQ-003"
+  ],
+  "requirement_risk_rank": [
+    {
+      "associated_packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-validate-stabilization"
+      ],
+      "evidence_type": "mixed_surface_smoke",
+      "failure_impact": "Operators cannot trust the new org surfaces end to end before rollout.",
+      "priority": "critical",
+      "requirement_id": "REQ-001"
+    },
+    {
+      "associated_packet_ids": [
+        "packet-extend-lead-surface-review",
+        "packet-validate-stabilization"
+      ],
+      "evidence_type": "review_bundle",
+      "failure_impact": "Team summary and brief drift could reach operators unnoticed.",
+      "priority": "critical",
+      "requirement_id": "REQ-002"
+    },
+    {
+      "associated_packet_ids": [
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ],
+      "evidence_type": "operator_docs",
+      "failure_impact": "Operators may use the wrong source of truth or resume runtime work prematurely.",
+      "priority": "core",
+      "requirement_id": "REQ-003"
+    }
+  ],
+  "schema_version": "plan-coverage.v1",
+  "track_id": "artifact-loop-stabilization-20260320"
+}

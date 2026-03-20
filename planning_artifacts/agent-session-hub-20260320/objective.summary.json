@@ -1,0 +1,48 @@
+{
+  "accepted_packet_count": 3,
+  "active_packets_by_lane": {
+    "explorer": [],
+    "reviewer": [],
+    "validator": [],
+    "worker": []
+  },
+  "authoritative_state_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.runtime-state.json",
+  "authoritative_state_kind": "objective.runtime-state.json",
+  "blocked_reasons": [
+    "checkpoint:unrelated_dirty_state"
+  ],
+  "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+  "controller_mode": "enforce",
+  "convergence_status": "terminal",
+  "current_cycle_id": "objective-agent-session-hub-20260320-cycle-final",
+  "current_frontier": [],
+  "derived_view": true,
+  "execution_shape": "single_lane",
+  "fallback_packets": [],
+  "lane_queue_depths": {
+    "explorer": 0,
+    "reviewer": 0,
+    "validator": 0,
+    "worker": 0
+  },
+  "material_optional_work_reasons": [],
+  "material_optional_work_remaining": false,
+  "next_action": "checkpoint_cleanup_or_user_accepts_blocked_closure",
+  "next_recommended_packet": "",
+  "objective_id": "objective-agent-session-hub-20260320",
+  "required_work_reasons": [],
+  "required_work_remaining": false,
+  "route_hint": "R2",
+  "safe_momentum_available": false,
+  "schema_version": "objective-summary.v1",
+  "stop_allowed": true,
+  "stop_reason": "checkpoint_blocked",
+  "strategy_mix": [
+    "command_capture",
+    "validation_command"
+  ],
+  "swarm_status": "single_lane",
+  "track_id": "agent-session-hub-20260320",
+  "unsupported_closure_risk": "none",
+  "updated_at": "2026-03-20T05:02:53.829Z"
+}

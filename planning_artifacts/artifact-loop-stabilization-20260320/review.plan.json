@@ -1,0 +1,30 @@
+{
+  "blocked_fields": [],
+  "content": "Plan contract, frontloaded sufficiency, and runtime-compatibility checks passed.",
+  "gate": "plan",
+  "meta": {
+    "frontloaded_artifacts": {
+      "compiler": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.compiler.json",
+      "coverage": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.coverage.json",
+      "gaps": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.gaps.json",
+      "sufficiency": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.sufficiency.json"
+    },
+    "plan_status": "execution_ready",
+    "runtime_compatible": true,
+    "smoke_100_pass": true,
+    "smoke_quality": {
+      "best_score": 26,
+      "loop": 4,
+      "score": 26,
+      "stagnant_loops": 0,
+      "stall_limit": 2
+    },
+    "track_id": "artifact-loop-stabilization-20260320",
+    "track_token": "artifact-loop-stabilization-20260320"
+  },
+  "missing_fields": [],
+  "next_step": "Proceed to implementation evidence capture and validation.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "worker-agent-create.schema.json",
+  "type": "object",
+  "required": ["id", "label", "connector_type"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "label": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "connector_type": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "active": { "type": "boolean" }
+  }
+}

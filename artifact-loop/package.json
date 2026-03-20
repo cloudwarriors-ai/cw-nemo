@@ -1,0 +1,36 @@
+{
+  "name": "artifact-loop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Artifact Loop v0.5 — coordination engine with contract schemas and derivation logic",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "artifact-loop": "./bin/artifact-loop.js"
+  },
+  "scripts": {
+    "accept:shared-coordination": "bash ./scripts/scenarios/shared_coordination_v1.sh",
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "review:lead-surfaces": "bash ./scripts/scenarios/lead_surface_review_v1.sh",
+    "scenario:org-surface-smoke": "bash ./scripts/scenarios/org_surface_smoke_v1.sh",
+    "scenario:shared-coordination": "bash ./scripts/scenarios/shared_coordination_v1.sh",
+    "scenario:tailscale-shared-coordination": "bash ./scripts/scenarios/tailscale_shared_coordination_v1.sh",
+    "test": "vitest run",
+    "test:harness": "npm run build && ARTIFACT_LOOP_RUN_SMOKE_HARNESS=1 vitest run src/__tests__/harness/org-loop.harness.test.ts src/__tests__/harness/org-loop.smoke.test.ts",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.37",
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

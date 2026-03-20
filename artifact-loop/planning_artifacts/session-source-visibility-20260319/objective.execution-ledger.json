@@ -1,0 +1,54 @@
+{
+  "coverage": {
+    "deterministic_packet_count": 2,
+    "deterministic_ratio": 1.0,
+    "fallback_packet_count": 0,
+    "fallback_packet_ids": [],
+    "fallback_reasons": {},
+    "non_review_deterministic_ratio": 1.0,
+    "packet_count": 2,
+    "review_packet_count": 0,
+    "route_hint": "R3",
+    "schema_version": "objective-execution-coverage.v1",
+    "status": "pass",
+    "thresholds": {
+      "deterministic_ratio_min": 0.9,
+      "non_review_deterministic_ratio_min": 0.9
+    }
+  },
+  "objective_id": "objective-session-source-visibility-20260319",
+  "packets": [
+    {
+      "evidence_destination": "planning_artifacts/session-source-visibility-20260319/packet-emit-and-read-formatting.json",
+      "fallback_reason": "",
+      "fallback_used": false,
+      "latest_result_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packet-emit-and-read-formatting.json",
+      "packet_id": "packet-emit-and-read-formatting",
+      "packet_lane": "worker",
+      "retry_counters": {},
+      "runner_metadata": {},
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "evidence_destination": "planning_artifacts/session-source-visibility-20260319/packet-verify-cli-contracts.json",
+      "fallback_reason": "",
+      "fallback_used": false,
+      "latest_result_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/packet-verify-cli-contracts.json",
+      "packet_id": "packet-verify-cli-contracts",
+      "packet_lane": "validator",
+      "retry_counters": {},
+      "runner_metadata": {},
+      "runtime_state": "accepted",
+      "strategy_name": "validation_command",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    }
+  ],
+  "schema_version": "objective-execution-ledger.v1",
+  "track_id": "session-source-visibility-20260319"
+}

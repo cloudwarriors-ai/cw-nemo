@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "invite-claim-result.schema.json",
+  "type": "object",
+  "required": ["invite", "membership", "member", "agent"],
+  "additionalProperties": false,
+  "properties": {
+    "invite": { "$ref": "invite.schema.json" },
+    "membership": { "$ref": "team-membership.schema.json" },
+    "member": { "$ref": "worker.schema.json" },
+    "agent": { "$ref": "worker-agent.schema.json" }
+  }
+}

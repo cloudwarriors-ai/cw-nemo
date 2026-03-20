@@ -1,0 +1,176 @@
+{
+  "objective_id": "objective-session-source-visibility-20260319",
+  "packets": [
+    {
+      "acceptance_checks": [
+        "Emit command strings include the resolved task reference.",
+        "Task status/history human output shows the resolved task line and session suffix only when session-derived."
+      ],
+      "allowed_scope": [
+        "artifact-loop/src/cli/commands",
+        "artifact-loop/src/cli/helpers",
+        "artifact-loop/src/__tests__/cli"
+      ],
+      "automatable_acceptance": true,
+      "cancelled_by": "",
+      "classification": "ready",
+      "constraints": [
+        "Do not change JSON output.",
+        "Do not change resolveTaskId signature.",
+        "Keep the change bounded to artifact-loop."
+      ],
+      "definition_of_done": {
+        "acceptance_checks": [
+          "Updated CLI tests pass for explicit and session-derived flows."
+        ],
+        "allowed_scope": [
+          "artifact-loop/src/cli/commands",
+          "artifact-loop/src/cli/helpers",
+          "artifact-loop/src/__tests__/cli"
+        ],
+        "behavior_outcome": "Human-readable emit and task-read commands disclose the resolved task source consistently.",
+        "evidence_requirements": [
+          "Source diff",
+          "test capture manifest"
+        ],
+        "objective_linkage": "REQ-001,REQ-002",
+        "rollback_or_fallback": "Revert helper/caller edits and rebuild dist if human output regressions appear.",
+        "verifier_acceptance_condition": "Reviewer confirms the shared helper centralizes the string rule without widening API scope."
+      },
+      "dependencies": [],
+      "dependency_mode": "accepted_upstream",
+      "evidence_destination": "planning_artifacts/session-source-visibility-20260319/packet-emit-and-read-formatting.json",
+      "execution_mode": "sequence_required",
+      "execution_strategy": "command_capture",
+      "failure_signals": [
+        "Explicit-task tests contain `(from session)`.",
+        "Session-derived tests fail to surface the resolved task ID."
+      ],
+      "fallback_or_rollback": "Revert the shared task reference helper and restore previous human-output strings.",
+      "last_changed_files": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/helpers/format.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test-run.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-note.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-merge.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-status.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-history.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-commands.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/task-read.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-test-run.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/golden-path.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/failure-escape.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/session-workflow.test.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.d.ts",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test-run.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-note.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-merge.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-status.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-history.js"
+      ],
+      "last_cycle_id": "objective-session-source-visibility-20260319-cycle-final",
+      "last_verifier_output": "accepted",
+      "maintainable_completion_path": true,
+      "packet_class": "implementation",
+      "packet_id": "packet-emit-and-read-formatting",
+      "packet_lane": "worker",
+      "parallelism_class": "serial",
+      "primary_behavior": "Implement shared task-source labeling across emit, task status, and task history human output.",
+      "product_meaning_resolved": true,
+      "prohibited_action_required": false,
+      "runtime_state": "accepted",
+      "shared_surface_categories": [
+        "cli-output",
+        "task-targeting",
+        "test-contract"
+      ],
+      "strategy_inputs": {
+        "command": "npm run build"
+      },
+      "swarm_eligible": false,
+      "verifier_mapping": "Existing emit/status/history vitest assertions plus reviewer inspection of human-only output changes."
+    },
+    {
+      "acceptance_checks": [
+        "Build, check, and test capture manifests prove dist regeneration and 137 passing tests for the updated command surfaces.",
+        "Validation evidence artifacts show source-backed and bin-backed CLI paths agree on the task-source output contract."
+      ],
+      "allowed_scope": [
+        "artifact-loop/dist",
+        "artifact-loop/bin",
+        "artifact-loop/src/__tests__/cli",
+        "artifact-loop/package.json"
+      ],
+      "automatable_acceptance": true,
+      "cancelled_by": "",
+      "classification": "ready",
+      "constraints": [
+        "Validation must use the artifact-loop package root.",
+        "Do not rely on unstaged unrelated repo changes.",
+        "Close only when bin-backed and source-backed tests agree."
+      ],
+      "definition_of_done": {
+        "acceptance_checks": [
+          "npm run build",
+          "npm run check",
+          "npm test"
+        ],
+        "allowed_scope": [
+          "artifact-loop/dist",
+          "artifact-loop/bin",
+          "artifact-loop/src/__tests__/cli",
+          "artifact-loop/package.json"
+        ],
+        "behavior_outcome": "Validation evidence proves the updated CLI contract in both source-backed and dist-backed execution paths.",
+        "evidence_requirements": [
+          "worker-build capture",
+          "verifier-check capture",
+          "test-vitest capture",
+          "smoke stage captures"
+        ],
+        "objective_linkage": "REQ-002,REQ-003",
+        "rollback_or_fallback": "Rebuild dist or revert bounded output changes if validation fails.",
+        "verifier_acceptance_condition": "Reviewer confirms the executable bin entrypoint and source tests report the same task-source contract."
+      },
+      "dependencies": [
+        "packet-emit-and-read-formatting"
+      ],
+      "dependency_mode": "accepted_upstream",
+      "evidence_destination": "planning_artifacts/session-source-visibility-20260319/packet-verify-cli-contracts.json",
+      "execution_mode": "sequence_required",
+      "execution_strategy": "validation_command",
+      "failure_signals": [
+        "emit-test-run.test.ts still reports the old output contract.",
+        "Typecheck or full test suite fails after output-string changes."
+      ],
+      "fallback_or_rollback": "Restore dist/source parity by rebuilding or reverting the bounded output change set.",
+      "last_changed_files": [],
+      "last_cycle_id": "objective-session-source-visibility-20260319-cycle-final",
+      "last_verifier_output": "accepted",
+      "maintainable_completion_path": true,
+      "packet_class": "validation",
+      "packet_id": "packet-verify-cli-contracts",
+      "packet_lane": "validator",
+      "parallelism_class": "serial",
+      "primary_behavior": "Verify source, dist, and CLI contract parity with build, typecheck, and full test evidence.",
+      "product_meaning_resolved": true,
+      "prohibited_action_required": false,
+      "runtime_state": "accepted",
+      "shared_surface_categories": [
+        "dist-parity",
+        "cli-output",
+        "validation"
+      ],
+      "strategy_inputs": {
+        "command": "npm test",
+        "validation_lane": "unit_and_e2e"
+      },
+      "swarm_eligible": false,
+      "verifier_mapping": "Captured build, check, test, and smoke manifests plus reviewer confirmation that the bin entrypoint is updated."
+    }
+  ],
+  "schema_version": "objective-packet-dag.v1",
+  "track_id": "session-source-visibility-20260319"
+}

@@ -1,0 +1,98 @@
+{
+  "ambiguity_classification": [
+    {
+      "classification": "technical_reversible",
+      "item_id": "amb-001",
+      "statement": "The stabilization note should live in repo-tracked artifact-loop docs rather than planning_artifacts."
+    },
+    {
+      "classification": "technical_reversible",
+      "item_id": "amb-002",
+      "statement": "The mixed-surface smoke should use HTTP only where the plan explicitly requires proof of the service contract; the rest should stay on stable CLI flows."
+    }
+  ],
+  "audience": [],
+  "authority_sensitive_decisions": [],
+  "clarification_batch_count": 0,
+  "clarification_governor": {
+    "allowed_topics": [
+      "product_meaning",
+      "authority_security_boundaries",
+      "missing_success_criteria",
+      "non_discoverable_tradeoffs"
+    ],
+    "default_batch_limit": 1,
+    "new_authority_boundary_required_for_mid_execution_clarification": true,
+    "repo_discoverable_questions_forbidden": true
+  },
+  "clarification_needed": false,
+  "clarification_questions": [],
+  "clarification_reasons": [],
+  "discoverable_resolution_log": [],
+  "discoverable_unknowns": [],
+  "intent_contract": {
+    "ambiguity_classification": [
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-001",
+        "statement": "The stabilization note should live in repo-tracked artifact-loop docs rather than planning_artifacts."
+      },
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-002",
+        "statement": "The mixed-surface smoke should use HTTP only where the plan explicitly requires proof of the service contract; the rest should stay on stable CLI flows."
+      }
+    ],
+    "authority_sensitive_decisions": [],
+    "non_goals": [
+      "No new product slices",
+      "No runtime transport implementation changes",
+      "No Tailscale automation beyond documenting the current gate",
+      "No mutation of the canonical shared_coordination_v1 contract beyond bug fixes required by this pass"
+    ],
+    "objective": "Create reusable operator-facing stabilization surfaces for the newly implemented invite, team summary/brief, and adopt-existing flows without widening into new product functionality or Tailscale Stage 2/3 work.",
+    "objective_shape_status": "accepted_rewritten",
+    "success_criteria": [
+      "A new scenario script proves invite creation over CLI, invite claim over HTTP, shared coordination over CLI, team readback over HTTP, and adopt-existing over CLI in one run.",
+      "The lead-surface review bundle captures both project-level and team-level outputs and checks that the derived team surfaces stay semantically aligned with project truth.",
+      "A repo-tracked rollout note documents slices B/C/D, stabilization entrypoints, operator commands, constraints, and the explicit gate for re-entering runtime work."
+    ]
+  },
+  "known_unknowns": [
+    "The stabilization note should live in repo-tracked artifact-loop docs rather than planning_artifacts.",
+    "The mixed-surface smoke should use HTTP only where the plan explicitly requires proof of the service contract; the rest should stay on stable CLI flows."
+  ],
+  "normalization_source": "plan_contract",
+  "objective": "Create reusable operator-facing stabilization surfaces for the newly implemented invite, team summary/brief, and adopt-existing flows without widening into new product functionality or Tailscale Stage 2/3 work.",
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "objective_shape_status": "accepted_rewritten",
+  "raw_request": "Stabilize the Artifact Loop organization rollout by adding a mixed CLI/HTTP smoke scenario, extending the lead-surface review to cover team surfaces, and publishing repo-tracked operator rollout notes with the current runtime gate.",
+  "schema_version": "objective-intent.v1",
+  "scope_boundaries": {
+    "in_scope": [
+      "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+      "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+      "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+      "artifact-loop/package.json",
+      "artifact-loop/README.md",
+      "artifact-loop/docs/org-stabilization-rollout.md",
+      "artifact-loop/docs/tailscale-rollout.md",
+      ".agents/skills/artifact-loop-lead-surface-review/SKILL.md",
+      "planning_artifacts/artifact-loop-stabilization-20260320"
+    ],
+    "out_of_scope": [
+      "artifact-loop/src/engine.ts product behavior unless a stabilization defect is discovered",
+      "Tailscale Stage 2 and Stage 3 implementation",
+      "nemoclaw and nemoclaw-blueprint runtime changes",
+      "Existing shared_coordination_v1 semantics beyond bug fixes required by the new stabilization surfaces"
+    ]
+  },
+  "source_type": "plan_json",
+  "success_criteria": [
+    "A new scenario script proves invite creation over CLI, invite claim over HTTP, shared coordination over CLI, team readback over HTTP, and adopt-existing over CLI in one run.",
+    "The lead-surface review bundle captures both project-level and team-level outputs and checks that the derived team surfaces stay semantically aligned with project truth.",
+    "A repo-tracked rollout note documents slices B/C/D, stabilization entrypoints, operator commands, constraints, and the explicit gate for re-entering runtime work."
+  ],
+  "track_id": "artifact-loop-stabilization-20260320",
+  "track_token": "artifact-loop-stabilization-20260320"
+}

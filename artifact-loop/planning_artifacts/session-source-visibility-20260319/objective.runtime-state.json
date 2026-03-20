@@ -1,0 +1,38 @@
+{
+  "authoritative_artifacts": {
+    "packet_dag": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.packet-dag.json",
+    "schedule": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.schedule.json",
+    "status": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.status.json"
+  },
+  "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+  "compatibility_artifacts": {
+    "operator_view": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.operator-view.json",
+    "summary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.summary.json",
+    "support_confidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/objective.support-confidence.json"
+  },
+  "controller_mode": "enforce",
+  "current_cycle_id": "objective-session-source-visibility-20260319-cycle-final",
+  "current_frontier": [],
+  "current_packet": "",
+  "derived_support_status": "supported",
+  "last_verifier_result": {
+    "reason": "Required packets accepted with deterministic evidence; checkpoint remains blocked by unrelated dirty repo state.",
+    "source": "validate_impl-prep",
+    "status": "approve"
+  },
+  "lifecycle_status": "approved",
+  "material_optional_work_reasons": [],
+  "material_optional_work_remaining": false,
+  "next_recommended_packet": "",
+  "objective_id": "objective-session-source-visibility-20260319",
+  "required_work_reasons": [],
+  "required_work_remaining": false,
+  "route_hint": "R3",
+  "safe_momentum_available": false,
+  "schema_version": "objective-runtime-state.v1",
+  "stop_allowed": true,
+  "stop_reason": "checkpoint_blocked",
+  "track_id": "session-source-visibility-20260319",
+  "unsupported_closure_risk": "none",
+  "updated_at": "2026-03-19T20:03:22+00:00"
+}

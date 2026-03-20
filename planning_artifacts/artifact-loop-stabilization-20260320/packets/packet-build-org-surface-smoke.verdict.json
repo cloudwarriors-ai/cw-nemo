@@ -1,0 +1,35 @@
+{
+  "allowed_scope_status": "within_scope",
+  "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-build-org-surface-smoke.verdict.json",
+  "captured_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke"
+  ],
+  "changed_files": [
+    "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+    "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+    "artifact-loop/package.json"
+  ],
+  "evidence_refs": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004252-worker-org-surface-smoke-tests/manifest.json"
+  ],
+  "fallback_reason": "",
+  "fallback_used": false,
+  "packet_id": "packet-build-org-surface-smoke",
+  "produced_artifacts": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004252-worker-org-surface-smoke-tests/manifest.json"
+  ],
+  "runner_kind": "command_capture",
+  "runtime_state": "accepted",
+  "step_results": [
+    {
+      "evidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004252-worker-org-surface-smoke-tests/manifest.json",
+      "status": "pass",
+      "step": "governed_capture"
+    }
+  ],
+  "strategy_name": "command_capture",
+  "summary": "Worker capture passed for the mixed CLI/HTTP org stabilization smoke.",
+  "support_status": "supported",
+  "unsupported_risk_reason": "",
+  "verifier_output": "accepted"
+}

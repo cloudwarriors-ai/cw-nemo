@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "authority_sensitive": false,
+      "packet_id": "packet-verify-cli-contracts",
+      "reason": "checkpoint_blocked_by_unrelated_dirty_repo_state"
+    }
+  ],
+  "objective_id": "objective-session-source-visibility-20260319",
+  "schema_version": "objective-blockers.v1",
+  "track_id": "session-source-visibility-20260319"
+}

@@ -1,0 +1,17 @@
+{
+  "deterministic_packet_count": 4,
+  "deterministic_ratio": 1.0,
+  "fallback_packet_count": 0,
+  "fallback_packet_ids": [],
+  "fallback_reasons": {},
+  "non_review_deterministic_ratio": 1.0,
+  "packet_count": 4,
+  "review_packet_count": 0,
+  "route_hint": "R3",
+  "schema_version": "objective-execution-coverage.v1",
+  "status": "pass",
+  "thresholds": {
+    "deterministic_ratio_min": 0.9,
+    "non_review_deterministic_ratio_min": 0.9
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "review-signal-trial",
+  "title": "Review signal visibility trial",
+  "description": "Review whether status signal visibility reduced run friction.",
+  "assignee_human_id": "chad",
+  "status": "not_started",
+  "acceptance_criteria": "trial reviewed",
+  "acceptance_signals": [
+    {
+      "id": "sig-review",
+      "category": "command",
+      "required": false,
+      "success_condition": "review completed",
+      "command": "review artifact"
+    }
+  ],
+  "depends_on": [
+    "validate-signal-visibility"
+  ],
+  "last_activity_at": "2026-03-19T21:41:27.900Z"
+}

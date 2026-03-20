@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "override.schema.json",
+  "type": "object",
+  "description": "Standalone override record. Sets canonical status only — does not suppress artifacts, disable staleness, or interfere with enrichment.",
+  "required": ["status", "reason", "by", "timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+    "reason": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "by": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

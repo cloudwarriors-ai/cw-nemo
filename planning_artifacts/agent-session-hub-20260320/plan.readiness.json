@@ -1,0 +1,59 @@
+{
+  "autonomous_session_readiness": {
+    "next_executable_frontier": [
+      "packet-build-session-service"
+    ],
+    "readiness_gaps": [],
+    "safe_momentum_ready": true,
+    "status": "execution_ready"
+  },
+  "frontier_map": [
+    {
+      "execution_mode": "sequence_required",
+      "packet_id": "packet-build-session-service"
+    },
+    {
+      "execution_mode": "sequence_required",
+      "packet_id": "packet-build-session-cli"
+    },
+    {
+      "execution_mode": "sequence_required",
+      "packet_id": "packet-validate-session-flow"
+    }
+  ],
+  "momentum_map": [
+    {
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-build-session-service",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-build-session-cli"
+      ]
+    },
+    {
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-build-session-cli",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-validate-session-flow"
+      ]
+    },
+    {
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-validate-session-flow",
+      "resolves_dependency_classification": false,
+      "unlocks_packets": []
+    }
+  ],
+  "objective_ref": "agent-session-hub-20260320",
+  "required_packets": [
+    "packet-build-session-service",
+    "packet-build-session-cli",
+    "packet-validate-session-flow"
+  ],
+  "schema_version": "plan-readiness.v1",
+  "track_id": "agent-session-hub-20260320"
+}

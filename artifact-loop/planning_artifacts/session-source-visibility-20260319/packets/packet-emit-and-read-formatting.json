@@ -1,0 +1,68 @@
+{
+  "acceptance_checks": [
+    "Emit command strings include the resolved task reference.",
+    "Task status/history human output shows the resolved task line and session suffix only when session-derived."
+  ],
+  "allowed_scope": [
+    "artifact-loop/src/cli/commands",
+    "artifact-loop/src/cli/helpers",
+    "artifact-loop/src/__tests__/cli"
+  ],
+  "automatable_acceptance": true,
+  "cancelled_by": "",
+  "classification": "ready",
+  "constraints": [
+    "Do not change JSON output.",
+    "Do not change resolveTaskId signature.",
+    "Keep the change bounded to artifact-loop."
+  ],
+  "definition_of_done": {
+    "acceptance_checks": [
+      "Updated CLI tests pass for explicit and session-derived flows."
+    ],
+    "allowed_scope": [
+      "artifact-loop/src/cli/commands",
+      "artifact-loop/src/cli/helpers",
+      "artifact-loop/src/__tests__/cli"
+    ],
+    "behavior_outcome": "Human-readable emit and task-read commands disclose the resolved task source consistently.",
+    "evidence_requirements": [
+      "Source diff",
+      "test capture manifest"
+    ],
+    "objective_linkage": "REQ-001,REQ-002",
+    "rollback_or_fallback": "Revert helper/caller edits and rebuild dist if human output regressions appear.",
+    "verifier_acceptance_condition": "Reviewer confirms the shared helper centralizes the string rule without widening API scope."
+  },
+  "dependencies": [],
+  "dependency_mode": "accepted_upstream",
+  "evidence_destination": "planning_artifacts/session-source-visibility-20260319/packet-emit-and-read-formatting.json",
+  "execution_mode": "sequence_required",
+  "execution_strategy": "command_capture",
+  "failure_signals": [
+    "Explicit-task tests contain `(from session)`.",
+    "Session-derived tests fail to surface the resolved task ID."
+  ],
+  "fallback_or_rollback": "Revert the shared task reference helper and restore previous human-output strings.",
+  "last_cycle_id": "",
+  "last_verifier_output": "",
+  "maintainable_completion_path": true,
+  "packet_class": "implementation",
+  "packet_id": "packet-emit-and-read-formatting",
+  "packet_lane": "worker",
+  "parallelism_class": "serial",
+  "primary_behavior": "Implement shared task-source labeling across emit, task status, and task history human output.",
+  "product_meaning_resolved": true,
+  "prohibited_action_required": false,
+  "runtime_state": "queued",
+  "shared_surface_categories": [
+    "cli-output",
+    "task-targeting",
+    "test-contract"
+  ],
+  "strategy_inputs": {
+    "command": "npm run build"
+  },
+  "swarm_eligible": false,
+  "verifier_mapping": "Existing emit/status/history vitest assertions plus reviewer inspection of human-only output changes."
+}

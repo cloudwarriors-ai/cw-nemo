@@ -1,0 +1,72 @@
+{
+  "acceptance_checks": [
+    "All listed validation commands pass.",
+    "Smoke and review captures exist under the stabilization track.",
+    "Governed finalize gate returns ok=true."
+  ],
+  "allowed_scope": [
+    "artifact-loop",
+    "planning_artifacts/artifact-loop-stabilization-20260320"
+  ],
+  "automatable_acceptance": true,
+  "cancelled_by": "",
+  "classification": "ready",
+  "constraints": [
+    "Run the full existing validation stack plus the new stabilization entrypoints.",
+    "Capture evidence under the stabilization track.",
+    "Do not close without finalize_gate ok=true."
+  ],
+  "definition_of_done": {
+    "acceptance_checks": [
+      "All listed validation commands pass.",
+      "Smoke and review captures exist under the stabilization track.",
+      "Governed finalize gate returns ok=true."
+    ],
+    "allowed_scope": [
+      "artifact-loop",
+      "planning_artifacts/artifact-loop-stabilization-20260320"
+    ],
+    "behavior_outcome": "The stabilization pass has artifact-backed proof and governed closure.",
+    "evidence_requirements": [
+      "command capture manifests",
+      "implementation.json",
+      "finalize.json"
+    ],
+    "objective_linkage": "REQ-001/REQ-002/REQ-003",
+    "rollback_or_fallback": "Fix defects before closing; do not force approval on partial evidence.",
+    "verifier_acceptance_condition": "Reviewer confirms evidence covers the whole stabilization objective and no required gate is skipped."
+  },
+  "dependencies": [
+    "packet-operator-rollout-docs"
+  ],
+  "dependency_mode": "accepted_upstream",
+  "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-validate-stabilization.json",
+  "execution_mode": "sequence_required",
+  "execution_strategy": "command_capture",
+  "failure_signals": [
+    "Existing package checks fail.",
+    "New smoke or review entrypoints fail.",
+    "Finalize gate reports blocked or revise."
+  ],
+  "fallback_or_rollback": "Fix regressions or doc/script defects before closure; do not boundary-shrink this pass.",
+  "last_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-002",
+  "last_verifier_output": "accepted",
+  "maintainable_completion_path": true,
+  "packet_class": "validation",
+  "packet_id": "packet-validate-stabilization",
+  "packet_lane": "validator",
+  "parallelism_class": "serial",
+  "primary_behavior": "Run the full Artifact Loop validation stack, capture governed evidence, and confirm the new stabilization surfaces and docs close cleanly.",
+  "product_meaning_resolved": true,
+  "prohibited_action_required": false,
+  "runtime_state": "accepted",
+  "shared_surface_categories": [
+    "verification",
+    "governed-closeout"
+  ],
+  "strategy_inputs": {
+    "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces"
+  },
+  "swarm_eligible": false,
+  "verifier_mapping": "Review captured manifests, test output, and finalize.json."
+}

@@ -1,0 +1,37 @@
+{
+  "current_frontier": [],
+  "entries": [
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-build-session-service",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-build-session-cli"
+      ]
+    },
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-build-session-cli",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-validate-session-flow"
+      ]
+    },
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-validate-session-flow",
+      "resolves_dependency_classification": false,
+      "unlocks_packets": []
+    }
+  ],
+  "objective_id": "objective-agent-session-hub-20260320",
+  "safe_momentum_ready": false,
+  "schema_version": "objective-momentum.v1",
+  "track_id": "agent-session-hub-20260320"
+}

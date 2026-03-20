@@ -1,0 +1,22 @@
+{
+  "blocked_fields": [],
+  "content": "Implementation evidence passed deterministic checks.",
+  "gate": "implementation",
+  "meta": {
+    "impl_quality": {
+      "best_score": 57,
+      "loop": 1,
+      "score": 57,
+      "stagnant_loops": 0,
+      "stall_limit": 2
+    },
+    "impl_smoke_100_pass": true,
+    "track_id": "session-source-visibility-20260319",
+    "track_token": "session-source-visibility-20260319"
+  },
+  "missing_fields": [],
+  "next_step": "Run finalize_gate.py for final fail-closed approval.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

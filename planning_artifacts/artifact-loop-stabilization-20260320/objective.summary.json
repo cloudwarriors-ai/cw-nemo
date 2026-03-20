@@ -1,0 +1,45 @@
+{
+  "accepted_packet_count": 4,
+  "active_packets_by_lane": {
+    "explorer": [],
+    "reviewer": [],
+    "validator": [],
+    "worker": []
+  },
+  "authoritative_state_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+  "authoritative_state_kind": "objective.runtime-state.json",
+  "blocked_reasons": [],
+  "closure_state": "OBJECTIVE_COMPLETE",
+  "controller_mode": "enforce",
+  "convergence_status": "idle",
+  "current_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-002",
+  "current_frontier": [],
+  "derived_view": true,
+  "execution_shape": "single_lane",
+  "fallback_packets": [],
+  "lane_queue_depths": {
+    "explorer": 0,
+    "reviewer": 0,
+    "validator": 0,
+    "worker": 0
+  },
+  "material_optional_work_reasons": [],
+  "material_optional_work_remaining": false,
+  "next_action": "finalize",
+  "next_recommended_packet": "finalize",
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "required_work_reasons": [],
+  "required_work_remaining": false,
+  "route_hint": "R3",
+  "safe_momentum_available": false,
+  "schema_version": "objective-summary.v1",
+  "stop_allowed": true,
+  "stop_reason": "all_policy_backed_work_satisfied",
+  "strategy_mix": [
+    "command_capture"
+  ],
+  "swarm_status": "single_lane",
+  "track_id": "artifact-loop-stabilization-20260320",
+  "unsupported_closure_risk": "none",
+  "updated_at": "2026-03-20T11:00:37+00:00"
+}

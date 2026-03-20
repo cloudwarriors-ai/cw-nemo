@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "inbox-item.schema.json",
+  "type": "object",
+  "required": ["id", "recipient_worker_id", "kind", "status", "created_at", "payload_ref"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "recipient_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "recipient_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "team_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "kind": {
+      "type": "string",
+      "enum": ["assignment", "reassignment", "message", "brief"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "acknowledged", "superseded", "closed"]
+    },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "acknowledged_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "payload_ref": {
+      "type": "object",
+      "required": ["type", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["assignment", "message", "brief_run", "team_brief_run"]
+        },
+        "id": { "$ref": "_defs.schema.json#/definitions/id" }
+      }
+    }
+  }
+}

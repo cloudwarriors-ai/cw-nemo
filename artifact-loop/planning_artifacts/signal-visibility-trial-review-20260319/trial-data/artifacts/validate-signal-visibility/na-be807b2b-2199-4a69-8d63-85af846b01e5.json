@@ -1,0 +1,16 @@
+{
+  "id": "na-be807b2b-2199-4a69-8d63-85af846b01e5",
+  "raw_artifact_id": "be807b2b-2199-4a69-8d63-85af846b01e5",
+  "primary_task_id": "validate-signal-visibility",
+  "session_id": "cli-0570fc3d-e5af-4f18-bb54-04c36f6a3adf",
+  "timestamp": "2026-03-19T21:41:44.666Z",
+  "normalization_state": "normalized",
+  "binding_confidence": 1,
+  "signal_payload": {
+    "type": "command_result",
+    "signal_id": "sig-check",
+    "exit_code": 0,
+    "stdout": "\n> artifact-loop@0.1.0 check\n> tsc --noEmit\n\n",
+    "stderr": ""
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "derivation-run.schema.json",
+  "type": "object",
+  "description": "Record of a single derivation that produced a state transition. Created only when transitionOccurred is true.",
+  "required": [
+    "id",
+    "timestamp",
+    "task_id",
+    "input_artifact_ids",
+    "rules_applied",
+    "prior_state",
+    "output_state"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "input_artifact_ids": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/id" },
+      "minItems": 1
+    },
+    "rules_applied": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "Names of derivation rules that fired to produce this transition"
+    },
+    "prior_state": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+    "output_state": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+    "input_override_id": { "$ref": "_defs.schema.json#/definitions/id" }
+  }
+}

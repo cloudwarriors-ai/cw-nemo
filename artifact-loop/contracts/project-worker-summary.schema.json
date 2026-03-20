@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-worker-summary.schema.json",
+  "type": "object",
+  "description": "Worker grouping read model for one project.",
+  "required": ["project_id", "by_human", "by_agent"],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "by_human": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assignee_human_id", "tasks"],
+        "additionalProperties": false,
+        "properties": {
+          "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "tasks": {
+            "type": "array",
+            "items": { "$ref": "project-task-list-item.schema.json" }
+          }
+        }
+      }
+    },
+    "by_agent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assignee_agent_id", "tasks"],
+        "additionalProperties": false,
+        "properties": {
+          "assignee_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "tasks": {
+            "type": "array",
+            "items": { "$ref": "project-task-list-item.schema.json" }
+          }
+        }
+      }
+    }
+  }
+}

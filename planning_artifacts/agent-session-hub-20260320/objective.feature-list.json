@@ -1,0 +1,69 @@
+{
+  "schema_version": "objective-feature-list.v1",
+  "objective_id": "objective-agent-session-hub-20260320",
+  "track_id": "agent-session-hub-20260320",
+  "features": [
+    {
+      "requirement_id": "REQ-001",
+      "priority": "critical",
+      "packet_ids": [
+        "packet-build-session-service"
+      ],
+      "status": "verified",
+      "evidence_refs": [
+        "root smoke captures",
+        "service integration test"
+      ],
+      "definition_of_done": {
+        "behavior_outcome": "A service started on a reachable host:port persists sessions and session messages on disk.",
+        "acceptance_checks": [
+          "Health endpoint responds.",
+          "Connect creates or updates a session.",
+          "Message posts are persisted under the session id."
+        ],
+        "evidence_requirements": [
+          "Service integration test evidence"
+        ],
+        "allowed_scope": [
+          "session-hub/src/store.js",
+          "session-hub/src/server.js"
+        ],
+        "rollback_or_fallback": "Remove the new package if the service contract proves incorrect.",
+        "verifier_acceptance_condition": "Reviewer confirms only minimal session/message behavior was added.",
+        "objective_linkage": "session-messaging"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "priority": "critical",
+      "packet_ids": [
+        "packet-build-session-cli",
+        "packet-validate-session-flow"
+      ],
+      "status": "verified",
+      "evidence_refs": [
+        "root smoke captures",
+        "CLI integration test"
+      ],
+      "definition_of_done": {
+        "behavior_outcome": "A client can connect once and then send and read without retyping the session id for each command.",
+        "acceptance_checks": [
+          "connect persists local state",
+          "send resolves the current session from local state when omitted",
+          "read returns persisted messages from the service"
+        ],
+        "evidence_requirements": [
+          "CLI integration test evidence"
+        ],
+        "allowed_scope": [
+          "session-hub/src/client.js",
+          "session-hub/src/cli.js",
+          "session-hub/bin/session-hub.js"
+        ],
+        "rollback_or_fallback": "Revert the new CLI if local client state handling is unreliable.",
+        "verifier_acceptance_condition": "Reviewer confirms the CLI remains minimal and service-url driven.",
+        "objective_linkage": "session-messaging"
+      }
+    }
+  ]
+}

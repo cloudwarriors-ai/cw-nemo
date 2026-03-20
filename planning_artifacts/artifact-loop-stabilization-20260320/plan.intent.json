@@ -1,0 +1,46 @@
+{
+  "autonomy_level": "L2_supervised_autonomous",
+  "clarification_governor": {
+    "allowed_topics": [
+      "product_meaning",
+      "authority_security_boundaries",
+      "missing_success_criteria",
+      "non_discoverable_tradeoffs"
+    ],
+    "default_batch_limit": 1,
+    "new_authority_boundary_required_for_mid_execution_clarification": true,
+    "repo_discoverable_questions_forbidden": true
+  },
+  "intent_contract": {
+    "ambiguity_classification": [
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-001",
+        "statement": "The stabilization note should live in repo-tracked artifact-loop docs rather than planning_artifacts."
+      },
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-002",
+        "statement": "The mixed-surface smoke should use HTTP only where the plan explicitly requires proof of the service contract; the rest should stay on stable CLI flows."
+      }
+    ],
+    "authority_sensitive_decisions": [],
+    "non_goals": [
+      "No new product slices",
+      "No runtime transport implementation changes",
+      "No Tailscale automation beyond documenting the current gate",
+      "No mutation of the canonical shared_coordination_v1 contract beyond bug fixes required by this pass"
+    ],
+    "objective": "Create reusable operator-facing stabilization surfaces for the newly implemented invite, team summary/brief, and adopt-existing flows without widening into new product functionality or Tailscale Stage 2/3 work.",
+    "objective_shape_status": "accepted_rewritten",
+    "success_criteria": [
+      "A new scenario script proves invite creation over CLI, invite claim over HTTP, shared coordination over CLI, team readback over HTTP, and adopt-existing over CLI in one run.",
+      "The lead-surface review bundle captures both project-level and team-level outputs and checks that the derived team surfaces stay semantically aligned with project truth.",
+      "A repo-tracked rollout note documents slices B/C/D, stabilization entrypoints, operator commands, constraints, and the explicit gate for re-entering runtime work."
+    ]
+  },
+  "objective_intent_ref": "objective.intent.json",
+  "objective_ref": "artifact-loop-stabilization-20260320",
+  "schema_version": "plan-intent.v1",
+  "track_id": "artifact-loop-stabilization-20260320"
+}

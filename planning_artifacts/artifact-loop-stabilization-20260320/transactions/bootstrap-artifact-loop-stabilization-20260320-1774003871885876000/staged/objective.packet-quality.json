@@ -1,0 +1,56 @@
+{
+  "budget": {
+    "fail_threshold": 0.35,
+    "fallback_count": 0,
+    "fallback_ratio": 0.0,
+    "packet_count": 4,
+    "route_hint": "R3",
+    "status": "pass",
+    "warning_threshold": 0.2
+  },
+  "hard_fail_packet_ids": [],
+  "route_hint": "R3",
+  "rows": [
+    {
+      "dependency_complexity": 0,
+      "evidence_completeness": true,
+      "fallback_class": "deterministic",
+      "hard_fail_checks": [],
+      "packet_id": "packet-build-org-surface-smoke",
+      "scope_size": 3,
+      "score": 100,
+      "warning_checks": []
+    },
+    {
+      "dependency_complexity": 1,
+      "evidence_completeness": true,
+      "fallback_class": "deterministic",
+      "hard_fail_checks": [],
+      "packet_id": "packet-extend-lead-surface-review",
+      "scope_size": 2,
+      "score": 100,
+      "warning_checks": []
+    },
+    {
+      "dependency_complexity": 1,
+      "evidence_completeness": true,
+      "fallback_class": "deterministic",
+      "hard_fail_checks": [],
+      "packet_id": "packet-operator-rollout-docs",
+      "scope_size": 3,
+      "score": 100,
+      "warning_checks": []
+    },
+    {
+      "dependency_complexity": 1,
+      "evidence_completeness": true,
+      "fallback_class": "deterministic",
+      "hard_fail_checks": [],
+      "packet_id": "packet-validate-stabilization",
+      "scope_size": 2,
+      "score": 100,
+      "warning_checks": []
+    }
+  ],
+  "schema_version": "objective-packet-quality.v1"
+}

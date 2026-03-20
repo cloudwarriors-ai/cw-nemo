@@ -1,0 +1,213 @@
+{
+  "committed_artifact_count": 20,
+  "recovery_outcome": "",
+  "schema_version": "objective-transaction-state.v1",
+  "started_at": "2026-03-20T10:51:11+00:00",
+  "state": "committed",
+  "step_id": "bootstrap",
+  "targets": [
+    {
+      "artifact_key": "packet_dag",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-dag.json",
+      "relative_path": "objective.packet-dag.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.packet-dag.json",
+      "staged_sha256": "4c94efa2d0a7451f83c3f480c4020b8f8d29e78e2171f7c5c06c962738b682db",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "status",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.status.json",
+      "relative_path": "objective.status.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.status.json",
+      "staged_sha256": "de85a2b61f2a0887b5b38566160afdaebca521fbe29ca351bee82bf2b72b8b5c",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "schedule",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.schedule.json",
+      "relative_path": "objective.schedule.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.schedule.json",
+      "staged_sha256": "c21d5eda00ec5bd28757d821c9012779aefa9ba9866f0ff83b4e428aec12e1c9",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "summary",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.summary.json",
+      "relative_path": "objective.summary.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.summary.json",
+      "staged_sha256": "11b269ca041d7498dbcd387cc05bba92d5984918770760a5e4426caef54c5faa",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "execution_plan",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-plan.json",
+      "relative_path": "objective.execution-plan.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.execution-plan.json",
+      "staged_sha256": "261951cd6b2a7abc35142aa24ff3459c1105fb7659ae0fa14535a0d20a5c3611",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "kernel_runtime_state",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.kernel-runtime-state.json",
+      "relative_path": "objective.kernel-runtime-state.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.kernel-runtime-state.json",
+      "staged_sha256": "cf84015878fc303aa709f8582e0068a80933764d185cf9340743033726e39306",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "transition_history",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transition-history.jsonl",
+      "relative_path": "objective.transition-history.jsonl",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.transition-history.jsonl",
+      "staged_sha256": "e947b4e878c59abbbe899a42531c99f0a6ec7d38615ccc0f9336c7dc32fc02ef",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "verification_results",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.verification-results.jsonl",
+      "relative_path": "objective.verification-results.jsonl",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.verification-results.jsonl",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "runtime_state",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+      "relative_path": "objective.runtime-state.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.runtime-state.json",
+      "staged_sha256": "a64be307f25df1bff519b47e1fba055129d3cecf2d43095aaced0afc8d1c55c7",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "validation_plan",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json",
+      "relative_path": "objective.validation-plan.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.validation-plan.json",
+      "staged_sha256": "eb6ccc8febdacdf2031cacf40c76b4971150322ff12200bde064cd20254ad1f1",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "repo_capabilities",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.repo-capabilities.json",
+      "relative_path": "objective.repo-capabilities.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.repo-capabilities.json",
+      "staged_sha256": "887eec21a4c7e3689053160145fb3ca9f9a3abba62c9ef5e56fae600d7a29a7f",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "packet_quality",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-quality.json",
+      "relative_path": "objective.packet-quality.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.packet-quality.json",
+      "staged_sha256": "20ed9c6d1ab8e46ab769483b152d54a7ee81e30225e4f1177be7b39b4389c5e0",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "execution_coverage",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-coverage.json",
+      "relative_path": "objective.execution-coverage.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.execution-coverage.json",
+      "staged_sha256": "6c17c48cc929af9addada2300c04b3b8dfd0f95b21c1032d7b0ebfe5b25ee79c",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "support_confidence",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.support-confidence.json",
+      "relative_path": "objective.support-confidence.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.support-confidence.json",
+      "staged_sha256": "14cc51b6182581573d92eccaafdc06571b78020a22c4844be95fe2632a4494be",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "packet_results",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-results.jsonl",
+      "relative_path": "objective.packet-results.jsonl",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.packet-results.jsonl",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "execution_ledger",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-ledger.json",
+      "relative_path": "objective.execution-ledger.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.execution-ledger.json",
+      "staged_sha256": "b52fbdb55db87dd16ac4339677617bce1f6340ebaee42a948e69820733ca466d",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "operator_view",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.operator-view.json",
+      "relative_path": "objective.operator-view.json",
+      "session_artifact": false,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.operator-view.json",
+      "staged_sha256": "18868abe5eb30de55180a66b6483afa310dcde577c26ae02bd3817d699405156",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "checkpoint",
+      "baseline_sha256": "d38eb5e29d39d43a0d9469248942ffa7d4e1553833b3825c038154103f51e916",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.checkpoint.json",
+      "relative_path": "objective.checkpoint.json",
+      "session_artifact": true,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.checkpoint.json",
+      "staged_sha256": "c7f526937d9647339e998cb0b18918b6145edf3eb1a941f2e72de87e46e88965",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "momentum",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.momentum.json",
+      "relative_path": "objective.momentum.json",
+      "session_artifact": true,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.momentum.json",
+      "staged_sha256": "4d0a6caf031b9f7304a6e9f1cb9e80d6a407bdfbd0c5354f9f94364c160dca69",
+      "step_id": "bootstrap"
+    },
+    {
+      "artifact_key": "blockers",
+      "baseline_sha256": "",
+      "live_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.blockers.json",
+      "relative_path": "objective.blockers.json",
+      "session_artifact": true,
+      "staged_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/transactions/bootstrap-artifact-loop-stabilization-20260320-1774003871885876000/staged/objective.blockers.json",
+      "staged_sha256": "a7eb7de10f5109508cc28f5a007cd653ba655f337b5369da3ab02664921e6869",
+      "step_id": "bootstrap"
+    }
+  ],
+  "track_id": "artifact-loop-stabilization-20260320",
+  "transaction_id": "bootstrap-artifact-loop-stabilization-20260320-1774003871885876000",
+  "updated_at": "2026-03-20T10:51:11+00:00"
+}

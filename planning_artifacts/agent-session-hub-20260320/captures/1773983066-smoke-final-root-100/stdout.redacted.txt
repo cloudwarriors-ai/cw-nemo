@@ -1,0 +1,14 @@
+
+> session-hub@0.1.0 test
+> node --test test/*.test.js
+
+✔ cli connect/send/read uses persisted client state (24.347083ms)
+✔ service connects agents and persists messages by session (24.266667ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 137.186375

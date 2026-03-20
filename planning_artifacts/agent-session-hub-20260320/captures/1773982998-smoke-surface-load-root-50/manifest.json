@@ -1,0 +1,40 @@
+{
+  "captured_at": "2026-03-20T05:03:18+00:00",
+  "command_argv": [
+    "node",
+    "-e",
+    "Promise.all([import('./session-hub/src/server.js'), import('./session-hub/src/cli.js')]).then(() => console.log('server ok / cli ok'))"
+  ],
+  "cwd": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+  "duration_ms": 132,
+  "ended_at": "2026-03-20T05:03:18+00:00",
+  "env_whitelist": {
+    "HOME": "/Users/chadsimon",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/Users/chadsimon/.codex/tmp/arg0/codex-arg0vHab8f:/Users/chadsimon/.opencode/bin:/Users/chadsimon/.rbenv/shims:/Users/chadsimon/.rbenv/bin:/Users/chadsimon/.local/bin:/Users/chadsimon/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Applications/Codex.app/Contents/Resources",
+    "PWD": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+    "SHELL": "/bin/zsh",
+    "TMPDIR": "/var/folders/8g/yc19qrvx1p5f65_tdtpj2fqw0000gn/T/",
+    "USER": "chadsimon"
+  },
+  "exit_code": 0,
+  "name": "smoke-surface-load-root",
+  "output_truncated": false,
+  "producer": "run_cmd_capture.v1",
+  "safety": {
+    "decision": "ok",
+    "override_reason": "",
+    "override_used": false
+  },
+  "schema_version": "run-cmd-capture.v1",
+  "stage": "50%",
+  "started_at": "2026-03-20T05:03:18+00:00",
+  "stderr_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-surface-load-root-50/stderr.redacted.txt",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-surface-load-root-50/stdout.redacted.txt",
+  "stdout_sha256": "116ce476bb4ce0d62994df30444ab689a1575eb20743f9f368469e9f3378a5f3",
+  "timeout_exceeded": false,
+  "timeout_sec": 300,
+  "track_id": "agent-session-hub-20260320"
+}

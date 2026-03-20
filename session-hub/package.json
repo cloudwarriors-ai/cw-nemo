@@ -1,0 +1,17 @@
+{
+  "name": "session-hub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal file-backed session messaging service for agents",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "session-hub": "./bin/session-hub.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

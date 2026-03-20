@@ -1,0 +1,15 @@
+{
+  "blocked_packets": [],
+  "boundary_shrunk_remainder": [],
+  "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+  "completed_packets": [
+    "packet-build-session-service",
+    "packet-build-session-cli",
+    "packet-validate-session-flow"
+  ],
+  "deferred_packets": [],
+  "objective_id": "objective-agent-session-hub-20260320",
+  "pending_packets": [],
+  "schema_version": "objective-status.v1",
+  "track_id": "agent-session-hub-20260320"
+}

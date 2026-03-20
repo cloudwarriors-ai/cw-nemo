@@ -1,0 +1,45 @@
+{
+  "changed_files": [
+    "session-hub/bin",
+    "session-hub/src",
+    "session-hub/test",
+    "session-hub/README.md",
+    "session-hub/package.json"
+  ],
+  "coverage": {
+    "generated_lane_count": 0,
+    "manual_blocker_count": 0,
+    "required_lane_count": 0
+  },
+  "escalated_review_required": false,
+  "generated_packets": [],
+  "lanes": [
+    {
+      "capability_confidence": "high",
+      "capability_source": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/package.json"
+      ],
+      "commands": [
+        "npm test"
+      ],
+      "generated_packet_ids": [],
+      "lane": "tests",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    }
+  ],
+  "objective_id": "objective-agent-session-hub-20260320",
+  "required_packets": [
+    "packet-build-session-service",
+    "packet-build-session-cli",
+    "packet-validate-session-flow"
+  ],
+  "route_hint": "R2",
+  "schema_version": "objective-validation-plan.v1",
+  "track_id": "agent-session-hub-20260320",
+  "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub"
+}

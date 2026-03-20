@@ -1,0 +1,294 @@
+{
+  "schema_version": "implementation.v1",
+  "summary": "Implemented a separate minimal session-hub package with a file-backed HTTP service and CLI for connect/send/read agent messaging.",
+  "changed_files": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/package.json",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/bin/session-hub.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/store.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/server.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/client.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/cli.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/test/service.test.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/test/cli.test.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/README.md"
+  ],
+  "tests_run": [
+    {
+      "name": "session-hub-package-tests",
+      "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test",
+      "status": "pass",
+      "result": "2 tests passed via root-scoped governed capture.",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773983115-test-session-hub-package-100/manifest.json",
+      "proof_hash": "e98e8b7358219d6e369c8fbeef81586b6946c0c6e6608c69a2e9d0fbf4677724"
+    }
+  ],
+  "smoke_results": [
+    {
+      "stage": "25%",
+      "status": "pass",
+      "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && node -e \"import('./src/store.js').then(() => console.log('store ok'))\"",
+      "observed_output": "store ok",
+      "decision": "continue",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-module-load-root-25/manifest.json",
+      "proof_hash": "8f058cb8371c3aa8d975f4223a0a711d4dd015449b134b9f2cad8944b792f6c0"
+    },
+    {
+      "stage": "50%",
+      "status": "pass",
+      "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && node -e \"Promise.all([import('./src/server.js'), import('./src/cli.js')]).then(() => console.log('server ok / cli ok'))\"",
+      "observed_output": "server ok / cli ok",
+      "decision": "continue",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-surface-load-root-50/manifest.json",
+      "proof_hash": "14cc86a4e80f2f8d06e1bbd1c23f26d3981e7a3dca3886ef10f2162f941b3576"
+    },
+    {
+      "stage": "75%",
+      "status": "pass",
+      "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test",
+      "observed_output": "Service and CLI tests passed in the isolated package.",
+      "decision": "continue",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982998-smoke-flow-tests-root-75/manifest.json",
+      "proof_hash": "ce2d7649ec0bcb54d71d57372c963ecc139819d405e244d7464f58f0006c0724"
+    },
+    {
+      "stage": "100%",
+      "status": "pass",
+      "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test",
+      "observed_output": "2 tests passed in the session-hub package.",
+      "decision": "approve",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773983066-smoke-final-root-100/manifest.json",
+      "proof_hash": "ecb3fc42c1d74ce6e76a700fe7d3a159e327913fc5990b4c7f9e1e327e403d42"
+    }
+  ],
+  "logging_evidence": [
+    {
+      "event": "Captured bounded diff evidence for the isolated session-hub package and track artifacts.",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982812-log-session-hub-diff-75/manifest.json",
+      "proof_hash": "9f2ca14567b0bc2f56d188d2931251fa4f33ef455b3b8f19fd704836900b5626"
+    }
+  ],
+  "rollback_validation": {
+    "executed": true,
+    "result": "pass",
+    "evidence": "Rollback scope manifest captured the isolated session-hub and track artifact file set.",
+    "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/captures/1773982812-rollback-session-hub-contract-100/manifest.json",
+    "proof_hash": "857eb19adfba7fad6e8554dd0107a175e70e0e7c12743703fd0f938678142e15"
+  },
+  "memory_retrieval_evidence": [
+    {
+      "tool": "mcp__codex_mem__build_context",
+      "query": "minimal session messaging service http cli local preferences artifact-loop networking",
+      "result_count": 0,
+      "error": "Transport closed"
+    }
+  ],
+  "preferences_applied": [
+    {
+      "key": "workspace.agents.process.non_trivial_governed_path",
+      "decision": "Used a separate package and governed artifact capture because the user explicitly rejected the broader Artifact Loop coordination surface.",
+      "rationale": "The requested operating surface is a minimal session messaging service, so the implementation stayed isolated to session-hub."
+    }
+  ],
+  "skill_trigger_eval_results": [
+    {
+      "skill": "memory-adaptation",
+      "false_positive_rate": 0,
+      "false_negative_rate": 0,
+      "threshold_passed": true
+    },
+    {
+      "skill": "planning-gate",
+      "false_positive_rate": 0,
+      "false_negative_rate": 0,
+      "threshold_passed": true
+    }
+  ],
+  "prompt_contract_used": [
+    {
+      "name": "feature-contract.v1",
+      "required_context": "Objective, users impacted, and the session-hub HTTP/CLI data flow.",
+      "required_constraints": "Keep scope isolated to a minimal package and avoid adding auth or coordination layers.",
+      "verification_section": "Run session-hub tests and capture governed smoke, diff, and rollback artifacts.",
+      "done_when": "Acceptance criteria are met, evidence artifacts are captured, and finalize_gate.py returns ok=true."
+    }
+  ],
+  "frontend_roundtrip_evidence": [],
+  "objective_runtime_state": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.runtime-state.json",
+    "authoritative_artifacts": {
+      "packet_dag": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.packet-dag.json",
+      "schedule": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.schedule.json",
+      "status": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.status.json"
+    },
+    "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+    "compatibility_artifacts": {
+      "operator_view": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.operator-view.json",
+      "summary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.summary.json",
+      "support_confidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.support-confidence.json"
+    },
+    "controller_mode": "enforce",
+    "current_cycle_id": "objective-agent-session-hub-20260320-cycle-final",
+    "current_frontier": [],
+    "current_packet": "",
+    "derived_support_status": "supported",
+    "last_verifier_result": {
+      "reason": "Required packets accepted with deterministic evidence; checkpoint remains blocked by unrelated dirty repo state.",
+      "source": "validate_impl-prep",
+      "status": "approve"
+    },
+    "lifecycle_status": "approved",
+    "material_optional_work_reasons": [],
+    "material_optional_work_remaining": false,
+    "next_recommended_packet": "",
+    "objective_id": "objective-agent-session-hub-20260320",
+    "required_work_reasons": [],
+    "required_work_remaining": false,
+    "route_hint": "R2",
+    "safe_momentum_available": false,
+    "schema_version": "objective-runtime-state.v1",
+    "stop_allowed": true,
+    "stop_reason": "checkpoint_blocked",
+    "track_id": "agent-session-hub-20260320",
+    "unsupported_closure_risk": "none",
+    "updated_at": "2026-03-20T05:02:53.829Z"
+  },
+  "objective_status": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.status.json",
+    "blocked_packets": [],
+    "boundary_shrunk_remainder": [],
+    "closure_state": "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED",
+    "completed_packets": [
+      "packet-build-session-service",
+      "packet-build-session-cli",
+      "packet-validate-session-flow"
+    ],
+    "deferred_packets": [],
+    "objective_id": "objective-agent-session-hub-20260320",
+    "pending_packets": [],
+    "schema_version": "objective-status.v1",
+    "track_id": "agent-session-hub-20260320"
+  },
+  "objective_summary": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.summary.json"
+  },
+  "validation_plan": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.validation-plan.json"
+  },
+  "support_confidence": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.support-confidence.json",
+    "external_support_coverage": {
+      "checkpoint_ready": false,
+      "deterministic_coverage_status": "pass",
+      "fallback_support_packet_ids": [],
+      "required_lane_gap_count": 0,
+      "validation_gap_present": false
+    },
+    "final_gate_recommendation": "allow_closure",
+    "mode": "enforce",
+    "objective_id": "objective-agent-session-hub-20260320",
+    "objective_support_status": "supported",
+    "packet_support": [
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-build-session-service.verdict.json",
+        "packet_id": "packet-build-session-service",
+        "runtime_state": "accepted",
+        "strategy_name": "command_capture",
+        "support_status": "supported",
+        "unsupported_risk_reason": ""
+      },
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-build-session-cli.verdict.json",
+        "packet_id": "packet-build-session-cli",
+        "runtime_state": "accepted",
+        "strategy_name": "command_capture",
+        "support_status": "supported",
+        "unsupported_risk_reason": ""
+      },
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-validate-session-flow.verdict.json",
+        "packet_id": "packet-validate-session-flow",
+        "runtime_state": "accepted",
+        "strategy_name": "validation_command",
+        "support_status": "supported",
+        "unsupported_risk_reason": ""
+      }
+    ],
+    "schema_version": "objective-support-confidence.v1",
+    "support_backed_closure": false,
+    "support_gap_reasons": [],
+    "support_remediation_available": false,
+    "track_id": "agent-session-hub-20260320",
+    "unsupported_closure_risk": "none"
+  },
+  "schedule_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.schedule.json",
+  "packet_verdicts": [
+    {
+      "allowed_scope_status": "within_scope",
+      "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-build-session-service.verdict.json",
+      "changed_files": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/store.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/server.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/test/service.test.js"
+      ],
+      "packet_id": "packet-build-session-service",
+      "runner_kind": "command",
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "allowed_scope_status": "within_scope",
+      "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-build-session-cli.verdict.json",
+      "changed_files": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/client.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/src/cli.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/bin/session-hub.js",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub/test/cli.test.js"
+      ],
+      "packet_id": "packet-build-session-cli",
+      "runner_kind": "command",
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "allowed_scope_status": "within_scope",
+      "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/packets/packet-validate-session-flow.verdict.json",
+      "changed_files": [],
+      "packet_id": "packet-validate-session-flow",
+      "runner_kind": "command",
+      "runtime_state": "accepted",
+      "strategy_name": "validation_command",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    }
+  ],
+  "execution_ledger": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.execution-ledger.json",
+  "packet_results_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.packet-results.jsonl",
+  "checkpoint_commit": "",
+  "checkpoint_blocked": true,
+  "checkpoint_block_reason": "unrelated_dirty_state",
+  "checkpoint_block_evidence": "Dirty worktree contains unrelated existing artifact-loop changes plus this new session-hub package.",
+  "bootstrap_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+  ],
+  "validation_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/session-hub && npm test"
+  ],
+  "clean_state_assertions": [
+    "Fresh governed state can resume from planning_artifacts without reconstructing prior chat context."
+  ],
+  "migration_fallback": {
+    "used": false,
+    "reason": "no migration defect observed",
+    "artifact_path": ""
+  },
+  "execution_coverage": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/agent-session-hub-20260320/objective.execution-coverage.json"
+  }
+}

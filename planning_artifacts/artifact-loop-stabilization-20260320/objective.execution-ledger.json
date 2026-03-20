@@ -1,0 +1,92 @@
+{
+  "coverage": {
+    "deterministic_packet_count": 4,
+    "deterministic_ratio": 1.0,
+    "fallback_packet_count": 0,
+    "fallback_packet_ids": [],
+    "fallback_reasons": {},
+    "non_review_deterministic_ratio": 1.0,
+    "packet_count": 4,
+    "review_packet_count": 0,
+    "route_hint": "R3",
+    "schema_version": "objective-execution-coverage.v1",
+    "status": "pass",
+    "thresholds": {
+      "deterministic_ratio_min": 0.9,
+      "non_review_deterministic_ratio_min": 0.9
+    }
+  },
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "packets": [
+    {
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-build-org-surface-smoke.json",
+      "fallback_reason": "",
+      "fallback_used": false,
+      "latest_result_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004252-worker-org-surface-smoke-tests/manifest.json",
+      "packet_id": "packet-build-org-surface-smoke",
+      "packet_lane": "worker",
+      "retry_counters": {},
+      "runner_metadata": {
+        "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004252-worker-org-surface-smoke-tests/manifest.json"
+      },
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-extend-lead-surface-review.json",
+      "fallback_reason": "",
+      "fallback_used": false,
+      "latest_result_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004274-verifier-lead-surface-review-tests/manifest.json",
+      "packet_id": "packet-extend-lead-surface-review",
+      "packet_lane": "worker",
+      "retry_counters": {},
+      "runner_metadata": {
+        "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004274-verifier-lead-surface-review-tests/manifest.json"
+      },
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-operator-rollout-docs.json",
+      "fallback_reason": "",
+      "fallback_used": false,
+      "latest_result_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003825-docs-stabilization-grep-95/manifest.json",
+      "packet_id": "packet-operator-rollout-docs",
+      "packet_lane": "worker",
+      "retry_counters": {},
+      "runner_metadata": {
+        "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003825-docs-stabilization-grep-95/manifest.json"
+      },
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    },
+    {
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-validate-stabilization.json",
+      "fallback_reason": "",
+      "fallback_used": false,
+      "latest_result_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004154-smoke-stabilization-final-100/manifest.json",
+      "packet_id": "packet-validate-stabilization",
+      "packet_lane": "validator",
+      "retry_counters": {},
+      "runner_metadata": {
+        "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004154-smoke-stabilization-final-100/manifest.json"
+      },
+      "runtime_state": "accepted",
+      "strategy_name": "command_capture",
+      "support_status": "supported",
+      "unsupported_risk_reason": "",
+      "verifier_output": "accepted"
+    }
+  ],
+  "schema_version": "objective-execution-ledger.v1",
+  "track_id": "artifact-loop-stabilization-20260320"
+}

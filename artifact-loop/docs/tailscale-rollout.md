@@ -8,6 +8,24 @@ Artifact Loop over Tailscale is split into three planes:
 
 Stage 1 is implemented here. Stages 2 and 3 are intentionally deferred.
 
+## Runtime Gate Boundary
+
+Do not start Stage 2 or Stage 3 because this repo branch says they are "next."
+
+They remain blocked until Stage 1 is proven on Doug's actual target host.
+
+The runtime track becomes eligible only after all of the following are true:
+
+- Doug has pulled branch `codex/session-source-visibility-20260319`
+- Doug's machine passes `start-artifact-loop-hub.sh`, `check-artifact-loop-hub.sh`, `configure-tailscale-artifact-loop-proxy.sh`, and `check-tailscale-artifact-loop-proxy.sh`
+- a teammate machine completes `bash ./scripts/scenarios/tailscale_shared_coordination_v1.sh` against the tailnet URL
+
+Until those conditions are met:
+
+- Artifact Loop remains the coordination truth
+- OpenClaw remains the runtime plane
+- Tailscale remains transport only
+
 ## Stage 1 Prerequisites
 
 On Doug's host:
@@ -186,12 +204,16 @@ Deferred. This stage will add:
 - one canonical remote runtime-backed action
 - rollback back to local gateway mode
 
+Stage 2 is not eligible to start until the Runtime Gate Boundary above is satisfied.
+
 ## Stage 3 — Combined Coordination + Runtime Acceptance
 
 Deferred. This stage will add:
 
 - one combined acceptance scenario using both the shared Artifact Loop hub and Doug's remote OpenClaw gateway
 - guardrails proving coordination remains in Artifact Loop and runtime remains in OpenClaw
+
+Stage 3 is not eligible to start until Stage 2 exists and the Runtime Gate Boundary above has already passed.
 
 ## Common Failure Cases
 

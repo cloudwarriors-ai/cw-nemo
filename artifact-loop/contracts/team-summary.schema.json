@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team-summary.schema.json",
+  "type": "object",
+  "required": [
+    "team",
+    "total_projects",
+    "active_projects",
+    "total_tasks",
+    "counts_by_status",
+    "project_counts",
+    "active_members_by_role",
+    "member_workload",
+    "attention",
+    "projects",
+    "last_activity_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "team": { "$ref": "team.schema.json" },
+    "total_projects": { "type": "integer", "minimum": 0 },
+    "active_projects": { "type": "integer", "minimum": 0 },
+    "total_tasks": { "type": "integer", "minimum": 0 },
+    "counts_by_status": { "$ref": "team-project-list-item.schema.json#/properties/counts_by_status" },
+    "project_counts": {
+      "type": "object",
+      "required": ["blocked", "needs_input", "ready_for_review", "healthy"],
+      "additionalProperties": false,
+      "properties": {
+        "blocked": { "type": "integer", "minimum": 0 },
+        "needs_input": { "type": "integer", "minimum": 0 },
+        "ready_for_review": { "type": "integer", "minimum": 0 },
+        "healthy": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "active_members_by_role": {
+      "type": "object",
+      "required": ["admin", "lead", "worker"],
+      "additionalProperties": false,
+      "properties": {
+        "admin": { "type": "integer", "minimum": 0 },
+        "lead": { "type": "integer", "minimum": 0 },
+        "worker": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "member_workload": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["member_id", "role", "project_ids", "task_count", "counts_by_status", "recent_activity_at"],
+        "additionalProperties": false,
+        "properties": {
+          "member_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "role": { "$ref": "_defs.schema.json#/definitions/team_membership_role" },
+          "project_ids": {
+            "type": "array",
+            "items": { "$ref": "_defs.schema.json#/definitions/id" }
+          },
+          "task_count": { "type": "integer", "minimum": 0 },
+          "counts_by_status": { "$ref": "team-project-list-item.schema.json#/properties/counts_by_status" },
+          "recent_activity_at": {
+            "anyOf": [
+              { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+              { "type": "null" }
+            ]
+          }
+        }
+      }
+    },
+    "attention": {
+      "type": "object",
+      "required": ["blocked_projects", "needs_input_projects", "ready_for_review_projects"],
+      "additionalProperties": false,
+      "properties": {
+        "blocked_projects": {
+          "type": "array",
+          "items": { "$ref": "team-project-list-item.schema.json" }
+        },
+        "needs_input_projects": {
+          "type": "array",
+          "items": { "$ref": "team-project-list-item.schema.json" }
+        },
+        "ready_for_review_projects": {
+          "type": "array",
+          "items": { "$ref": "team-project-list-item.schema.json" }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": { "$ref": "team-project-list-item.schema.json" }
+    },
+    "last_activity_at": {
+      "anyOf": [
+        { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

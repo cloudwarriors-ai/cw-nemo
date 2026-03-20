@@ -1,0 +1,285 @@
+
+> artifact-loop@0.1.0 check
+> tsc --noEmit
+
+
+> artifact-loop@0.1.0 build
+> tsc
+
+
+> artifact-loop@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90m/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop[39m
+
+ [32m✓[39m __tests__/enrichment.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 519[2mms[22m[39m
+ [32m✓[39m __tests__/contract-hardening.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 589[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.organization.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1307[2mms[22m[39m
+     [33m[2m✓[22m[39m supports draft approval, assignment inbox, task messages, and scheduled brief runs [33m 854[2mms[22m[39m
+     [33m[2m✓[22m[39m builds team summaries and scheduled team briefs from project truth [33m 319[2mms[22m[39m
+ [32m✓[39m src/__tests__/service.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1213[2mms[22m[39m
+     [33m[2m✓[22m[39m serves health checks [33m 370[2mms[22m[39m
+     [33m[2m✓[22m[39m creates tasks, assignments, ingests artifacts, and exposes state/history/stats [33m 396[2mms[22m[39m
+ [32m✓[39m src/__tests__/service.organization.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1466[2mms[22m[39m
+     [33m[2m✓[22m[39m bootstraps org state, exposes team surfaces, and rejects duplicate bootstrap [33m 561[2mms[22m[39m
+     [33m[2m✓[22m[39m supports the end-to-end organization loop over HTTP plus the local brief runner [33m 832[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/session.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 616[2mms[22m[39m
+ [32m✓[39m src/__tests__/contracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 1576[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts org bootstrap, team, membership, worker, worker agent, task draft, inbox, message, and brief schedule contracts [33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts invite and team read model contracts [33m 824[2mms[22m[39m
+ [32m✓[39m src/__tests__/tailscale-rollout.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.projects.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 633[2mms[22m[39m
+     [33m[2m✓[22m[39m computes project summary from current task states and groups workers by human and agent [33m 363[2mms[22m[39m
+ok
+ [32m✓[39m src/__tests__/cli/e2e/real-work-capture.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1513[2mms[22m[39m
+     [33m[2m✓[22m[39m tracks session-default run, git diff, and stats without git affecting status [33m 1511[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/task-read.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1527[2mms[22m[39m
+     [33m[2m✓[22m[39m shows command signal status from command_result evidence [33m 950[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-commands.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 934[2mms[22m[39m
+     [33m[2m✓[22m[39m emits a passing test result and triggers derivation [33m 348[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/organization-loop.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1896[2mms[22m[39m
+     [33m[2m✓[22m[39m supports the lead and worker organization loop commands locally [33m 850[2mms[22m[39m
+     [33m[2m✓[22m[39m supports invite claim onboarding plus team summary and team brief commands locally [33m 1015[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-git-diff.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1845[2mms[22m[39m
+     [33m[2m✓[22m[39m captures working_tree summary and does not change status [33m 975[2mms[22m[39m
+     [33m[2m✓[22m[39m captures staged-only summary [33m 819[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-test-run.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2390[2mms[22m[39m
+     [33m[2m✓[22m[39m captures a passing command [33m 1053[2mms[22m[39m
+     [33m[2m✓[22m[39m captures a failing command [33m 741[2mms[22m[39m
+     [33m[2m✓[22m[39m exits with the wrapped command exit code [33m 593[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/stats.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 427[2mms[22m[39m
+     [33m[2m✓[22m[39m reports raw counts for usage, artifacts, overrides, and evidence buckets [33m 426[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.assignments.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 263[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.adoption.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 157[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/session-workflow.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m __tests__/invariants.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/remote-mode.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 3509[2mms[22m[39m
+     [33m[2m✓[22m[39m ingests test evidence through the shared service and persists remote provenance [33m 969[2mms[22m[39m
+     [33m[2m✓[22m[39m renders remote task status and history while keeping session resolution local [33m 409[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves run --next against remote task state and ingests remotely [33m 982[2mms[22m[39m
+     [33m[2m✓[22m[39m feeds project summaries through the existing remote worker flow after tasks are linked [33m 483[2mms[22m[39m
+     [33m[2m✓[22m[39m fails closed when remote ingest fails after the wrapped command succeeds [33m 616[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/failure-escape.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 183[2mms[22m[39m
+ [2m[90m↓[39m[22m src/__tests__/harness/org-loop.smoke.test.ts [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+ [32m✓[39m src/__tests__/cli/e2e/golden-path.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m __tests__/schema-validation.test.ts [2m([22m[2m86 tests[22m[2m)[22m[33m 6081[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects missing required fields [33m 307[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/run.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 4136[2mms[22m[39m
+     [33m[2m✓[22m[39m emits test_result and preserves session-default source tracking [33m 1269[2mms[22m[39m
+     [33m[2m✓[22m[39m emits command_result without changing status when no matching command signal exists [33m 574[2mms[22m[39m
+     [33m[2m✓[22m[39m uses existing command signal rules and nothing more [33m 702[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves the next runnable required test signal [33m 644[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves the next runnable required command signal [33m 373[2mms[22m[39m
+     [33m[2m✓[22m[39m prefers explicit task over session when resolving --next [33m 321[2mms[22m[39m
+ [32m✓[39m src/__tests__/harness/org-loop.harness.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 4132[2mms[22m[39m
+     [33m[2m✓[22m[39m covers the happy path through the shared hub [33m 3163[2mms[22m[39m
+     [33m[2m✓[22m[39m scheduled brief movement reflects remote evidence and not inbox-only activity [33m 608[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m26 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (27)[39m
+[2m      Tests [22m [1m[32m211 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (212)[39m
+[2m   Start at [22m 06:56:07
+[2m   Duration [22m 8.44s[2m (transform 18.67s, setup 0ms, import 35.50s, tests 37.57s, environment 4ms)[22m
+
+
+> artifact-loop@0.1.0 accept:shared-coordination
+> bash ./scripts/scenarios/shared_coordination_v1.sh
+
+==> Building artifact-loop
+==> Starting shared service on http://127.0.0.1:53101
+==> Bootstrapping organization and team
+==> node bin/artifact-loop.js org bootstrap --org-id org-core --org-name Core Org --org-timezone America/New_York --team-id team-core --team-name Core Team --team-description Shared coordination team --member-id lead-1 --member-name Lead --member-timezone America/New_York --agent-id lead-agent-1 --agent-label Lead Agent --agent-connector lead-cli --service-url http://127.0.0.1:53101
+Bootstrapped organization org-core
+==> node bin/artifact-loop.js team add-member team-core --member worker-1 --role worker --by lead-1 --name Worker --timezone America/New_York --worker-role worker --service-url http://127.0.0.1:53101
+Added worker-1 to team-core as worker
+==> node bin/artifact-loop.js worker add-agent worker-1 --id worker-agent-1 --label Worker Agent --connector remote --service-url http://127.0.0.1:53101
+Created worker agent worker-agent-1
+==> Creating project definition
+==> node bin/artifact-loop.js project create --id proj-core --team team-core --title Core Project --description Shared coordination smoke scenario --owner-worker lead-1 --goal Validate the shared lead/worker coordination loop --scope lead flow --scope worker flow --deliverable Verified loop --constraint CLI only --definition-of-done Lead can assign, worker can report, brief reflects truth --service-url http://127.0.0.1:53101
+Created project proj-core
+==> Generating and approving task drafts
+==> Assigning task to worker agent
+==> node bin/artifact-loop.js task assign proj-core-verified-loop --worker worker-1 --agent worker-agent-1 --by lead-1 --service-url http://127.0.0.1:53101
+Assigned proj-core-verified-loop to worker-1
+==> Validating worker inbox receives assignment
+==> Acknowledging assignment
+==> node bin/artifact-loop.js worker inbox-ack inbox-0bd31101-1b08-4f81-a9ca-bd619f607f2f --service-url http://127.0.0.1:53101
+Acknowledged inbox item inbox-0bd31101-1b08-4f81-a9ca-bd619f607f2f
+==> Worker reports progress through shared truth
+Using next signal: proj-core-verified-loop-sig-complete (command, required)
+
+Emitted command_result (exit 0) for proj-core-verified-loop → status: ready_for_review (transition)
+==> Validating project summary and worker grouping
+==> Sending task-scoped ping from lead to worker agent
+==> Validating message visibility and acknowledgement
+==> node bin/artifact-loop.js task message-ack msg-79e02bb4-4d53-462e-8f4f-61bf765e3a70 --service-url http://127.0.0.1:53101
+Acknowledged message msg-79e02bb4-4d53-462e-8f4f-61bf765e3a70
+==> Validating current brief
+==> Scheduling brief
+==> Running scheduled brief if due
+==> Brief schedule is not due yet; forcing execution at persisted next_run_at to validate brief-run persistence
+==> Validating latest brief run
+==> Rendering human brief
+==> node bin/artifact-loop.js project brief proj-core --service-url http://127.0.0.1:53101
+Project Brief: Core Project (proj-core)
+Snapshot: 1 task(s) | blocked 0 | needs_input 0 | ready_for_review 1 | done 0
+Recent movement:
+- 2026-03-20T10:56:28.607Z: proj-core-verified-loop not_started -> ready_for_review (worker-1 / worker-agent-1)
+Blocked: 0
+Needs input: 0
+Ready for review: 1
+- proj-core-verified-loop (worker-1)
+By worker:
+- worker-1: proj-core-verified-loop (ready_for_review) | 1 artifact(s) | latest 2026-03-20T10:56:28.587Z
+By human:
+- worker-1: 1 task(s)
+By agent:
+- worker-agent-1: 1 task(s)
+Lead attention:
+- ready_for_review: proj-core-verified-loop (worker-1 / worker-agent-1)
+
+PASS shared_coordination_v1
+  tmp_root: /tmp/artifact-loop-shared-coordination-RJW2mL
+  service_url: http://127.0.0.1:53101
+  project_id: proj-core
+  org_id: org-core
+  team_id: team-core
+  task_id: proj-core-verified-loop
+  assignment_inbox_id: inbox-0bd31101-1b08-4f81-a9ca-bd619f607f2f
+  message_id: msg-79e02bb4-4d53-462e-8f4f-61bf765e3a70
+
+> artifact-loop@0.1.0 scenario:org-surface-smoke
+> bash ./scripts/scenarios/org_surface_smoke_v1.sh
+
+==> Building artifact-loop
+==> Starting shared service on http://127.0.0.1:53133
+==> Bootstrapping organization and lead
+==> node bin/artifact-loop.js org bootstrap --org-id org-core --org-name Core Org --org-timezone America/New_York --team-id team-core --team-name Core Team --team-description Organization stabilization team --member-id lead-1 --member-name Lead --member-timezone America/New_York --agent-id lead-agent-1 --agent-label Lead Agent --agent-connector lead-cli --service-url http://127.0.0.1:53133
+Bootstrapped organization org-core
+==> Creating invite over CLI
+==> Claiming invite over HTTP
+==> Creating project definition
+==> node bin/artifact-loop.js project create --id proj-org-surface --team team-core --title Org Surface Smoke --description Mixed CLI and HTTP stabilization validation --owner-worker lead-1 --goal Validate invite claim, team read models, and adoption flows --scope lead flow --scope worker flow --deliverable Stabilization signoff --constraint CLI plus HTTP only --definition-of-done Invite claim, team surfaces, and adoption flow all pass --service-url http://127.0.0.1:53133
+Created project proj-org-surface
+==> Generating and approving task drafts
+==> Assigning task to worker agent
+==> node bin/artifact-loop.js task assign proj-org-surface-stabilization-signoff --worker worker-claim --agent worker-claim-agent --by lead-1 --service-url http://127.0.0.1:53133
+Assigned proj-org-surface-stabilization-signoff to worker-claim
+==> Validating worker inbox receives assignment
+==> Acknowledging assignment
+==> node bin/artifact-loop.js worker inbox-ack inbox-5fd4b2e4-d372-4c49-b86f-47f96a10f759 --service-url http://127.0.0.1:53133
+Acknowledged inbox item inbox-5fd4b2e4-d372-4c49-b86f-47f96a10f759
+==> Worker reports progress through shared truth
+Using next signal: proj-org-surface-stabilization-signoff-sig-complete (command, required)
+
+Emitted command_result (exit 0) for proj-org-surface-stabilization-signoff → status: ready_for_review (transition)
+==> Validating project summary and worker grouping
+==> Sending task-scoped ping from lead to worker agent
+==> Validating message visibility and acknowledgement
+==> node bin/artifact-loop.js task message-ack msg-523b1378-a764-4a8c-895c-dbcac945003c --service-url http://127.0.0.1:53133
+Acknowledged message msg-523b1378-a764-4a8c-895c-dbcac945003c
+==> Validating current brief
+==> Reading team surfaces over HTTP
+==> Scheduling team brief
+==> Running scheduled briefs if due
+==> Team brief is not due yet; forcing execution at persisted next_run_at
+==> Seeding isolated legacy adoption fixture
+==> Writing smoke summary
+# Org Surface Smoke v1
+
+## Verified Surfaces
+- CLI invite creation
+- HTTP invite claim
+- CLI project/task coordination to ready_for_review
+- HTTP team projects/summary/brief reads
+- Team brief schedule plus latest persisted run
+- CLI adopt-existing dry-run/apply/status
+
+## Identifiers
+- service_url: http://127.0.0.1:53133
+- invite_id: invite-6b26edc7-db19-42c4-a148-9290cd900707
+- claimed_member_id: worker-claim
+- project_id: proj-org-surface
+- task_id: proj-org-surface-stabilization-signoff
+- team_brief_run_id: team-brief-run-37afa8c9-04b3-40ff-9312-68a8fe2418a3
+- adoption_report_path: /tmp/artifact-loop-org-surface-smoke-qOVkID/legacy-data/adoption-reports/adoption-8a57775f-90ec-4d9d-a855-ea90358b3c88.json
+
+PASS org_surface_smoke_v1
+  tmp_root: /tmp/artifact-loop-org-surface-smoke-qOVkID
+  service_url: http://127.0.0.1:53133
+  invite_id: invite-6b26edc7-db19-42c4-a148-9290cd900707
+  project_id: proj-org-surface
+  task_id: proj-org-surface-stabilization-signoff
+  team_brief_run_id: team-brief-run-37afa8c9-04b3-40ff-9312-68a8fe2418a3
+  adoption_report_path: /tmp/artifact-loop-org-surface-smoke-qOVkID/legacy-data/adoption-reports/adoption-8a57775f-90ec-4d9d-a855-ea90358b3c88.json
+  report_path: /tmp/artifact-loop-org-surface-smoke-qOVkID/org-surface-smoke-summary.md
+
+> artifact-loop@0.1.0 review:lead-surfaces
+> bash ./scripts/scenarios/lead_surface_review_v1.sh
+
+==> Bootstrapping shared-coordination acceptance scenario
+==> Capturing lead-facing surfaces into /tmp/artifact-loop-lead-review-DZEUdS
+==> Creating a pending invite to validate active-member exclusion
+==> Scheduling and capturing team lead surfaces
+==> Team brief schedule is not due yet; forcing execution at persisted next_run_at
+==> Checking stabilized lead-surface invariants
+# Lead Surface Review v1
+
+Project: proj-core
+Task: proj-core-verified-loop
+Team: team-core
+Lead: lead-1 / lead-agent-1
+Worker: worker-1 / worker-agent-1
+Pending invite: invite-22bf9f04-f917-44b1-bd72-4bdae19f3512
+
+## Project Snapshot
+- ready_for_review count: 1
+- current brief ready_for_review count: 1
+- latest brief movement count: 1
+- task message count: 1
+
+## Team Snapshot
+- total projects: 1
+- active projects: 1
+- total tasks: 1
+- worker active count: 1
+- current team brief rollup count: 1
+- latest team brief movement count: 1
+
+## Stable Semantics Checks
+- Project summary and current brief both show the task as ready_for_review.
+- Project worker summary and current brief both attribute work to worker-1.
+- Latest persisted brief run includes movement for proj-core-verified-loop.
+- Lead attention stays grounded in ready_for_review state rather than message activity.
+- Task messages remain acknowledged and visible without creating a second task-state path.
+- Team summary totals stay aligned with the reviewed project truth rather than a second state machine.
+- Team brief rollup keeps proj-core as the lead project and includes worker-1 in by-member workload.
+- Pending invite invite-22bf9f04-f917-44b1-bd72-4bdae19f3512 does not increase active team member counts.
+- Latest persisted team brief run is delivered to the lead inbox.
+
+## Output Bundle
+- project-summary.json / .txt
+- project-workers.json / .txt
+- project-brief-current.json / .txt
+- project-brief-latest-run.json
+- task-messages.json / .txt
+- worker-inbox.json
+- worker-show.json
+- project-list.json
+- project-show.json
+- project-tasks.json
+- project-brief-schedule.json
+- pending-invite.json
+- team-projects.json
+- team-summary.json / .txt
+- team-brief-current.json / .txt
+- team-brief-latest-run.json
+- team-brief-schedule.json
+- team-brief-run-result.json
+
+PASS lead_surface_review_v1
+  review_root: /tmp/artifact-loop-lead-review-DZEUdS
+  service_url: http://127.0.0.1:53165
+  project_id: proj-core
+  task_id: proj-core-verified-loop
+  report_path: /tmp/artifact-loop-lead-review-DZEUdS/review-summary.md

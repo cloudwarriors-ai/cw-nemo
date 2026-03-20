@@ -1,0 +1,18 @@
+{
+  "hardening_budget": {
+    "max_authority_blockers_before_blocked": 1,
+    "max_hardening_passes": 2,
+    "max_repacketization_passes": 1,
+    "max_unresolved_gaps_before_revise": 1
+  },
+  "objective_ref": "artifact-loop-stabilization-20260320",
+  "plan_gap_report": {
+    "gaps_auto_fixed": [],
+    "gaps_detected": [],
+    "gaps_escalated": [],
+    "gaps_unresolved": []
+  },
+  "schema_version": "plan-gap-report.v1",
+  "track_id": "artifact-loop-stabilization-20260320",
+  "unresolved_gap_count": 0
+}

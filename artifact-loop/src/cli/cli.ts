@@ -16,6 +16,7 @@ import { registerRun } from "./commands/run.js";
 import { registerRunScheduledBriefs } from "./commands/run-scheduled-briefs.js";
 import { registerServe } from "./commands/serve.js";
 import { registerStats } from "./commands/stats.js";
+import { registerInviteCommands } from "./commands/invite-commands.js";
 import { registerProjectCommands } from "./commands/project-commands.js";
 import { registerOrgCommands } from "./commands/org-commands.js";
 import { registerTeamCommands } from "./commands/team-commands.js";
@@ -48,6 +49,7 @@ export function createProgram(): Command {
   registerRunScheduledBriefs(program);
   registerServe(program);
   registerStats(program);
+  registerInviteCommands(program);
   registerOrgCommands(program);
   registerTeamCommands(program);
   registerProjectCommands(program);

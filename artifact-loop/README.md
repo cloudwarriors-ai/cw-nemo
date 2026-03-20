@@ -10,6 +10,7 @@ The organization loop has a dedicated layered harness:
 npm test
 npm run test:harness
 npm run accept:shared-coordination
+npm run scenario:org-surface-smoke
 npm run review:lead-surfaces
 npm run scenario:shared-coordination
 npm run scenario:tailscale-shared-coordination
@@ -18,7 +19,8 @@ npm run scenario:tailscale-shared-coordination
 - `npm test` includes the fast in-process harness coverage.
 - `npm run test:harness` builds the package and runs both the fast harness suite and the higher-fidelity subprocess smoke suite against the built `artifact-loop` binary.
 - `npm run accept:shared-coordination` runs the canonical shared lead/worker acceptance scenario and exits non-zero on any broken invariant.
-- `npm run review:lead-surfaces` reuses the shared-coordination scenario, captures the lead-facing read surfaces, and asserts the semantics that are still stabilizing across inbox, messages, project summary, worker grouping, and brief output.
+- `npm run scenario:org-surface-smoke` runs the broader stabilization smoke that mixes CLI and direct HTTP validation for invite claim, team read models, scheduled team briefs, and CLI-only adopt-existing flow.
+- `npm run review:lead-surfaces` reuses the shared-coordination scenario, captures the lead-facing project and team read surfaces, and asserts the semantics that are still stabilizing across inbox, messages, summaries, worker grouping, and brief output.
 - `npm run scenario:shared-coordination` runs the canonical end-to-end lead/worker shared-coordination smoke scenario in isolated temp dirs and exits non-zero on any broken invariant.
 - `npm run scenario:tailscale-shared-coordination` runs the shared-coordination path against an externally hosted Artifact Loop service URL and is intended for the Stage 1 Tailscale rollout.
 - The harness lives under `src/__tests__/harness/` and verifies the lead/worker loop through CLI/API surfaces only, without any frontend or real model calls.
@@ -45,10 +47,13 @@ This rollout keeps the planes separate:
 
 ## Stabilization Workflow
 
+The canonical operator note for this branch lives in [docs/org-stabilization-rollout.md](/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md).
+
 Use this sequence while the lead/worker operating model is still settling:
 
 ```bash
 npm run accept:shared-coordination
+npm run scenario:org-surface-smoke
 npm run review:lead-surfaces
 ```
 
@@ -59,10 +64,17 @@ What each step means:
   - worker reports progress against shared truth
   - lead pings the worker agent
   - brief generation persists the resulting state
+- `scenario:org-surface-smoke` is the mixed-surface stabilization pass:
+  - bootstraps the org/team/lead locally
+  - creates a worker invite over CLI and claims it over HTTP
+  - reuses the shared project/task coordination loop
+  - reads team projects, summary, and brief directly over HTTP
+  - schedules and persists a team brief run
+  - seeds an isolated legacy fixture and runs CLI-only adopt-existing dry-run/apply/status
 - `review:lead-surfaces` is the lead-side stabilization pass:
   - it bootstraps the same acceptance scenario
-  - captures the lead-facing outputs into a review bundle
-  - checks that `project summary`, `project workers`, `project brief`, `latest brief run`, `task messages`, and `worker inbox` stay semantically aligned
+  - captures the lead-facing project and team outputs into a review bundle
+  - checks that `project summary`, `project workers`, `project brief`, `team summary`, `team brief`, `latest brief runs`, `task messages`, and `worker inbox` stay semantically aligned
 
 Important nuance:
 - if the scheduled brief is not yet due, both scenario paths force execution at the persisted `next_run_at`
@@ -70,6 +82,7 @@ Important nuance:
 
 The lead-surface review bundle includes:
 - machine-readable JSON snapshots for project summary, worker grouping, current brief, latest brief run, messages, inbox, and schedule
+- machine-readable JSON snapshots for team projects, team summary, current team brief, latest team brief run, and team brief schedule
 - human-readable text renderings for the key lead-facing CLI surfaces
 - a compact `review-summary.md` that records the semantic checks the script enforced
 
@@ -299,6 +312,25 @@ artifact-loop worker add-agent worker-1 \
   --service-url http://127.0.0.1:4080
 ```
 
+Invite-based onboarding is also available for pending members:
+
+```bash
+artifact-loop team invite team-core \
+  --member worker-claim \
+  --role worker \
+  --name "Claim Worker" \
+  --timezone America/New_York \
+  --by lead-1 \
+  --service-url http://127.0.0.1:4080
+
+artifact-loop invite claim \
+  --token <claim-token> \
+  --agent-id worker-claim-agent \
+  --agent-label "Claim Agent" \
+  --agent-connector remote \
+  --service-url http://127.0.0.1:4080
+```
+
 In Slice A, canonical authority comes from team membership:
 - `admin` can bootstrap the org, create teams, and add members
 - `lead` can create team-scoped projects, approve task drafts, assign same-team workers, and own brief schedules
@@ -362,3 +394,55 @@ artifact-loop task messages <task-id> --service-url http://127.0.0.1:4080
 artifact-loop task message-ack <message-id> --service-url http://127.0.0.1:4080
 artifact-loop project summary proj-core --json --service-url http://127.0.0.1:4080
 ```
+
+## Team Briefs
+
+Team-level read models are derived from existing project and task truth. Leads and admins can read the same project-level signals rolled up across the team:
+
+```bash
+artifact-loop team projects team-core --by lead-1 --service-url http://127.0.0.1:4080
+artifact-loop team summary team-core --by lead-1 --service-url http://127.0.0.1:4080
+artifact-loop team brief team-core --by lead-1 --service-url http://127.0.0.1:4080
+artifact-loop team schedule-brief team-core --owner-worker lead-1 --timezone America/New_York --delivery-hour 9 --service-url http://127.0.0.1:4080
+artifact-loop team brief-schedule team-core --by lead-1 --service-url http://127.0.0.1:4080
+artifact-loop run-scheduled-briefs --data-dir .artifact-loop
+artifact-loop team brief team-core --by lead-1 --latest-run --service-url http://127.0.0.1:4080
+```
+
+Team summaries and briefs stay derived-only:
+- they do not introduce a second team state machine
+- they aggregate existing project summaries, task state, derivation movement, workload, and brief history
+- pending invite-only memberships are not treated as active team members
+
+## Adopt Existing
+
+Legacy file-backed coordination data can be wrapped into the organization model with a CLI-only migration path:
+
+```bash
+artifact-loop org adopt-existing \
+  --org-id org-legacy \
+  --org-name "Legacy Org" \
+  --org-timezone America/New_York \
+  --team-id team-legacy \
+  --team-name "Legacy Team" \
+  --team-description "Default adopted team" \
+  --data-dir .artifact-loop
+
+artifact-loop org adopt-existing \
+  --org-id org-legacy \
+  --org-name "Legacy Org" \
+  --org-timezone America/New_York \
+  --team-id team-legacy \
+  --team-name "Legacy Team" \
+  --team-description "Default adopted team" \
+  --apply \
+  --data-dir .artifact-loop
+
+artifact-loop org adoption-status --data-dir .artifact-loop
+```
+
+The adoption flow is fail-closed:
+- it blocks if org/team state already exists in a conflicting way
+- it backfills existing workers into the default team as active memberships
+- it assigns `team_id` onto existing projects
+- it disables invalid legacy brief schedules and records that in the adoption report

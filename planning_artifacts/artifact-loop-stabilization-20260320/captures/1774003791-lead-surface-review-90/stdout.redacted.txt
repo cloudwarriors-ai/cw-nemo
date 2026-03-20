@@ -1,0 +1,70 @@
+
+> artifact-loop@0.1.0 review:lead-surfaces
+> bash ./scripts/scenarios/lead_surface_review_v1.sh
+
+==> Bootstrapping shared-coordination acceptance scenario
+==> Capturing lead-facing surfaces into /tmp/artifact-loop-lead-review-x12S9i
+==> Creating a pending invite to validate active-member exclusion
+==> Scheduling and capturing team lead surfaces
+==> Team brief schedule is not due yet; forcing execution at persisted next_run_at
+==> Checking stabilized lead-surface invariants
+# Lead Surface Review v1
+
+Project: proj-core
+Task: proj-core-verified-loop
+Team: team-core
+Lead: lead-1 / lead-agent-1
+Worker: worker-1 / worker-agent-1
+Pending invite: invite-86aaec43-7ce1-40bf-bc3c-da1a522131d0
+
+## Project Snapshot
+- ready_for_review count: 1
+- current brief ready_for_review count: 1
+- latest brief movement count: 1
+- task message count: 1
+
+## Team Snapshot
+- total projects: 1
+- active projects: 1
+- total tasks: 1
+- worker active count: 1
+- current team brief rollup count: 1
+- latest team brief movement count: 1
+
+## Stable Semantics Checks
+- Project summary and current brief both show the task as ready_for_review.
+- Project worker summary and current brief both attribute work to worker-1.
+- Latest persisted brief run includes movement for proj-core-verified-loop.
+- Lead attention stays grounded in ready_for_review state rather than message activity.
+- Task messages remain acknowledged and visible without creating a second task-state path.
+- Team summary totals stay aligned with the reviewed project truth rather than a second state machine.
+- Team brief rollup keeps proj-core as the lead project and includes worker-1 in by-member workload.
+- Pending invite invite-86aaec43-7ce1-40bf-bc3c-da1a522131d0 does not increase active team member counts.
+- Latest persisted team brief run is delivered to the lead inbox.
+
+## Output Bundle
+- project-summary.json / .txt
+- project-workers.json / .txt
+- project-brief-current.json / .txt
+- project-brief-latest-run.json
+- task-messages.json / .txt
+- worker-inbox.json
+- worker-show.json
+- project-list.json
+- project-show.json
+- project-tasks.json
+- project-brief-schedule.json
+- pending-invite.json
+- team-projects.json
+- team-summary.json / .txt
+- team-brief-current.json / .txt
+- team-brief-latest-run.json
+- team-brief-schedule.json
+- team-brief-run-result.json
+
+PASS lead_surface_review_v1
+  review_root: /tmp/artifact-loop-lead-review-x12S9i
+  service_url: http://127.0.0.1:52773
+  project_id: proj-core
+  task_id: proj-core-verified-loop
+  report_path: /tmp/artifact-loop-lead-review-x12S9i/review-summary.md

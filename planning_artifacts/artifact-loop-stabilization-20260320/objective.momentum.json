@@ -1,0 +1,47 @@
+{
+  "current_frontier": [],
+  "entries": [
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-build-org-surface-smoke",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-extend-lead-surface-review"
+      ]
+    },
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-extend-lead-surface-review",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-operator-rollout-docs"
+      ]
+    },
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-operator-rollout-docs",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-validate-stabilization"
+      ]
+    },
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-validate-stabilization",
+      "resolves_dependency_classification": false,
+      "unlocks_packets": []
+    }
+  ],
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "safe_momentum_ready": true,
+  "schema_version": "objective-momentum.v1",
+  "track_id": "artifact-loop-stabilization-20260320"
+}

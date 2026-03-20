@@ -1,0 +1,956 @@
+{
+  "schema_version": "plan.v1",
+  "objective": "Stabilize the Artifact Loop organization rollout by adding a mixed CLI/HTTP smoke scenario, extending the lead-surface review to cover team surfaces, and publishing repo-tracked operator rollout notes with the current runtime gate.",
+  "intent_contract": {
+    "objective": "Create reusable operator-facing stabilization surfaces for the newly implemented invite, team summary/brief, and adopt-existing flows without widening into new product functionality or Tailscale Stage 2/3 work.",
+    "success_criteria": [
+      "A new scenario script proves invite creation over CLI, invite claim over HTTP, shared coordination over CLI, team readback over HTTP, and adopt-existing over CLI in one run.",
+      "The lead-surface review bundle captures both project-level and team-level outputs and checks that the derived team surfaces stay semantically aligned with project truth.",
+      "A repo-tracked rollout note documents slices B/C/D, stabilization entrypoints, operator commands, constraints, and the explicit gate for re-entering runtime work."
+    ],
+    "non_goals": [
+      "Do not implement Tailscale Stage 2 or Stage 3.",
+      "Do not change the canonical shared_coordination_v1 baseline to include invite or adoption concerns.",
+      "Do not add new engine, HTTP, or CLI product capabilities beyond the stabilization surfaces and docs already described."
+    ],
+    "authority_sensitive_decisions": [],
+    "ambiguity_classification": [
+      {
+        "item_id": "amb-001",
+        "statement": "The stabilization note should live in repo-tracked artifact-loop docs rather than planning_artifacts.",
+        "classification": "technical_reversible"
+      },
+      {
+        "item_id": "amb-002",
+        "statement": "The mixed-surface smoke should use HTTP only where the plan explicitly requires proof of the service contract; the rest should stay on stable CLI flows.",
+        "classification": "technical_reversible"
+      }
+    ],
+    "objective_shape_status": "accepted_rewritten"
+  },
+  "clarification_governor": {
+    "default_batch_limit": 1,
+    "allowed_topics": [
+      "product_meaning",
+      "authority_security_boundaries",
+      "missing_success_criteria",
+      "non_discoverable_tradeoffs"
+    ],
+    "repo_discoverable_questions_forbidden": true,
+    "new_authority_boundary_required_for_mid_execution_clarification": true
+  },
+  "autonomous_session_readiness": {
+    "status": "execution_ready",
+    "readiness_gaps": [],
+    "safe_momentum_ready": true,
+    "next_executable_frontier": [
+      "packet-build-org-surface-smoke"
+    ]
+  },
+  "constraints": [
+    "Keep shared_coordination_v1 as the canonical baseline and do not fold invite or adoption logic into it.",
+    "Add only the minimum helper surface needed in shared-coordination-common.sh for HTTP JSON requests, team brief forcing, and seeded legacy adoption fixtures.",
+    "Keep adopt-existing validation CLI-only because that is the shipped contract.",
+    "Publish operator-facing documentation under artifact-loop/docs and not under planning_artifacts."
+  ],
+  "scope_boundaries": {
+    "in_scope": [
+      "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+      "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+      "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+      "artifact-loop/package.json",
+      "artifact-loop/README.md",
+      "artifact-loop/docs/org-stabilization-rollout.md",
+      "artifact-loop/docs/tailscale-rollout.md",
+      ".agents/skills/artifact-loop-lead-surface-review/SKILL.md",
+      "planning_artifacts/artifact-loop-stabilization-20260320"
+    ],
+    "out_of_scope": [
+      "artifact-loop/src/engine.ts product behavior unless a stabilization defect is discovered",
+      "Tailscale Stage 2 and Stage 3 implementation",
+      "nemoclaw and nemoclaw-blueprint runtime changes",
+      "Existing shared_coordination_v1 semantics beyond bug fixes required by the new stabilization surfaces"
+    ]
+  },
+  "implementation_plan": [
+    "Create a new org_surface_smoke_v1 scenario that starts a local service, mixes CLI and direct HTTP verification across the new organization surfaces, and emits a manifest plus smoke report.",
+    "Extend the lead_surface_review_v1 bundle so it captures and validates team projects, team summary, team brief, team brief schedule, and latest team brief run alongside the current project-level views.",
+    "Document the stabilization workflow and runtime re-entry gate in a repo-tracked rollout note, update README links, and align the Tailscale rollout doc with the same gate."
+  ],
+  "definition_of_done": [
+    {
+      "id": "dod-correctness",
+      "category": "correctness",
+      "criterion": "The new org stabilization smoke script completes end to end and proves the required mixed CLI and HTTP surfaces without mutating shared_coordination_v1.",
+      "verification": "bash /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh"
+    },
+    {
+      "id": "dod-tests",
+      "category": "tests",
+      "criterion": "Existing Artifact Loop checks remain green and the new smoke plus expanded lead-surface review pass.",
+      "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test"
+    },
+    {
+      "id": "dod-security",
+      "category": "security",
+      "criterion": "The stabilization docs preserve the current boundary: no new auth assumptions, pending invite-only members are not active, and runtime work remains gated behind Tailscale Stage 1 on Doug's host.",
+      "verification": "rg -n \"pending memberships|CLI-only|Stage 1|Stage 2|Stage 3|derived-only\" /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md"
+    },
+    {
+      "id": "dod-observability",
+      "category": "observability",
+      "criterion": "The smoke and review flows emit stable manifests and human-readable summaries that operators can use without reading raw test logs.",
+      "verification": "bash /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/scripts/scenarios/lead_surface_review_v1.sh"
+    },
+    {
+      "id": "dod-rollback",
+      "category": "rollback",
+      "criterion": "Rollback is bounded to scenario, doc, package-script, and skill-doc changes with no widened runtime or product-surface migration.",
+      "verification": "bash -lc 'cd /Users/chadsimon/chad_bot_attempt/nemoclaw && git diff --stat -- artifact-loop .agents/skills/artifact-loop-lead-surface-review/SKILL.md'"
+    }
+  ],
+  "objective_requirements": [
+    {
+      "requirement_id": "REQ-001",
+      "description": "Provide a mixed-surface operator smoke that proves invite claim, team readbacks, team brief persistence, and adopt-existing using the shipped CLI/HTTP contracts.",
+      "priority": "critical",
+      "definition_of_done": {
+        "behavior_outcome": "One scenario run proves the stabilization path across the new org surfaces and writes a manifest plus summary bundle.",
+        "acceptance_checks": [
+          "CLI invite creation succeeds and exposes a claim token.",
+          "HTTP invite claim succeeds.",
+          "HTTP team summary and team brief reflect the same task state reached by the CLI coordination loop.",
+          "CLI adopt-existing dry-run, apply, and status succeed against seeded legacy data."
+        ],
+        "evidence_requirements": [
+          "org-surface-smoke capture manifest",
+          "scenario stdout capture"
+        ],
+        "allowed_scope": [
+          "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+          "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+          "artifact-loop/package.json"
+        ],
+        "rollback_or_fallback": "Revert the new scenario and helper additions if the mixed-surface contract proves unstable.",
+        "verifier_acceptance_condition": "Reviewer confirms the new smoke proves the intended surfaces without widening shared_coordination_v1.",
+        "objective_linkage": "stabilization"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "description": "Extend the lead-surface review bundle to capture team-level derived outputs and assert semantic alignment with project truth.",
+      "priority": "critical",
+      "definition_of_done": {
+        "behavior_outcome": "The lead review emits project and team snapshots plus a review-summary.md that can identify semantic drift.",
+        "acceptance_checks": [
+          "Team summary counts align with the reviewed project set.",
+          "Team brief includes the active scenario project and worker workload.",
+          "Latest team brief run is persisted and delivered to the schedule owner inbox."
+        ],
+        "evidence_requirements": [
+          "lead surface review bundle",
+          "review-summary.md"
+        ],
+        "allowed_scope": [
+          "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+          ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+        ],
+        "rollback_or_fallback": "Remove the team-level review expansion if it cannot stay aligned with the current derived team surfaces.",
+        "verifier_acceptance_condition": "Reviewer confirms the new invariants validate team derivation semantics rather than duplicating product logic.",
+        "objective_linkage": "stabilization"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "description": "Publish a repo-tracked operator rollout note and align README and Tailscale rollout docs with the current runtime gate.",
+      "priority": "core",
+      "definition_of_done": {
+        "behavior_outcome": "Operators can find one repo-tracked note that explains what shipped, how to run the stabilization passes, and when runtime work is allowed to resume.",
+        "acceptance_checks": [
+          "README links to the stabilization note.",
+          "The stabilization note lists exact smoke and review entrypoints.",
+          "The Tailscale rollout doc states the gate boundary and exit criteria for Stage 2/3."
+        ],
+        "evidence_requirements": [
+          "repo diff",
+          "doc grep capture"
+        ],
+        "allowed_scope": [
+          "artifact-loop/docs/org-stabilization-rollout.md",
+          "artifact-loop/docs/tailscale-rollout.md",
+          "artifact-loop/README.md"
+        ],
+        "rollback_or_fallback": "Revert the doc-only changes if wording conflicts with the shipped product surfaces.",
+        "verifier_acceptance_condition": "Reviewer confirms the operator note is canonical and does not publish planning_artifacts as user-facing docs.",
+        "objective_linkage": "stabilization"
+      }
+    }
+  ],
+  "objective_coverage_map": [
+    {
+      "requirement_id": "REQ-001",
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-validate-stabilization"
+      ],
+      "verification": [
+        "npm run scenario:org-surface-smoke"
+      ],
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ]
+    },
+    {
+      "requirement_id": "REQ-002",
+      "packet_ids": [
+        "packet-extend-lead-surface-review",
+        "packet-validate-stabilization"
+      ],
+      "verification": [
+        "npm run review:lead-surfaces"
+      ],
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ]
+    },
+    {
+      "requirement_id": "REQ-003",
+      "packet_ids": [
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ],
+      "verification": [
+        "README/doc grep validation"
+      ],
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ]
+    }
+  ],
+  "assumptions_ledger": [
+    {
+      "assumption_id": "ASM-001",
+      "statement": "The existing CLI and HTTP product surfaces are already implemented and should only be orchestrated, reviewed, and documented in this pass.",
+      "classification": "resolved_from_context",
+      "disposition": "Applied from the current workspace state and prior implementation evidence."
+    },
+    {
+      "assumption_id": "ASM-002",
+      "statement": "The highest useful layer is a stable operator surface made of scripts, manifests, and docs rather than new product abstractions.",
+      "classification": "reversible_technical",
+      "disposition": "Chosen because the remaining work is rollout validation and operability, not a new product feature."
+    },
+    {
+      "assumption_id": "ASM-003",
+      "statement": "Stage 2 and Stage 3 runtime work remain blocked until Doug completes Stage 1 on the target host.",
+      "classification": "resolved_from_context",
+      "disposition": "Applied from the handoff and current docs."
+    }
+  ],
+  "authority_map": [
+    {
+      "authority_id": "AUTH-001",
+      "type": "local_repo_change",
+      "scope": "Scenario scripts, docs, package scripts, skill doc, and governed planning artifacts.",
+      "resolution": "Allowed within the workspace; no destructive git actions or external communications are required."
+    }
+  ],
+  "integration_map": [
+    {
+      "integration_id": "INT-001",
+      "touchpoint": "Artifact Loop CLI and HTTP service surfaces for invite, claim, project coordination, team summary/brief, and brief runs.",
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-extend-lead-surface-review"
+      ],
+      "verification": [
+        "scenario:org-surface-smoke",
+        "review:lead-surfaces"
+      ],
+      "evidence": [
+        "planning_artifacts/artifact-loop-stabilization-20260320/captures"
+      ]
+    },
+    {
+      "integration_id": "INT-002",
+      "touchpoint": "Artifact Loop operator docs and rollout instructions for the newly shipped org surfaces and runtime gate.",
+      "packet_ids": [
+        "packet-operator-rollout-docs"
+      ],
+      "verification": [
+        "README/doc grep validation"
+      ],
+      "evidence": [
+        "artifact-loop/docs/org-stabilization-rollout.md",
+        "artifact-loop/docs/tailscale-rollout.md"
+      ]
+    }
+  ],
+  "evidence_plan": [
+    {
+      "name": "org surface smoke",
+      "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+      "evidence": "planning_artifacts/artifact-loop-stabilization-20260320/captures/*-org-surface-smoke-*/manifest.json"
+    },
+    {
+      "name": "lead surface review",
+      "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+      "evidence": "planning_artifacts/artifact-loop-stabilization-20260320/captures/*-lead-surface-review-*/manifest.json"
+    },
+    {
+      "name": "artifact-loop validation",
+      "verification": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination",
+      "evidence": "planning_artifacts/artifact-loop-stabilization-20260320/captures/*-artifact-loop-validation-*/manifest.json"
+    }
+  ],
+  "dependencies": [
+    "Node.js >= 20",
+    "Artifact Loop package already builds and runs locally",
+    "Existing organization slices B/C/D implementation in the current worktree"
+  ],
+  "tests": {
+    "smoke_gates": [
+      {
+        "stage": "25%",
+        "status": "pass",
+        "criteria": "Existing scenario and package surfaces still load before adding the new stabilization wrapper.",
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build"
+        ],
+        "expected_output": "TypeScript build succeeds.",
+        "failure_interpretation": "The working baseline is not stable enough to extend safely.",
+        "proceed_decision": "continue",
+        "rollback_decision": "fix_baseline"
+      },
+      {
+        "stage": "50%",
+        "status": "pass",
+        "criteria": "The new smoke and review surfaces exist and run against the local service.",
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+        ],
+        "expected_output": "Both scripts exit zero and emit manifests or review bundle summaries.",
+        "failure_interpretation": "The new operator stabilization surfaces are not coherent enough to close.",
+        "proceed_decision": "continue",
+        "rollback_decision": "fix_operator_surfaces"
+      },
+      {
+        "stage": "75%",
+        "status": "pass",
+        "criteria": "Automated checks stay green with the new stabilization surfaces present.",
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination"
+        ],
+        "expected_output": "Vitest and shared-coordination acceptance pass.",
+        "failure_interpretation": "The stabilization changes caused regressions in existing behavior.",
+        "proceed_decision": "continue",
+        "rollback_decision": "fix_regression"
+      },
+      {
+        "stage": "100%",
+        "status": "pass",
+        "criteria": "Full verification and governed finalize gate succeed with evidence.",
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces"
+        ],
+        "expected_output": "All validations pass and finalize gate returns ok=true.",
+        "failure_interpretation": "The stabilization pass is not ready for closure.",
+        "proceed_decision": "approve",
+        "rollback_decision": "rework_before_close"
+      }
+    ]
+  },
+  "logging_plan": [
+    "Smoke scenario should emit a compact manifest and readable summary with key identifiers.",
+    "Lead review should emit a review-summary.md that summarizes both project and team surface invariants.",
+    "README and rollout docs should point operators to the exact entrypoints rather than raw implementation details."
+  ],
+  "rollback_plan": [
+    "Rollback is bounded to reverting the new scenario, the lead review expansion, package script wiring, the skill doc update, and the doc changes in artifact-loop/docs and README."
+  ],
+  "risks": [
+    {
+      "id": "risk-001",
+      "description": "The new smoke could accidentally duplicate or drift from shared_coordination_v1 if too much coordination logic is reimplemented instead of reused.",
+      "mitigation": "Reuse shared-coordination-common.sh for the stable project/task loop and keep the new script focused on invite/team/adoption orchestration."
+    },
+    {
+      "id": "risk-002",
+      "description": "The review bundle could validate only CLI text formatting instead of the underlying team read model semantics.",
+      "mitigation": "Capture JSON surfaces and assert team summary/brief invariants directly against the service results."
+    },
+    {
+      "id": "risk-003",
+      "description": "Operators could misread the runtime state and start Stage 2/3 before Stage 1 is proven on Doug's host.",
+      "mitigation": "State the gate boundary consistently in the stabilization note and tailscale-rollout.md."
+    }
+  ],
+  "approval_gate": {
+    "required": [
+      "Full Artifact Loop validation passes",
+      "scenario:org-surface-smoke passes",
+      "review:lead-surfaces passes",
+      "Governed finalize gate returns ok=true"
+    ],
+    "blockers": [
+      "shared_coordination_v1 is widened or broken",
+      "Smoke proves only CLI formatting and not the HTTP contract",
+      "Operator docs publish planning_artifacts as canonical surfaces",
+      "Runtime docs weaken the Stage 1 gate for Doug's host"
+    ]
+  },
+  "non_goals": [
+    "No new product slices",
+    "No runtime transport implementation changes",
+    "No Tailscale automation beyond documenting the current gate",
+    "No mutation of the canonical shared_coordination_v1 contract beyond bug fixes required by this pass"
+  ],
+  "quality_bar": {
+    "maintainability": "Keep the new work as stable operator surfaces layered on the existing product contracts, with minimal helper additions and no duplicated coordination logic.",
+    "evidence": "Close only after captured smoke, review, validation, and finalize artifacts exist under the stabilization planning_artifacts track.",
+    "policy_compliance": "Preserve shared_coordination_v1 as baseline, respect dirty worktree boundaries, and avoid destructive git operations."
+  },
+  "decomposition_policy": {
+    "packetization": "Use three implementation packets followed by one validation packet.",
+    "bounded_contexts": [
+      "scenario surfaces",
+      "review surfaces",
+      "operator docs",
+      "governed artifacts"
+    ]
+  },
+  "objective_closure_policy": {
+    "allowed_states": [
+      "OBJECTIVE_COMPLETE",
+      "OBJECTIVE_COMPLETE_BOUNDARY_SHRUNK",
+      "OBJECTIVE_BLOCKED_ESCALATION_REQUIRED"
+    ],
+    "boundary_shrink_allowed": false
+  },
+  "migration_fallback_policy": {
+    "compat_fallback_allowed": false,
+    "max_fallback_invocations": 0,
+    "manifest_rollback_path": "planning_artifacts/artifact-loop-stabilization-20260320/captures/rollback-stabilization-scope/manifest.json"
+  },
+  "scheduler_policy": {
+    "max_parallel_packets": 1,
+    "parallelism_policy": "serial_only",
+    "execution_shape": "single_lane",
+    "admission_rule": [
+      "packet validity",
+      "autonomy readiness",
+      "dependency readiness",
+      "conflict check",
+      "retry-budget check"
+    ],
+    "recompute_triggers": [
+      "verifier_verdict",
+      "packet_cancellation",
+      "repacketization",
+      "escalation_decision",
+      "boundary_shrink_decision"
+    ],
+    "terminal_stop_conditions": [
+      "objective_closed",
+      "escalation_required_no_runnable_packets",
+      "migration_defect_fallback_invoked",
+      "unrecoverable_graph_invalidity"
+    ]
+  },
+  "hardening_budget": {
+    "max_hardening_passes": 2,
+    "max_repacketization_passes": 1,
+    "max_unresolved_gaps_before_revise": 1,
+    "max_authority_blockers_before_blocked": 1
+  },
+  "plan_status": "execution_ready",
+  "plan_gap_report": {
+    "gaps_detected": [],
+    "gaps_auto_fixed": [],
+    "gaps_escalated": [],
+    "gaps_unresolved": []
+  },
+  "plan_sufficiency_report": {
+    "status": "execution_ready",
+    "coverage_complete": true,
+    "integration_realism": true,
+    "runtime_compatible": true,
+    "unresolved_gap_count": 0,
+    "verifier_notes": [
+      "Single-lane R3 plan is appropriate because the work is serially coupled around shared scenario helpers and end-to-end validation."
+    ]
+  },
+  "requirement_risk_rank": [
+    {
+      "requirement_id": "REQ-001",
+      "priority": "critical",
+      "associated_packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-validate-stabilization"
+      ],
+      "evidence_type": "mixed_surface_smoke",
+      "failure_impact": "Operators cannot trust the new org surfaces end to end before rollout."
+    },
+    {
+      "requirement_id": "REQ-002",
+      "priority": "critical",
+      "associated_packet_ids": [
+        "packet-extend-lead-surface-review",
+        "packet-validate-stabilization"
+      ],
+      "evidence_type": "review_bundle",
+      "failure_impact": "Team summary and brief drift could reach operators unnoticed."
+    },
+    {
+      "requirement_id": "REQ-003",
+      "priority": "core",
+      "associated_packet_ids": [
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ],
+      "evidence_type": "operator_docs",
+      "failure_impact": "Operators may use the wrong source of truth or resume runtime work prematurely."
+    }
+  ],
+  "momentum_map": [
+    {
+      "packet_id": "packet-build-org-surface-smoke",
+      "movement_type": "closure_advancing",
+      "unlocks_packets": [
+        "packet-extend-lead-surface-review"
+      ],
+      "resolves_dependency_classification": true,
+      "isolates_blocker": false
+    },
+    {
+      "packet_id": "packet-extend-lead-surface-review",
+      "movement_type": "closure_advancing",
+      "unlocks_packets": [
+        "packet-operator-rollout-docs"
+      ],
+      "resolves_dependency_classification": true,
+      "isolates_blocker": false
+    },
+    {
+      "packet_id": "packet-operator-rollout-docs",
+      "movement_type": "closure_advancing",
+      "unlocks_packets": [
+        "packet-validate-stabilization"
+      ],
+      "resolves_dependency_classification": true,
+      "isolates_blocker": false
+    },
+    {
+      "packet_id": "packet-validate-stabilization",
+      "movement_type": "closure_advancing",
+      "unlocks_packets": [],
+      "resolves_dependency_classification": false,
+      "isolates_blocker": false
+    }
+  ],
+  "frontier_map": [
+    {
+      "packet_id": "packet-build-org-surface-smoke",
+      "execution_mode": "sequence_required"
+    },
+    {
+      "packet_id": "packet-extend-lead-surface-review",
+      "execution_mode": "sequence_required"
+    },
+    {
+      "packet_id": "packet-operator-rollout-docs",
+      "execution_mode": "sequence_required"
+    },
+    {
+      "packet_id": "packet-validate-stabilization",
+      "execution_mode": "sequence_required"
+    }
+  ],
+  "failure_mode_matrix": [
+    {
+      "item_id": "fm-001",
+      "scenario": "The new smoke proves only CLI formatting and misses a broken HTTP route or payload shape.",
+      "handling": "Read team summary, team brief, and invite claim directly over HTTP JSON and fail closed on route or payload errors.",
+      "verification": "npm run scenario:org-surface-smoke"
+    },
+    {
+      "item_id": "fm-002",
+      "scenario": "The lead review captures team snapshots but they drift from the project truth used to generate them.",
+      "handling": "Assert team totals, worker workload, and brief rollup against the reviewed project/task identifiers in the bundle.",
+      "verification": "npm run review:lead-surfaces"
+    },
+    {
+      "item_id": "fm-003",
+      "scenario": "Docs imply runtime rollout can continue immediately after this pass.",
+      "handling": "Explicitly document the Doug-host Stage 1 gate and the exit criteria before Stage 2/3 become eligible.",
+      "verification": "rg -n \"Doug|Stage 1|Stage 2|Stage 3|eligible\" /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md"
+    }
+  ],
+  "edge_case_matrix": [
+    {
+      "item_id": "ec-001",
+      "scenario": "Team brief schedule is not wall-clock due during the smoke or review run.",
+      "handling": "Force-run scheduled briefs at the persisted next_run_at, matching the existing project-brief pattern.",
+      "verification": "scenario and review bundle both check latest persisted team brief run."
+    },
+    {
+      "item_id": "ec-002",
+      "scenario": "A pending invite exists in the review environment and could pollute active team counts.",
+      "handling": "Assert that pending invite-only memberships are excluded from active-member counts in team summary outputs.",
+      "verification": "review:lead-surfaces"
+    }
+  ],
+  "autonomy_level": "L2_supervised_autonomous",
+  "packets": [
+    {
+      "packet_id": "packet-build-org-surface-smoke",
+      "primary_behavior": "Implement the new org stabilization smoke script and minimal shared scenario helpers needed to exercise mixed CLI and HTTP surfaces plus CLI-only adoption flow.",
+      "packet_class": "implementation",
+      "execution_strategy": "command_capture",
+      "strategy_inputs": {
+        "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke"
+      },
+      "allowed_scope": [
+        "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+        "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+        "artifact-loop/package.json"
+      ],
+      "dependencies": [],
+      "dependency_mode": "accepted_upstream",
+      "acceptance_checks": [
+        "CLI invite creation succeeds.",
+        "HTTP invite claim succeeds.",
+        "HTTP team summary and brief reflect the same task truth as the CLI coordination loop.",
+        "CLI adopt-existing succeeds against seeded legacy data."
+      ],
+      "failure_signals": [
+        "Scenario reimplements too much of the canonical coordination flow.",
+        "HTTP route checks are absent or do not validate payload semantics.",
+        "Adoption proof depends on service endpoints instead of CLI-only commands."
+      ],
+      "fallback_or_rollback": "Remove the new smoke script and helper additions if it cannot stay bounded to operator validation.",
+      "verifier_mapping": "Review the new smoke script, helper changes, and a passing smoke capture.",
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-build-org-surface-smoke.json",
+      "shared_surface_categories": [
+        "scenario",
+        "http-service",
+        "cli"
+      ],
+      "classification": "ready",
+      "execution_mode": "sequence_required",
+      "constraints": [
+        "Do not edit shared_coordination_v1.sh beyond invoking existing helpers if needed.",
+        "Keep adoption validation CLI-only.",
+        "Emit a manifest and smoke report."
+      ],
+      "product_meaning_resolved": true,
+      "automatable_acceptance": true,
+      "prohibited_action_required": false,
+      "maintainable_completion_path": true,
+      "packet_lane": "worker",
+      "parallelism_class": "serial",
+      "swarm_eligible": false,
+      "definition_of_done": {
+        "behavior_outcome": "Operators can run one scenario to validate the new organization surfaces end to end before rollout.",
+        "acceptance_checks": [
+          "CLI invite creation succeeds.",
+          "HTTP invite claim succeeds.",
+          "HTTP team summary and brief reflect the same task truth as the CLI coordination loop.",
+          "CLI adopt-existing succeeds against seeded legacy data."
+        ],
+        "evidence_requirements": [
+          "manifest",
+          "smoke summary",
+          "scenario capture"
+        ],
+        "allowed_scope": [
+          "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+          "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+          "artifact-loop/package.json"
+        ],
+        "rollback_or_fallback": "Revert the new smoke and helper additions if the scenario cannot remain bounded.",
+        "verifier_acceptance_condition": "Reviewer confirms the smoke exercises the intended contracts and keeps shared_coordination_v1 canonical.",
+        "objective_linkage": "REQ-001"
+      }
+    },
+    {
+      "packet_id": "packet-extend-lead-surface-review",
+      "primary_behavior": "Extend the lead surface review to capture and validate team-level outputs and update the skill doc to describe the expanded bundle.",
+      "packet_class": "implementation",
+      "execution_strategy": "command_capture",
+      "strategy_inputs": {
+        "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+      },
+      "allowed_scope": [
+        "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+        ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+      ],
+      "dependencies": [
+        "packet-build-org-surface-smoke"
+      ],
+      "dependency_mode": "accepted_upstream",
+      "acceptance_checks": [
+        "Review bundle captures the new team files.",
+        "Invariants prove team totals and worker workload align with project truth.",
+        "Latest team brief run is persisted and delivered to the owner inbox."
+      ],
+      "failure_signals": [
+        "Review bundle lacks team-level outputs.",
+        "Invariants depend on text rendering instead of JSON semantics.",
+        "Skill doc still describes project-only review coverage."
+      ],
+      "fallback_or_rollback": "Revert the review expansion if it cannot stay semantically aligned with the current derived team surfaces.",
+      "verifier_mapping": "Review the expanded review script, skill doc, and a passing bundle summary.",
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-extend-lead-surface-review.json",
+      "shared_surface_categories": [
+        "review",
+        "derived-reads",
+        "operator-skill"
+      ],
+      "classification": "ready",
+      "execution_mode": "sequence_required",
+      "constraints": [
+        "Preserve the current project-level review bundle.",
+        "Validate team semantics from JSON outputs.",
+        "Keep the review bundle human-readable."
+      ],
+      "product_meaning_resolved": true,
+      "automatable_acceptance": true,
+      "prohibited_action_required": false,
+      "maintainable_completion_path": true,
+      "packet_lane": "worker",
+      "parallelism_class": "serial",
+      "swarm_eligible": false,
+      "definition_of_done": {
+        "behavior_outcome": "Lead review captures both project and team read surfaces and highlights semantic drift before rollout.",
+        "acceptance_checks": [
+          "Review bundle captures the new team files.",
+          "Invariants prove team totals and worker workload align with project truth.",
+          "Latest team brief run is persisted and delivered to the owner inbox."
+        ],
+        "evidence_requirements": [
+          "review-summary.md",
+          "review bundle capture"
+        ],
+        "allowed_scope": [
+          "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+          ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+        ],
+        "rollback_or_fallback": "Revert the review expansion if it produces unstable or misleading semantics.",
+        "verifier_acceptance_condition": "Reviewer confirms the review validates derived team behavior rather than inventing a second state path.",
+        "objective_linkage": "REQ-002"
+      }
+    },
+    {
+      "packet_id": "packet-operator-rollout-docs",
+      "primary_behavior": "Add the canonical repo-tracked stabilization rollout note and align README and tailscale-rollout docs with the current runtime gate.",
+      "packet_class": "implementation",
+      "execution_strategy": "command_capture",
+      "strategy_inputs": {
+        "command": "rg -n \"org-surface-smoke|review:lead-surfaces|Stage 1|Stage 2|Stage 3\" /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/README.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/org-stabilization-rollout.md /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/docs/tailscale-rollout.md"
+      },
+      "allowed_scope": [
+        "artifact-loop/docs/org-stabilization-rollout.md",
+        "artifact-loop/docs/tailscale-rollout.md",
+        "artifact-loop/README.md"
+      ],
+      "dependencies": [
+        "packet-extend-lead-surface-review"
+      ],
+      "dependency_mode": "accepted_upstream",
+      "acceptance_checks": [
+        "README links to the note.",
+        "The note includes the exact stabilization entrypoints and org operator commands.",
+        "The runtime gate is consistent between the note and tailscale-rollout.md."
+      ],
+      "failure_signals": [
+        "Canonical operator guidance remains in planning_artifacts.",
+        "Docs contradict the current runtime gate.",
+        "README does not surface the new stabilization entrypoints."
+      ],
+      "fallback_or_rollback": "Revert the doc updates if they conflict with the current shipped product surfaces.",
+      "verifier_mapping": "Review the new rollout note and aligned README/runtime gate wording.",
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-operator-rollout-docs.json",
+      "shared_surface_categories": [
+        "docs",
+        "operator-surface"
+      ],
+      "classification": "ready",
+      "execution_mode": "sequence_required",
+      "constraints": [
+        "Do not imply that Stage 2 or 3 is implemented.",
+        "Do not publish planning_artifacts as canonical user docs.",
+        "Keep the note operator-facing and branch-local."
+      ],
+      "product_meaning_resolved": true,
+      "automatable_acceptance": true,
+      "prohibited_action_required": false,
+      "maintainable_completion_path": true,
+      "packet_lane": "worker",
+      "parallelism_class": "serial",
+      "swarm_eligible": false,
+      "definition_of_done": {
+        "behavior_outcome": "Operators can find one repo-tracked note that explains the current org rollout state and runtime gate.",
+        "acceptance_checks": [
+          "README links to the note.",
+          "The note includes the exact stabilization entrypoints and org operator commands.",
+          "The runtime gate is consistent between the note and tailscale-rollout.md."
+        ],
+        "evidence_requirements": [
+          "doc diff",
+          "grep capture"
+        ],
+        "allowed_scope": [
+          "artifact-loop/docs/org-stabilization-rollout.md",
+          "artifact-loop/docs/tailscale-rollout.md",
+          "artifact-loop/README.md"
+        ],
+        "rollback_or_fallback": "Revert the doc changes if they misstate the shipped surfaces.",
+        "verifier_acceptance_condition": "Reviewer confirms the note is the canonical operator-facing source of truth for this stabilization pass.",
+        "objective_linkage": "REQ-003"
+      }
+    },
+    {
+      "packet_id": "packet-validate-stabilization",
+      "primary_behavior": "Run the full Artifact Loop validation stack, capture governed evidence, and confirm the new stabilization surfaces and docs close cleanly.",
+      "packet_class": "validation",
+      "execution_strategy": "command_capture",
+      "strategy_inputs": {
+        "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces"
+      },
+      "allowed_scope": [
+        "artifact-loop",
+        "planning_artifacts/artifact-loop-stabilization-20260320"
+      ],
+      "dependencies": [
+        "packet-operator-rollout-docs"
+      ],
+      "dependency_mode": "accepted_upstream",
+      "acceptance_checks": [
+        "All listed validation commands pass.",
+        "Smoke and review captures exist under the stabilization track.",
+        "Governed finalize gate returns ok=true."
+      ],
+      "failure_signals": [
+        "Existing package checks fail.",
+        "New smoke or review entrypoints fail.",
+        "Finalize gate reports blocked or revise."
+      ],
+      "fallback_or_rollback": "Fix regressions or doc/script defects before closure; do not boundary-shrink this pass.",
+      "verifier_mapping": "Review captured manifests, test output, and finalize.json.",
+      "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-validate-stabilization.json",
+      "shared_surface_categories": [
+        "verification",
+        "governed-closeout"
+      ],
+      "classification": "ready",
+      "execution_mode": "sequence_required",
+      "constraints": [
+        "Run the full existing validation stack plus the new stabilization entrypoints.",
+        "Capture evidence under the stabilization track.",
+        "Do not close without finalize_gate ok=true."
+      ],
+      "product_meaning_resolved": true,
+      "automatable_acceptance": true,
+      "prohibited_action_required": false,
+      "maintainable_completion_path": true,
+      "packet_lane": "validator",
+      "parallelism_class": "serial",
+      "swarm_eligible": false,
+      "definition_of_done": {
+        "behavior_outcome": "The stabilization pass has artifact-backed proof and governed closure.",
+        "acceptance_checks": [
+          "All listed validation commands pass.",
+          "Smoke and review captures exist under the stabilization track.",
+          "Governed finalize gate returns ok=true."
+        ],
+        "evidence_requirements": [
+          "command capture manifests",
+          "implementation.json",
+          "finalize.json"
+        ],
+        "allowed_scope": [
+          "artifact-loop",
+          "planning_artifacts/artifact-loop-stabilization-20260320"
+        ],
+        "rollback_or_fallback": "Fix defects before closing; do not force approval on partial evidence.",
+        "verifier_acceptance_condition": "Reviewer confirms evidence covers the whole stabilization objective and no required gate is skipped.",
+        "objective_linkage": "REQ-001/REQ-002/REQ-003"
+      }
+    }
+  ],
+  "session_harness": {
+    "required": true,
+    "route_hint": "R3",
+    "estimated_packet_count": 4,
+    "expected_duration_minutes": 45,
+    "checkpoint_interval_minutes": 20,
+    "checkpoint_required": true,
+    "context_index_required": true,
+    "bootstrap_commands": [
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build"
+    ],
+    "validation_commands": [
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check",
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+      "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+    ],
+    "clean_state_assertions": [
+      "Fresh session can resume from planning_artifacts/artifact-loop-stabilization-20260320 without chat reconstruction.",
+      "shared_coordination_v1 remains unchanged as the canonical baseline."
+    ],
+    "ui_evidence_required": false
+  },
+  "required_packets": [
+    "packet-build-org-surface-smoke",
+    "packet-extend-lead-surface-review",
+    "packet-operator-rollout-docs",
+    "packet-validate-stabilization"
+  ],
+  "execution_shape": "single_lane",
+  "solution_ladder": {
+    "L1_patch": {
+      "description": "Run manual commands and add a one-off note without creating reusable stabilization surfaces.",
+      "pros": [
+        "Lowest immediate implementation effort"
+      ],
+      "cons": [
+        "Would not produce stable operator entrypoints or reusable review artifacts"
+      ]
+    },
+    "L2_abstraction": {
+      "description": "Refactor internal helpers or client abstractions without shipping new operator-facing smoke, review, or rollout surfaces.",
+      "pros": [
+        "Could reduce some scenario helper duplication"
+      ],
+      "cons": [
+        "Would not satisfy the explicit rollout validation and documentation requirements"
+      ]
+    },
+    "L3_operating_surface": {
+      "description": "Add stable scenario commands, review bundles, and operator docs that run directly against the shipped org surfaces.",
+      "pros": [
+        "Matches the requested stabilization path directly",
+        "Creates reusable operator surfaces with bounded changes"
+      ],
+      "cons": [
+        "Adds scenario and documentation maintenance surface"
+      ]
+    }
+  },
+  "chosen_layer": "L3_operating_surface",
+  "layer_justification": "The missing work is reusable operator validation and rollout surfaces around already-implemented product capabilities, not more internal product logic.",
+  "why_not_lower": "Manual steps or one-off notes would not create stable smoke/review entrypoints or a canonical rollout reference.",
+  "why_not_higher": "A larger platform abstraction for scenario orchestration or release tooling would exceed the bounded stabilization objective.",
+  "future_reuse_gain": {
+    "frequency": "medium",
+    "spread": "multi_flow",
+    "operability": "operator_surface",
+    "boundedness": "bounded_now"
+  }
+}

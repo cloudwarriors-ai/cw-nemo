@@ -3,7 +3,18 @@
 
 import type { Command } from "commander";
 import { resolveArtifactLoopClient } from "../helpers/client.js";
-import { formatJson, formatTeam, formatTeamMembers, formatTeams } from "../helpers/format.js";
+import {
+  formatInvite,
+  formatInviteCreateResult,
+  formatInvites,
+  formatJson,
+  formatProjects,
+  formatTeam,
+  formatTeamBriefSchedule,
+  formatTeamMembers,
+  formatTeams,
+  formatTeamSummary,
+} from "../helpers/format.js";
 
 export function registerTeamCommands(program: Command): void {
   const teamCmd = program.command("team").description("Team coordination commands");
@@ -128,6 +139,215 @@ export function registerTeamCommands(program: Command): void {
       try {
         const memberships = await client.getTeamMembers(teamId);
         console.log(opts.json ? formatJson(memberships) : formatTeamMembers(teamId, memberships));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("invite <team-id>")
+    .requiredOption("--member <id>", "Reserved member id")
+    .requiredOption("--role <role>", "Team role")
+    .requiredOption("--name <name>", "Display name")
+    .requiredOption("--timezone <tz>", "Timezone")
+    .requiredOption("--by <worker-id>", "Admin worker id")
+    .option("--expires-in-days <days>", "Invite expiry in days")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, opts: {
+      member: string;
+      role: string;
+      name: string;
+      timezone: string;
+      by: string;
+      expiresInDays?: string;
+      json?: boolean;
+      serviceUrl?: string;
+      dataDir?: string;
+    }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const invite = await client.createTeamInvite(teamId, {
+          member_id: opts.member,
+          role: opts.role as "admin" | "lead" | "worker",
+          display_name: opts.name,
+          timezone: opts.timezone,
+          invited_by_worker_id: opts.by,
+          expires_in_days: opts.expiresInDays ? Number.parseInt(opts.expiresInDays, 10) : undefined,
+        });
+        console.log(opts.json ? formatJson(invite) : formatInviteCreateResult(invite));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("invites <team-id> [invite-id]")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, inviteId: string | undefined, opts: { json?: boolean; serviceUrl?: string; dataDir?: string }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        if (inviteId) {
+          const invite = await client.getInvite(inviteId);
+          if (!invite) {
+            throw new Error(`Invite not found: ${inviteId}`);
+          }
+          console.log(opts.json ? formatJson(invite) : formatInvite(invite));
+          return;
+        }
+
+        const invites = await client.getTeamInvites(teamId);
+        console.log(opts.json ? formatJson(invites) : formatInvites(teamId, invites));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("revoke-invite <invite-id>")
+    .requiredOption("--by <worker-id>", "Admin worker id")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (inviteId: string, opts: { by: string; json?: boolean; serviceUrl?: string; dataDir?: string }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const invite = await client.revokeInvite(inviteId, {
+          revoked_by_worker_id: opts.by,
+        });
+        console.log(opts.json ? formatJson(invite) : formatInvite(invite));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("projects <team-id>")
+    .requiredOption("--by <worker-id>", "Requesting worker id")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, opts: { by: string; json?: boolean; serviceUrl?: string; dataDir?: string }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const projects = await client.getTeamProjects(teamId, opts.by);
+        console.log(opts.json ? formatJson(projects) : formatProjects(projects));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("summary <team-id>")
+    .requiredOption("--by <worker-id>", "Requesting worker id")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, opts: { by: string; json?: boolean; serviceUrl?: string; dataDir?: string }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const summary = await client.getTeamSummary(teamId, opts.by);
+        console.log(opts.json ? formatJson(summary) : formatTeamSummary(summary));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("brief <team-id>")
+    .requiredOption("--by <worker-id>", "Requesting worker id")
+    .option("--latest-run", "Read latest scheduled team brief run")
+    .option("--history", "Read team brief run history")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, opts: {
+      by: string;
+      latestRun?: boolean;
+      history?: boolean;
+      json?: boolean;
+      serviceUrl?: string;
+      dataDir?: string;
+    }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const result = opts.history
+          ? await client.getTeamBriefRuns(teamId, opts.by)
+          : opts.latestRun
+            ? await client.getLatestTeamBriefRun(teamId, opts.by)
+            : await client.getTeamBrief(teamId, opts.by);
+        const renderedText = typeof result === "object" && result !== null
+          ? "rendered_text" in result
+            ? String((result as { rendered_text: string }).rendered_text)
+            : "brief" in result &&
+                typeof (result as { brief?: unknown }).brief === "object" &&
+                (result as { brief?: { rendered_text?: string } }).brief?.rendered_text
+              ? String((result as { brief: { rendered_text: string } }).brief.rendered_text)
+              : undefined
+          : undefined;
+        console.log(opts.json || !renderedText ? formatJson(result) : renderedText);
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("brief-schedule <team-id>")
+    .requiredOption("--by <worker-id>", "Requesting worker id")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, opts: { by: string; json?: boolean; serviceUrl?: string; dataDir?: string }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const schedule = await client.getTeamBriefSchedule(teamId, opts.by);
+        if (!schedule) {
+          throw new Error(`Team brief schedule not found: ${teamId}`);
+        }
+        console.log(opts.json ? formatJson(schedule) : formatTeamBriefSchedule(schedule));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  teamCmd
+    .command("schedule-brief <team-id>")
+    .requiredOption("--owner-worker <id>", "Owner worker id")
+    .requiredOption("--timezone <tz>", "IANA timezone")
+    .requiredOption("--delivery-hour <hour>", "Local delivery hour")
+    .option("--disabled", "Disable schedule")
+    .option("--json", "Output as JSON")
+    .option("--service-url <url>", "Artifact Loop service URL")
+    .option("--data-dir <dir>", "Data directory")
+    .action(async (teamId: string, opts: {
+      ownerWorker: string;
+      timezone: string;
+      deliveryHour: string;
+      disabled?: boolean;
+      json?: boolean;
+      serviceUrl?: string;
+      dataDir?: string;
+    }) => {
+      const client = resolveArtifactLoopClient(opts);
+      try {
+        const schedule = await client.upsertTeamBriefSchedule(teamId, {
+          owner_worker_id: opts.ownerWorker,
+          timezone: opts.timezone,
+          delivery_hour_local: Number.parseInt(opts.deliveryHour, 10),
+          enabled: !opts.disabled,
+        });
+        console.log(opts.json ? formatJson(schedule) : formatTeamBriefSchedule(schedule));
       } catch (err) {
         console.error((err as Error).message);
         process.exitCode = 1;

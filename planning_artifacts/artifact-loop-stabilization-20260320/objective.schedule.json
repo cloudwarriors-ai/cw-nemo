@@ -1,0 +1,128 @@
+{
+  "accepted_packet_count": 4,
+  "active_packets_by_lane": {
+    "explorer": [],
+    "reviewer": [],
+    "validator": [],
+    "worker": []
+  },
+  "admission_failures": {
+    "packet-build-org-surface-smoke": [
+      "already_accepted"
+    ],
+    "packet-extend-lead-surface-review": [
+      "already_accepted"
+    ],
+    "packet-operator-rollout-docs": [
+      "already_accepted"
+    ],
+    "packet-validate-stabilization": [
+      "already_accepted"
+    ]
+  },
+  "awaiting_reviewer_barrier": [],
+  "blocked_packet_count": 0,
+  "blocked_set": [],
+  "closure_readiness": "pending",
+  "convergence_required_for_closure": false,
+  "convergence_status": "idle",
+  "current_frontier": [],
+  "cycle_log": [
+    {
+      "classification": "closure_advancing",
+      "closure_impact": "Move the objective toward verifier-accepted closure.",
+      "cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+      "escalation_condition": "No safe momentum remains for required work.",
+      "expected_evidence": [
+        "frontier movement"
+      ],
+      "frontier_movement": true,
+      "frontier_movement_reason": "dependency_unlocked",
+      "objective_id": "objective-artifact-loop-stabilization-20260320",
+      "packet_ids": [
+        "packet-build-org-surface-smoke"
+      ],
+      "pivot_condition": "No safe momentum or retry budget remains.",
+      "purpose": "Advance the current executable frontier.",
+      "stop_condition": "Frontier and admission state recomputed.",
+      "strategy_label": "scheduler_frontier_evaluation"
+    },
+    {
+      "classification": "closure_advancing",
+      "closure_impact": "Close the objective with verifier-accepted evidence.",
+      "cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-002",
+      "escalation_condition": "Closure artifacts cannot be reconciled with the passing command captures.",
+      "expected_evidence": [
+        "accepted packet verdicts",
+        "complete validation captures",
+        "approved finalize gate"
+      ],
+      "frontier_movement": true,
+      "frontier_movement_reason": "packet_completed",
+      "objective_id": "objective-artifact-loop-stabilization-20260320",
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-extend-lead-surface-review",
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ],
+      "pivot_condition": "Any regenerated artifact fails deterministic validation.",
+      "purpose": "Finalize the accepted stabilization packets and close the governed objective.",
+      "stop_condition": "All packets marked accepted and runtime artifacts regenerated.",
+      "strategy_label": "manual_artifact_convergence"
+    }
+  ],
+  "dispatch_block_reasons": {},
+  "dispatch_history": [
+    {
+      "cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-002",
+      "packet_ids": [
+        "packet-build-org-surface-smoke",
+        "packet-extend-lead-surface-review",
+        "packet-operator-rollout-docs",
+        "packet-validate-stabilization"
+      ]
+    }
+  ],
+  "escalation_count": 0,
+  "execution_shape": "single_lane",
+  "frontier_dispatch_order": [],
+  "frontier_movement": true,
+  "frontier_movement_reason": "packet_completed",
+  "lane_caps": {},
+  "lane_queue_depths": {
+    "explorer": 0,
+    "reviewer": 0,
+    "validator": 0,
+    "worker": 0
+  },
+  "max_no_frontier_movement_cycles": 2,
+  "max_noop_cycles": 2,
+  "max_parallel_packets": 1,
+  "max_same_strategy_retries": 2,
+  "max_verifier_return_cycles": 2,
+  "migration_fallback_used": false,
+  "objective_id": "objective-artifact-loop-stabilization-20260320",
+  "parallelism_policy": "serial_only",
+  "rejected_packet_count": 0,
+  "repacketization_count": 0,
+  "repacketization_events": [],
+  "retry_counters": {},
+  "reviewer_barrier_points": [],
+  "route_swarm_cap": null,
+  "runnable_but_not_dispatched": [],
+  "runnable_candidates": [],
+  "runnable_set": [],
+  "runtime_states": {
+    "packet-build-org-surface-smoke": "accepted",
+    "packet-extend-lead-surface-review": "accepted",
+    "packet-operator-rollout-docs": "accepted",
+    "packet-validate-stabilization": "accepted"
+  },
+  "safe_momentum_available": false,
+  "strategy_switches": {},
+  "swarm_status": "single_lane",
+  "total_packet_count": 4,
+  "total_runtime_attempts": 0,
+  "track_id": "artifact-loop-stabilization-20260320"
+}

@@ -2,8 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type {
+  AdoptionPlan,
+  AdoptionStatus,
   DerivationRun,
   InboxItem,
+  Invite,
+  InviteCreateResult,
   Organization,
   Project,
   ProjectBriefSchedule,
@@ -16,6 +20,8 @@ import type {
   TaskMessage,
   TaskState,
   Team,
+  TeamBriefSchedule,
+  TeamSummary,
   TeamMembership,
   UsageStats,
   Worker,
@@ -255,6 +261,78 @@ export function formatTeamMembers(teamId: string, memberships: TeamMembership[])
   return lines.join("\n");
 }
 
+export function formatInvite(invite: Invite): string {
+  return [
+    `Invite: ${invite.id}`,
+    `Team: ${invite.team_id}`,
+    `Member: ${invite.member_id}`,
+    `Role: ${invite.role}`,
+    `Status: ${invite.status}`,
+    `Display name: ${invite.display_name}`,
+    `Timezone: ${invite.timezone}`,
+    `Invited by: ${invite.invited_by_worker_id}`,
+    `Created: ${invite.created_at}`,
+    `Expires: ${invite.expires_at}`,
+    `Claimed: ${invite.claimed_at ?? "none"}`,
+    `Revoked: ${invite.revoked_at ?? "none"}`,
+  ].join("\n");
+}
+
+export function formatInviteCreateResult(result: InviteCreateResult): string {
+  return [
+    formatInvite(result.invite),
+    `Claim token: ${result.claim_token}`,
+  ].join("\n");
+}
+
+export function formatInvites(teamId: string, invites: Invite[]): string {
+  const lines = [`Team invites: ${teamId}`];
+  if (invites.length === 0) {
+    lines.push("  none");
+    return lines.join("\n");
+  }
+  for (const invite of invites) {
+    lines.push(`  - ${invite.id}: ${invite.member_id} (${invite.role}, ${invite.status})`);
+  }
+  return lines.join("\n");
+}
+
+export function formatTeamSummary(summary: TeamSummary): string {
+  const statusCounts = Object.entries(summary.counts_by_status)
+    .map(([status, count]) => `${status}=${count}`)
+    .join(" ");
+  const lines = [
+    `Team: ${summary.team.id}`,
+    `Name: ${summary.team.name}`,
+    `Projects: total=${summary.total_projects} active=${summary.active_projects}`,
+    `Tasks: total=${summary.total_tasks}`,
+    `Counts by status: ${statusCounts}`,
+    `Project attention: blocked=${summary.project_counts.blocked} needs_input=${summary.project_counts.needs_input} ready_for_review=${summary.project_counts.ready_for_review} healthy=${summary.project_counts.healthy}`,
+    `Active members: admin=${summary.active_members_by_role.admin} lead=${summary.active_members_by_role.lead} worker=${summary.active_members_by_role.worker}`,
+    `Last activity: ${summary.last_activity_at ?? "none"}`,
+  ];
+
+  lines.push("Projects:");
+  if (summary.projects.length === 0) {
+    lines.push("  none");
+  } else {
+    for (const project of summary.projects) {
+      lines.push(`  - ${project.project_id}: tasks=${project.total_tasks} blocked=${project.blocked_count} needs_input=${project.needs_input_count} ready_for_review=${project.ready_for_review_count}`);
+    }
+  }
+
+  lines.push("Member workload:");
+  if (summary.member_workload.length === 0) {
+    lines.push("  none");
+  } else {
+    for (const member of summary.member_workload) {
+      lines.push(`  - ${member.member_id} (${member.role}): tasks=${member.task_count} projects=${member.project_ids.length} latest=${member.recent_activity_at ?? "none"}`);
+    }
+  }
+
+  return lines.join("\n");
+}
+
 export function formatProjectSummary(summary: ProjectSummary): string {
   const { project, counts_by_status, buckets, last_activity_at, total_tasks } = summary;
   const statusCounts = Object.entries(counts_by_status)
@@ -400,8 +478,13 @@ export function formatInboxItems(items: InboxItem[]): string {
   for (const item of items) {
     const taskSuffix = item.task_id ? ` task=${item.task_id}` : "";
     const agentSuffix = item.recipient_agent_id ? ` agent=${item.recipient_agent_id}` : "";
+    const scope = item.project_id
+      ? `project=${item.project_id}`
+      : item.team_id
+        ? `team=${item.team_id}`
+        : "scope=none";
     lines.push(
-      `  - ${item.id} [${item.kind}/${item.status}] project=${item.project_id}${taskSuffix}${agentSuffix} payload=${item.payload_ref.type}:${item.payload_ref.id}`,
+      `  - ${item.id} [${item.kind}/${item.status}] ${scope}${taskSuffix}${agentSuffix} payload=${item.payload_ref.type}:${item.payload_ref.id}`,
     );
   }
   return lines.join("\n");
@@ -430,5 +513,57 @@ export function formatProjectBriefSchedule(schedule: ProjectBriefSchedule): stri
     `Enabled: ${schedule.enabled ? "yes" : "no"}`,
     `Last run: ${schedule.last_run_at ?? "none"}`,
     `Next run: ${schedule.next_run_at ?? "none"}`,
+  ].join("\n");
+}
+
+export function formatTeamBriefSchedule(schedule: TeamBriefSchedule): string {
+  return [
+    `Team brief schedule: ${schedule.team_id}`,
+    `Owner worker: ${schedule.owner_worker_id}`,
+    `Timezone: ${schedule.timezone}`,
+    `Delivery hour: ${schedule.delivery_hour_local}`,
+    `Enabled: ${schedule.enabled ? "yes" : "no"}`,
+    `Last run: ${schedule.last_run_at ?? "none"}`,
+    `Next run: ${schedule.next_run_at ?? "none"}`,
+  ].join("\n");
+}
+
+export function formatAdoptionPlan(plan: AdoptionPlan): string {
+  const lines = [
+    `Adoption plan: ${plan.ready ? "ready" : "blocked"}`,
+    `Summary: workers=${plan.summary.workers} agents=${plan.summary.worker_agents} projects=${plan.summary.projects} tasks=${plan.summary.tasks} schedules=${plan.summary.brief_schedules}`,
+  ];
+  if (plan.blockers.length > 0) {
+    lines.push("Blockers:");
+    for (const blocker of plan.blockers) {
+      lines.push(`  - ${blocker}`);
+    }
+  }
+  lines.push("Teams:");
+  for (const team of plan.teams) {
+    lines.push(`  - ${team.id}: workers=${team.worker_ids.length} projects=${team.project_ids.length}`);
+  }
+  lines.push("Schedule actions:");
+  if (plan.schedule_actions.length === 0) {
+    lines.push("  none");
+  } else {
+    for (const action of plan.schedule_actions) {
+      lines.push(`  - ${action.project_id}: ${action.action}${action.reason ? ` (${action.reason})` : ""}`);
+    }
+  }
+  return lines.join("\n");
+}
+
+export function formatAdoptionStatus(status: AdoptionStatus): string {
+  if (!status.has_report || !status.report) {
+    return "Adoption status: none";
+  }
+  return [
+    `Adoption status: applied`,
+    `Report id: ${status.report.report_id}`,
+    `Report path: ${status.report.report_path}`,
+    `Organization: ${status.report.organization.id}`,
+    `Teams: ${status.report.teams.map((team) => team.id).join(", ")}`,
+    `Disabled schedules: ${status.report.disabled_schedule_project_ids.length > 0 ? status.report.disabled_schedule_project_ids.join(", ") : "none"}`,
   ].join("\n");
 }

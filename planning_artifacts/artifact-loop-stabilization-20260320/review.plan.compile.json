@@ -1,0 +1,22 @@
+{
+  "blocked_fields": [],
+  "content": "Frontloaded plan compiler artifacts emitted.",
+  "gate": "plan-compiler",
+  "meta": {
+    "artifacts": {
+      "compiler": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.compiler.json",
+      "coverage": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.coverage.json",
+      "gaps": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.gaps.json",
+      "intent": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.intent.json",
+      "objective_intent": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.intent.json",
+      "readiness": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.readiness.json"
+    },
+    "track_id": "artifact-loop-stabilization-20260320",
+    "track_token": "artifact-loop-stabilization-20260320"
+  },
+  "missing_fields": [],
+  "next_step": "Run verify_plan.py or validate_plan.py.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

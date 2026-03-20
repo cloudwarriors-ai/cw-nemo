@@ -1,0 +1,72 @@
+{
+  "acceptance_checks": [
+    "Review bundle captures the new team files.",
+    "Invariants prove team totals and worker workload align with project truth.",
+    "Latest team brief run is persisted and delivered to the owner inbox."
+  ],
+  "allowed_scope": [
+    "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+    ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+  ],
+  "automatable_acceptance": true,
+  "cancelled_by": "",
+  "classification": "ready",
+  "constraints": [
+    "Preserve the current project-level review bundle.",
+    "Validate team semantics from JSON outputs.",
+    "Keep the review bundle human-readable."
+  ],
+  "definition_of_done": {
+    "acceptance_checks": [
+      "Review bundle captures the new team files.",
+      "Invariants prove team totals and worker workload align with project truth.",
+      "Latest team brief run is persisted and delivered to the owner inbox."
+    ],
+    "allowed_scope": [
+      "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+      ".agents/skills/artifact-loop-lead-surface-review/SKILL.md"
+    ],
+    "behavior_outcome": "Lead review captures both project and team read surfaces and highlights semantic drift before rollout.",
+    "evidence_requirements": [
+      "review-summary.md",
+      "review bundle capture"
+    ],
+    "objective_linkage": "REQ-002",
+    "rollback_or_fallback": "Revert the review expansion if it produces unstable or misleading semantics.",
+    "verifier_acceptance_condition": "Reviewer confirms the review validates derived team behavior rather than inventing a second state path."
+  },
+  "dependencies": [
+    "packet-build-org-surface-smoke"
+  ],
+  "dependency_mode": "accepted_upstream",
+  "evidence_destination": "planning_artifacts/artifact-loop-stabilization-20260320/packet-extend-lead-surface-review.json",
+  "execution_mode": "sequence_required",
+  "execution_strategy": "command_capture",
+  "failure_signals": [
+    "Review bundle lacks team-level outputs.",
+    "Invariants depend on text rendering instead of JSON semantics.",
+    "Skill doc still describes project-only review coverage."
+  ],
+  "fallback_or_rollback": "Revert the review expansion if it cannot stay semantically aligned with the current derived team surfaces.",
+  "last_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-002",
+  "last_verifier_output": "accepted",
+  "maintainable_completion_path": true,
+  "packet_class": "implementation",
+  "packet_id": "packet-extend-lead-surface-review",
+  "packet_lane": "worker",
+  "parallelism_class": "serial",
+  "primary_behavior": "Extend the lead surface review to capture and validate team-level outputs and update the skill doc to describe the expanded bundle.",
+  "product_meaning_resolved": true,
+  "prohibited_action_required": false,
+  "runtime_state": "accepted",
+  "shared_surface_categories": [
+    "review",
+    "derived-reads",
+    "operator-skill"
+  ],
+  "strategy_inputs": {
+    "command": "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+  },
+  "swarm_eligible": false,
+  "verifier_mapping": "Review the expanded review script, skill doc, and a passing bundle summary."
+}

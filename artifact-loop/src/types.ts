@@ -282,7 +282,7 @@ export interface OrganizationBootstrapResult {
 }
 
 export type TeamMembershipRole = "admin" | "lead" | "worker";
-export type TeamMembershipStatus = "active" | "inactive";
+export type TeamMembershipStatus = "pending" | "active" | "inactive";
 
 export interface Team {
   id: string;
@@ -317,6 +317,55 @@ export interface TeamMembershipCreate {
   timezone?: string;
   worker_role?: string;
   added_by_worker_id: string;
+}
+
+export type InviteStatus = "pending" | "claimed" | "revoked" | "expired";
+
+export interface Invite {
+  id: string;
+  team_id: string;
+  member_id: string;
+  role: TeamMembershipRole;
+  display_name: string;
+  timezone: string;
+  status: InviteStatus;
+  invited_by_worker_id: string;
+  created_at: string;
+  expires_at: string;
+  claimed_at?: string;
+  revoked_at?: string;
+}
+
+export interface InviteCreate {
+  member_id: string;
+  role: TeamMembershipRole;
+  display_name: string;
+  timezone: string;
+  invited_by_worker_id: string;
+  expires_in_days?: number;
+}
+
+export interface InviteCreateResult {
+  invite: Invite;
+  claim_token: string;
+}
+
+export interface InviteClaimRequest {
+  claim_token: string;
+  agent_id: string;
+  agent_label: string;
+  agent_connector_type: string;
+}
+
+export interface InviteClaimResult {
+  invite: Invite;
+  membership: TeamMembership;
+  member: Worker;
+  agent: WorkerAgent;
+}
+
+export interface InviteRevokeRequest {
+  revoked_by_worker_id: string;
 }
 
 // ─── Project ────────────────────────────────────────────────────────
@@ -432,7 +481,7 @@ export type InboxItemKind = "assignment" | "reassignment" | "message" | "brief";
 export type InboxItemStatus = "pending" | "acknowledged" | "superseded" | "closed";
 
 export interface InboxPayloadRef {
-  type: "assignment" | "message" | "brief_run";
+  type: "assignment" | "message" | "brief_run" | "team_brief_run";
   id: string;
 }
 
@@ -440,7 +489,8 @@ export interface InboxItem {
   id: string;
   recipient_worker_id: string;
   recipient_agent_id?: string;
-  project_id: string;
+  project_id?: string;
+  team_id?: string;
   task_id?: string;
   kind: InboxItemKind;
   status: InboxItemStatus;
@@ -503,6 +553,7 @@ export interface ProjectBriefRun {
 export interface ScheduledBriefRunResult {
   generated_count: number;
   generated_project_ids: string[];
+  generated_team_ids: string[];
 }
 
 export interface ProjectTaskListItem {
@@ -540,6 +591,49 @@ export interface ProjectWorkerSummary {
   project_id: string;
   by_human: ProjectHumanSummaryGroup[];
   by_agent: ProjectAgentSummaryGroup[];
+}
+
+export interface TeamProjectListItem {
+  project_id: string;
+  title: string;
+  total_tasks: number;
+  counts_by_status: Record<CanonicalStatus, number>;
+  blocked_count: number;
+  needs_input_count: number;
+  ready_for_review_count: number;
+  last_activity_at: string | null;
+}
+
+export interface TeamMemberWorkload {
+  member_id: string;
+  role: TeamMembershipRole;
+  project_ids: string[];
+  task_count: number;
+  counts_by_status: Record<CanonicalStatus, number>;
+  recent_activity_at: string | null;
+}
+
+export interface TeamSummary {
+  team: Team;
+  total_projects: number;
+  active_projects: number;
+  total_tasks: number;
+  counts_by_status: Record<CanonicalStatus, number>;
+  project_counts: {
+    blocked: number;
+    needs_input: number;
+    ready_for_review: number;
+    healthy: number;
+  };
+  active_members_by_role: Record<TeamMembershipRole, number>;
+  member_workload: TeamMemberWorkload[];
+  attention: {
+    blocked_projects: TeamProjectListItem[];
+    needs_input_projects: TeamProjectListItem[];
+    ready_for_review_projects: TeamProjectListItem[];
+  };
+  projects: TeamProjectListItem[];
+  last_activity_at: string | null;
 }
 
 export interface ProjectBriefMovementItem {
@@ -585,6 +679,72 @@ export interface ProjectBrief {
   by_agent: ProjectAgentSummaryGroup[];
   lead_attention_items: ProjectBriefAttentionItem[];
   rendered_text: string;
+}
+
+export interface TeamBriefMovementItem {
+  project_id: string;
+  task_id: string;
+  task_title: string;
+  assignee_human_id: string;
+  assignee_agent_id?: string;
+  changed_at: string;
+  from_status: CanonicalStatus;
+  to_status: CanonicalStatus;
+  rules_applied: string[];
+}
+
+export type TeamBriefAttentionKind = "blocked" | "needs_input" | "ready_for_review";
+
+export interface TeamBriefAttentionItem {
+  kind: TeamBriefAttentionKind;
+  project: TeamProjectListItem;
+  reason: string;
+}
+
+export interface TeamBrief {
+  team: Team;
+  generated_at: string;
+  snapshot: {
+    total_projects: number;
+    active_projects: number;
+    total_tasks: number;
+    counts_by_status: Record<CanonicalStatus, number>;
+    last_activity_at: string | null;
+  };
+  blocked_projects: TeamProjectListItem[];
+  needs_input_projects: TeamProjectListItem[];
+  ready_for_review_projects: TeamProjectListItem[];
+  project_rollup: TeamProjectListItem[];
+  by_member: TeamMemberWorkload[];
+  recent_movement: TeamBriefMovementItem[];
+  lead_attention_items: TeamBriefAttentionItem[];
+  rendered_text: string;
+}
+
+export interface TeamBriefSchedule {
+  team_id: string;
+  owner_worker_id: string;
+  timezone: string;
+  delivery_hour_local: number;
+  enabled: boolean;
+  last_run_at?: string;
+  next_run_at?: string;
+}
+
+export interface TeamBriefScheduleUpsert {
+  owner_worker_id: string;
+  timezone: string;
+  delivery_hour_local: number;
+  enabled: boolean;
+}
+
+export interface TeamBriefRun {
+  id: string;
+  team_id: string;
+  generated_at: string;
+  window_start: string;
+  window_end: string;
+  brief: TeamBrief;
 }
 
 // ─── Assignment ─────────────────────────────────────────────────────
@@ -682,4 +842,70 @@ export interface UsageStats {
     merge_only: number;
     none: number;
   };
+}
+
+export interface AdoptionTeamPlan {
+  id: string;
+  name: string;
+  description: string;
+  worker_ids: string[];
+  project_ids: string[];
+}
+
+export interface AdoptionPlanRequest {
+  organization: {
+    id: string;
+    name: string;
+    timezone: string;
+  };
+  default_team: {
+    id: string;
+    name: string;
+    description: string;
+  };
+}
+
+export interface AdoptionPlan {
+  ready: boolean;
+  blockers: string[];
+  summary: {
+    workers: number;
+    worker_agents: number;
+    projects: number;
+    tasks: number;
+    brief_schedules: number;
+  };
+  organization: AdoptionPlanRequest["organization"];
+  teams: AdoptionTeamPlan[];
+  membership_plans: Array<{
+    member_id: string;
+    team_id: string;
+    role: TeamMembershipRole;
+    status: "active";
+  }>;
+  project_backfills: Array<{
+    project_id: string;
+    team_id: string;
+  }>;
+  schedule_actions: Array<{
+    project_id: string;
+    action: "retain" | "disable";
+    reason?: string;
+  }>;
+}
+
+export interface AdoptionApplyResult {
+  applied: boolean;
+  report_id: string;
+  report_path: string;
+  organization: Organization;
+  teams: Team[];
+  memberships: TeamMembership[];
+  disabled_schedule_project_ids: string[];
+  plan: AdoptionPlan;
+}
+
+export interface AdoptionStatus {
+  has_report: boolean;
+  report?: AdoptionApplyResult;
 }

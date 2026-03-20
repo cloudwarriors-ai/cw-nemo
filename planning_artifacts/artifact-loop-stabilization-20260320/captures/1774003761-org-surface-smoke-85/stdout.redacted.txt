@@ -1,0 +1,66 @@
+
+> artifact-loop@0.1.0 scenario:org-surface-smoke
+> bash ./scripts/scenarios/org_surface_smoke_v1.sh
+
+==> Building artifact-loop
+==> Starting shared service on http://127.0.0.1:52724
+==> Bootstrapping organization and lead
+==> node bin/artifact-loop.js org bootstrap --org-id org-core --org-name Core Org --org-timezone America/New_York --team-id team-core --team-name Core Team --team-description Organization stabilization team --member-id lead-1 --member-name Lead --member-timezone America/New_York --agent-id lead-agent-1 --agent-label Lead Agent --agent-connector lead-cli --service-url http://127.0.0.1:52724
+Bootstrapped organization org-core
+==> Creating invite over CLI
+==> Claiming invite over HTTP
+==> Creating project definition
+==> node bin/artifact-loop.js project create --id proj-org-surface --team team-core --title Org Surface Smoke --description Mixed CLI and HTTP stabilization validation --owner-worker lead-1 --goal Validate invite claim, team read models, and adoption flows --scope lead flow --scope worker flow --deliverable Stabilization signoff --constraint CLI plus HTTP only --definition-of-done Invite claim, team surfaces, and adoption flow all pass --service-url http://127.0.0.1:52724
+Created project proj-org-surface
+==> Generating and approving task drafts
+==> Assigning task to worker agent
+==> node bin/artifact-loop.js task assign proj-org-surface-stabilization-signoff --worker worker-claim --agent worker-claim-agent --by lead-1 --service-url http://127.0.0.1:52724
+Assigned proj-org-surface-stabilization-signoff to worker-claim
+==> Validating worker inbox receives assignment
+==> Acknowledging assignment
+==> node bin/artifact-loop.js worker inbox-ack inbox-51abeffc-bd86-46a0-9683-2769004ad2c2 --service-url http://127.0.0.1:52724
+Acknowledged inbox item inbox-51abeffc-bd86-46a0-9683-2769004ad2c2
+==> Worker reports progress through shared truth
+Using next signal: proj-org-surface-stabilization-signoff-sig-complete (command, required)
+
+Emitted command_result (exit 0) for proj-org-surface-stabilization-signoff → status: ready_for_review (transition)
+==> Validating project summary and worker grouping
+==> Sending task-scoped ping from lead to worker agent
+==> Validating message visibility and acknowledgement
+==> node bin/artifact-loop.js task message-ack msg-1d41c44e-ba1d-4dd5-b2e3-baac4c49c9b0 --service-url http://127.0.0.1:52724
+Acknowledged message msg-1d41c44e-ba1d-4dd5-b2e3-baac4c49c9b0
+==> Validating current brief
+==> Reading team surfaces over HTTP
+==> Scheduling team brief
+==> Running scheduled briefs if due
+==> Team brief is not due yet; forcing execution at persisted next_run_at
+==> Seeding isolated legacy adoption fixture
+==> Writing smoke summary
+# Org Surface Smoke v1
+
+## Verified Surfaces
+- CLI invite creation
+- HTTP invite claim
+- CLI project/task coordination to ready_for_review
+- HTTP team projects/summary/brief reads
+- Team brief schedule plus latest persisted run
+- CLI adopt-existing dry-run/apply/status
+
+## Identifiers
+- service_url: http://127.0.0.1:52724
+- invite_id: invite-815840a5-18e0-41fd-b3e0-0127ed699343
+- claimed_member_id: worker-claim
+- project_id: proj-org-surface
+- task_id: proj-org-surface-stabilization-signoff
+- team_brief_run_id: team-brief-run-dc61ccec-8dae-40a8-8712-f184b331ab2d
+- adoption_report_path: /tmp/artifact-loop-org-surface-smoke-MqrjfF/legacy-data/adoption-reports/adoption-272739ab-9489-4558-a2cb-1188b0817478.json
+
+PASS org_surface_smoke_v1
+  tmp_root: /tmp/artifact-loop-org-surface-smoke-MqrjfF
+  service_url: http://127.0.0.1:52724
+  invite_id: invite-815840a5-18e0-41fd-b3e0-0127ed699343
+  project_id: proj-org-surface
+  task_id: proj-org-surface-stabilization-signoff
+  team_brief_run_id: team-brief-run-dc61ccec-8dae-40a8-8712-f184b331ab2d
+  adoption_report_path: /tmp/artifact-loop-org-surface-smoke-MqrjfF/legacy-data/adoption-reports/adoption-272739ab-9489-4558-a2cb-1188b0817478.json
+  report_path: /tmp/artifact-loop-org-surface-smoke-MqrjfF/org-surface-smoke-summary.md

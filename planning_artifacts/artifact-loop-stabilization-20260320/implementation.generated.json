@@ -1,0 +1,1047 @@
+{
+  "adaptation_log": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.adaptation-log.jsonl",
+  "bootstrap_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build"
+  ],
+  "changed_files": [
+    ".agents/skills/artifact-loop-lead-surface-review/SKILL.md",
+    "artifact-loop",
+    "artifact-loop/README.md",
+    "artifact-loop/docs/org-stabilization-rollout.md",
+    "artifact-loop/docs/tailscale-rollout.md",
+    "artifact-loop/package.json",
+    "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+    "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+    "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+    "planning_artifacts/artifact-loop-stabilization-20260320"
+  ],
+  "checkpoint_block_evidence": "No verifier-accepted packet has been checkpointed yet.",
+  "checkpoint_block_reason": "checkpoint_not_attempted",
+  "checkpoint_blocked": true,
+  "checkpoint_commit": "",
+  "clean_state_assertions": [
+    "Fresh session can resume from planning_artifacts/artifact-loop-stabilization-20260320 without chat reconstruction.",
+    "shared_coordination_v1 remains unchanged as the canonical baseline."
+  ],
+  "execution_coverage": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-coverage.json",
+    "deterministic_packet_count": 4,
+    "deterministic_ratio": 1.0,
+    "fallback_packet_count": 0,
+    "fallback_packet_ids": [],
+    "fallback_reasons": {},
+    "non_review_deterministic_ratio": 1.0,
+    "packet_count": 4,
+    "review_packet_count": 0,
+    "route_hint": "R3",
+    "schema_version": "objective-execution-coverage.v1",
+    "status": "pass",
+    "thresholds": {
+      "deterministic_ratio_min": 0.9,
+      "non_review_deterministic_ratio_min": 0.9
+    }
+  },
+  "execution_ledger": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-ledger.json",
+  "frontend_roundtrip_evidence": [],
+  "logging_evidence": [
+    {
+      "event": "log-docs-stabilization",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003904-log-docs-stabilization-95/manifest.json",
+      "proof_hash": "2c534fd7d8d69399d93a8cde0bfa3133e38b8e19a7ce278c31e4a9d18d879d0e"
+    }
+  ],
+  "memory_retrieval_evidence": [
+    {
+      "query": "pref:planning-gate",
+      "result_count": 0,
+      "tool": "mcp__codex-mem__build_context"
+    }
+  ],
+  "migration_fallback": {
+    "artifact_path": "",
+    "reason": "not-needed",
+    "used": false
+  },
+  "objective_runtime_state": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+    "authoritative_artifacts": {
+      "execution_plan": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-plan.json",
+      "kernel_runtime_state": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.kernel-runtime-state.json",
+      "packet_dag": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-dag.json",
+      "schedule": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.schedule.json",
+      "status": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.status.json"
+    },
+    "closure_state": "",
+    "compatibility_artifacts": {
+      "operator_view": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.operator-view.json",
+      "summary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.summary.json",
+      "support_confidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.support-confidence.json",
+      "transition_history": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transition-history.jsonl",
+      "verification_results": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.verification-results.jsonl"
+    },
+    "controller_mode": "enforce",
+    "current_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+    "current_frontier": [
+      "packet-build-org-surface-smoke"
+    ],
+    "current_packet": "packet-build-org-surface-smoke",
+    "derived_support_status": "supported",
+    "last_verifier_result": {},
+    "lifecycle_status": "revise",
+    "material_optional_work_reasons": [],
+    "material_optional_work_remaining": false,
+    "next_recommended_packet": "packet-build-org-surface-smoke",
+    "objective_id": "objective-artifact-loop-stabilization-20260320",
+    "required_work_reasons": [
+      "required_packets_pending"
+    ],
+    "required_work_remaining": true,
+    "route_hint": "R3",
+    "safe_momentum_available": true,
+    "schema_version": "objective-runtime-state.v1",
+    "stop_allowed": false,
+    "stop_reason": "required_packets_pending",
+    "track_id": "artifact-loop-stabilization-20260320",
+    "unsupported_closure_risk": "none",
+    "updated_at": "2026-03-20T10:51:11+00:00"
+  },
+  "objective_status": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.status.json",
+    "blocked_packets": [],
+    "boundary_shrunk_remainder": [],
+    "closure_state": "",
+    "completed_packets": [],
+    "deferred_packets": [],
+    "objective_id": "objective-artifact-loop-stabilization-20260320",
+    "pending_packets": [
+      "packet-build-org-surface-smoke",
+      "packet-extend-lead-surface-review",
+      "packet-operator-rollout-docs",
+      "packet-validate-stabilization"
+    ],
+    "schema_version": "objective-status.v1",
+    "track_id": "artifact-loop-stabilization-20260320"
+  },
+  "objective_summary": {
+    "accepted_packet_count": 0,
+    "active_packets_by_lane": {
+      "explorer": [],
+      "reviewer": [],
+      "validator": [],
+      "worker": []
+    },
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.summary.json",
+    "authoritative_source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+    "authoritative_state_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+    "authoritative_state_kind": "objective.runtime-state.json",
+    "blocked_reasons": [],
+    "closure_state": "",
+    "controller_mode": "enforce",
+    "convergence_status": "dispatching",
+    "current_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+    "current_frontier": [
+      "packet-build-org-surface-smoke"
+    ],
+    "derived_view": true,
+    "execution_shape": "single_lane",
+    "fallback_packets": [],
+    "lane_queue_depths": {
+      "explorer": 0,
+      "reviewer": 0,
+      "validator": 0,
+      "worker": 1
+    },
+    "material_optional_work_reasons": [],
+    "material_optional_work_remaining": false,
+    "next_action": "packet-build-org-surface-smoke",
+    "next_recommended_packet": "packet-build-org-surface-smoke",
+    "objective_id": "objective-artifact-loop-stabilization-20260320",
+    "required_work_reasons": [
+      "required_packets_pending"
+    ],
+    "required_work_remaining": true,
+    "route_hint": "R3",
+    "safe_momentum_available": true,
+    "schema_version": "objective-summary.v1",
+    "stop_allowed": false,
+    "stop_reason": "required_packets_pending",
+    "strategy_mix": [
+      "command_capture"
+    ],
+    "swarm_status": "single_lane",
+    "track_id": "artifact-loop-stabilization-20260320",
+    "unsupported_closure_risk": "none",
+    "updated_at": "2026-03-20T10:51:11+00:00"
+  },
+  "operator_view": {
+    "active_packets_by_lane": {
+      "explorer": [],
+      "reviewer": [],
+      "validator": [],
+      "worker": []
+    },
+    "adaptation_summary": {
+      "event_count": 0,
+      "events": [],
+      "latest_event": {},
+      "source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.adaptation-log.jsonl"
+    },
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.operator-view.json",
+    "artifacts": {
+      "adaptation_log": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.adaptation-log.jsonl",
+      "benchmark": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.benchmark.json",
+      "canary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.canary.json",
+      "execution_coverage": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-coverage.json",
+      "execution_ledger": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.execution-ledger.json",
+      "operator_view": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.operator-view.json",
+      "packet_quality": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-quality.json",
+      "packet_results": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-results.jsonl",
+      "repo_capabilities": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.repo-capabilities.json",
+      "runtime_state": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+      "schedule": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.schedule.json",
+      "status": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.status.json",
+      "summary": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.summary.json",
+      "support_confidence": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.support-confidence.json",
+      "transaction_log": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transaction-log.jsonl",
+      "transaction_state": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transaction-state.json",
+      "validation_plan": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+    },
+    "authoritative_source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+    "awaiting_reviewer_barrier": [],
+    "awaiting_verifier": [],
+    "benchmark_summary": {},
+    "blockers": [
+      {
+        "cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+        "kind": "checkpoint",
+        "message": "Checkpoint is unhealthy: checkpoint_not_attempted.",
+        "packet_id": "",
+        "proof_artifact": "",
+        "source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.checkpoint.json",
+        "source_label": "artifact-loop-stabilization-20260320/objective.checkpoint.json"
+      }
+    ],
+    "canary_summary": {},
+    "checkpoint_health": {
+      "checkpoint_block_reason": "checkpoint_not_attempted",
+      "checkpoint_blocked": true,
+      "checkpoint_commit": "",
+      "rollback_validation_ref": "",
+      "source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.checkpoint.json"
+    },
+    "closure_state": "",
+    "controller_mode": "enforce",
+    "convergence_status": "dispatching",
+    "current_cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+    "current_frontier": [
+      "packet-build-org-surface-smoke"
+    ],
+    "dispatch_block_reasons": {},
+    "evaluation_summary": {
+      "benchmark_reason": "",
+      "canary_isolation_mode": "",
+      "canary_refusal_reason": "",
+      "canary_refused": false,
+      "canary_safety_mode": "",
+      "closure_strength": "pending",
+      "has_benchmark": false,
+      "has_canary": false,
+      "recommended_mode": "",
+      "serial_better": false,
+      "swarm_outperformed_serial": false
+    },
+    "execution_coverage": {
+      "deterministic_packet_count": 4,
+      "deterministic_ratio": 1.0,
+      "fallback_packet_count": 0,
+      "fallback_packet_ids": [],
+      "fallback_reasons": {},
+      "non_review_deterministic_ratio": 1.0,
+      "packet_count": 4,
+      "review_packet_count": 0,
+      "route_hint": "R3",
+      "schema_version": "objective-execution-coverage.v1",
+      "status": "pass",
+      "thresholds": {
+        "deterministic_ratio_min": 0.9,
+        "non_review_deterministic_ratio_min": 0.9
+      }
+    },
+    "execution_shape": "single_lane",
+    "explanations": {
+      "closure_confidence": {
+        "level": "not_ready",
+        "message": "Closure is not ready yet."
+      },
+      "fallback_analysis": {
+        "acceptable": true,
+        "message": "No fallback packets are in the objective."
+      },
+      "frontier_change_explanation": "Last cycle objective-artifact-loop-stabilization-20260320-cycle-001 moved the frontier because dependency_unlocked.",
+      "why_blocked": "Runtime is not blocked.",
+      "why_this_is_next": "Packet packet-build-org-surface-smoke is next because it is in the runnable frontier, uses command_capture, and no unresolved dependency or conflict excludes it."
+    },
+    "external_support_coverage": {
+      "checkpoint_ready": false,
+      "deterministic_coverage_status": "pass",
+      "fallback_support_packet_ids": [],
+      "required_lane_gap_count": 0,
+      "validation_gap_present": false
+    },
+    "fallback_packets": [],
+    "health_signals": {
+      "checkpoint_unhealthy": true,
+      "closure_claim_is_strong": false,
+      "closure_ready": false,
+      "closure_ready_but_weak": false,
+      "fallback_burden_high": false,
+      "fallback_count": 0,
+      "fallback_ratio": 0.0,
+      "fallback_warning_threshold": 0.2,
+      "human_attention_required": true,
+      "safe_momentum_available": true,
+      "stagnating": false,
+      "support_backed_closure": false,
+      "validation_gap_present": false
+    },
+    "lane_queue_depths": {
+      "explorer": 0,
+      "reviewer": 0,
+      "validator": 0,
+      "worker": 1
+    },
+    "lane_state": {
+      "explorer": [],
+      "reviewer": [],
+      "validator": [],
+      "worker": []
+    },
+    "last_verifier_result": {},
+    "lifecycle_status": "revise",
+    "material_optional_work_reasons": [],
+    "material_optional_work_remaining": false,
+    "next_action": "packet-build-org-surface-smoke",
+    "next_recommended_packet": "packet-build-org-surface-smoke",
+    "objective_id": "objective-artifact-loop-stabilization-20260320",
+    "packet_counts": {
+      "accepted": 0,
+      "blocked": 0,
+      "cancelled": 0,
+      "escalated": 0,
+      "queued": 4,
+      "total": 4
+    },
+    "packet_quality_summary": {
+      "budget": {
+        "fail_threshold": 0.35,
+        "fallback_count": 0,
+        "fallback_ratio": 0.0,
+        "packet_count": 4,
+        "route_hint": "R3",
+        "status": "pass",
+        "warning_threshold": 0.2
+      },
+      "hard_fail_packet_ids": [],
+      "packet_count": 4,
+      "source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-quality.json",
+      "warning_packet_ids": []
+    },
+    "repo_capabilities_summary": {
+      "confidence_by_lane": {
+        "build": "medium",
+        "lint": "none",
+        "schema_check": "none",
+        "security_sensitive_review": "none",
+        "smoke_e2e": "none",
+        "tests": "high",
+        "typecheck": "medium"
+      },
+      "detectors_run": [
+        "ci_config",
+        "node_package_json",
+        "python_project"
+      ],
+      "enabled_lanes": [
+        "build",
+        "security_sensitive_review",
+        "tests",
+        "typecheck"
+      ],
+      "low_confidence_lanes": [],
+      "missing_capabilities": {
+        "lint": "No deterministic repo capability discovered for lint.",
+        "schema_check": "No deterministic repo capability discovered for schema_check.",
+        "smoke_e2e": "No deterministic repo capability discovered for smoke_e2e."
+      },
+      "source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.repo-capabilities.json",
+      "source_refs": {
+        "build": [
+          "/Users/chadsimon/chad_bot_attempt/nemoclaw/.github/workflows/pr-limit.yaml",
+          "/Users/chadsimon/chad_bot_attempt/nemoclaw/.github/workflows/pr.yaml"
+        ],
+        "lint": [],
+        "schema_check": [],
+        "security_sensitive_review": [],
+        "smoke_e2e": [],
+        "tests": [
+          "/Users/chadsimon/chad_bot_attempt/nemoclaw/package.json"
+        ],
+        "typecheck": [
+          "/Users/chadsimon/chad_bot_attempt/nemoclaw/pyproject.toml"
+        ]
+      }
+    },
+    "required_work_reasons": [
+      "required_packets_pending"
+    ],
+    "required_work_remaining": true,
+    "route_hint": "R3",
+    "runnable_but_not_dispatched": [],
+    "safe_momentum_available": true,
+    "schema_version": "objective-operator-view.v1",
+    "stop_allowed": false,
+    "stop_reason": "required_packets_pending",
+    "strategy_mix": [
+      "command_capture"
+    ],
+    "support_backed_closure": false,
+    "support_confidence": {
+      "external_support_coverage": {
+        "checkpoint_ready": false,
+        "deterministic_coverage_status": "pass",
+        "fallback_support_packet_ids": [],
+        "required_lane_gap_count": 0,
+        "validation_gap_present": false
+      },
+      "final_gate_recommendation": "allow_closure",
+      "mode": "enforce",
+      "objective_id": "objective-artifact-loop-stabilization-20260320",
+      "objective_support_status": "supported",
+      "packet_support": [
+        {
+          "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-build-org-surface-smoke.verdict.json",
+          "packet_id": "packet-build-org-surface-smoke",
+          "runtime_state": "queued",
+          "strategy_name": "command_capture",
+          "support_status": "pending",
+          "unsupported_risk_reason": ""
+        },
+        {
+          "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-extend-lead-surface-review.verdict.json",
+          "packet_id": "packet-extend-lead-surface-review",
+          "runtime_state": "queued",
+          "strategy_name": "command_capture",
+          "support_status": "pending",
+          "unsupported_risk_reason": ""
+        },
+        {
+          "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-operator-rollout-docs.verdict.json",
+          "packet_id": "packet-operator-rollout-docs",
+          "runtime_state": "queued",
+          "strategy_name": "command_capture",
+          "support_status": "pending",
+          "unsupported_risk_reason": ""
+        },
+        {
+          "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-validate-stabilization.verdict.json",
+          "packet_id": "packet-validate-stabilization",
+          "runtime_state": "queued",
+          "strategy_name": "command_capture",
+          "support_status": "pending",
+          "unsupported_risk_reason": ""
+        }
+      ],
+      "schema_version": "objective-support-confidence.v1",
+      "support_backed_closure": false,
+      "support_gap_reasons": [],
+      "support_remediation_available": true,
+      "track_id": "artifact-loop-stabilization-20260320",
+      "unsupported_closure_risk": "none"
+    },
+    "support_gaps": [],
+    "support_remediation_available": true,
+    "swarm_status": "single_lane",
+    "timeline": [
+      {
+        "artifacts": {
+          "result": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/cycles/objective-artifact-loop-stabilization-20260320-cycle-001/cycle.result.json",
+          "review": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/cycles/objective-artifact-loop-stabilization-20260320-cycle-001/cycle.review.json",
+          "state": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/cycles/objective-artifact-loop-stabilization-20260320-cycle-001/cycle.state.json"
+        },
+        "blockers_cleared": [],
+        "blockers_introduced": [],
+        "checkpoint_outcome": {
+          "blocked": false,
+          "reason": ""
+        },
+        "closure_state": "",
+        "cycle_id": "objective-artifact-loop-stabilization-20260320-cycle-001",
+        "frontier_movement": true,
+        "frontier_movement_reason": "dependency_unlocked",
+        "packet_ids": [
+          "packet-build-org-surface-smoke"
+        ],
+        "verifier_outcome": {
+          "accepted": 0,
+          "blocked_boundary": 0,
+          "rejected_rework": 0
+        }
+      }
+    ],
+    "track_id": "artifact-loop-stabilization-20260320",
+    "transaction": {
+      "artifact_paths": {
+        "transaction_log": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transaction-log.jsonl",
+        "transaction_state": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.transaction-state.json"
+      },
+      "committed_artifact_count": 20,
+      "recovered": false,
+      "recovery_outcome": "",
+      "state": "committed",
+      "step_id": "bootstrap",
+      "transaction_id": "bootstrap-artifact-loop-stabilization-20260320-1774003871885876000",
+      "updated_at": "2026-03-20T10:51:11+00:00"
+    },
+    "trust_report": {
+      "checkpoint_confidence": "blocked",
+      "closure_strength": "pending",
+      "deterministic_coverage": 1.0,
+      "fallback_dependence": 0.0,
+      "low_confidence_lanes": [],
+      "manual_dependencies": [],
+      "non_review_deterministic_coverage": 1.0,
+      "support_confidence": "supported",
+      "support_gap_reasons": [],
+      "support_remediation_available": true,
+      "validation_coverage_strength": "complete",
+      "weakening_factors": [
+        "checkpoint_unhealthy"
+      ]
+    },
+    "unsupported_closure_risk": "none",
+    "updated_at": "2026-03-20T10:51:11+00:00",
+    "validation_coverage": [
+      {
+        "accepted_packet_ids": [],
+        "artifact_ref": {
+          "label": "artifact-loop-stabilization-20260320/objective.validation-plan.json",
+          "source": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+        },
+        "capability_confidence": "high",
+        "generated_packet_ids": [],
+        "lane": "tests",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "status": "optional"
+      },
+      {
+        "accepted_packet_ids": [],
+        "artifact_ref": {
+          "label": "artifact-loop-stabilization-20260320/objective.validation-plan.json",
+          "source": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+        },
+        "capability_confidence": "medium",
+        "generated_packet_ids": [],
+        "lane": "types_build",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "status": "optional"
+      },
+      {
+        "accepted_packet_ids": [],
+        "artifact_ref": {
+          "label": "artifact-loop-stabilization-20260320/objective.validation-plan.json",
+          "source": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+        },
+        "capability_confidence": "none",
+        "generated_packet_ids": [],
+        "lane": "lint",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "No deterministic repo capability discovered for lint.",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "status": "optional"
+      },
+      {
+        "accepted_packet_ids": [],
+        "artifact_ref": {
+          "label": "artifact-loop-stabilization-20260320/objective.validation-plan.json",
+          "source": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+        },
+        "capability_confidence": "none",
+        "generated_packet_ids": [],
+        "lane": "smoke_e2e",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "No deterministic repo capability discovered for smoke_e2e.",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "status": "optional"
+      },
+      {
+        "accepted_packet_ids": [],
+        "artifact_ref": {
+          "label": "artifact-loop-stabilization-20260320/objective.validation-plan.json",
+          "source": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+        },
+        "capability_confidence": "none",
+        "generated_packet_ids": [],
+        "lane": "migration_schema",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "No deterministic repo capability discovered for schema_check.",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "status": "optional"
+      },
+      {
+        "accepted_packet_ids": [],
+        "artifact_ref": {
+          "label": "artifact-loop-stabilization-20260320/objective.validation-plan.json",
+          "source": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json"
+        },
+        "capability_confidence": "none",
+        "generated_packet_ids": [],
+        "lane": "security_sensitive_review",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "status": "optional"
+      }
+    ]
+  },
+  "packet_quality": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-quality.json",
+    "budget": {
+      "fail_threshold": 0.35,
+      "fallback_count": 0,
+      "fallback_ratio": 0.0,
+      "packet_count": 4,
+      "route_hint": "R3",
+      "status": "pass",
+      "warning_threshold": 0.2
+    },
+    "hard_fail_packet_ids": [],
+    "route_hint": "R3",
+    "rows": [
+      {
+        "dependency_complexity": 0,
+        "evidence_completeness": true,
+        "fallback_class": "deterministic",
+        "hard_fail_checks": [],
+        "packet_id": "packet-build-org-surface-smoke",
+        "scope_size": 3,
+        "score": 100,
+        "warning_checks": []
+      },
+      {
+        "dependency_complexity": 1,
+        "evidence_completeness": true,
+        "fallback_class": "deterministic",
+        "hard_fail_checks": [],
+        "packet_id": "packet-extend-lead-surface-review",
+        "scope_size": 2,
+        "score": 100,
+        "warning_checks": []
+      },
+      {
+        "dependency_complexity": 1,
+        "evidence_completeness": true,
+        "fallback_class": "deterministic",
+        "hard_fail_checks": [],
+        "packet_id": "packet-operator-rollout-docs",
+        "scope_size": 3,
+        "score": 100,
+        "warning_checks": []
+      },
+      {
+        "dependency_complexity": 1,
+        "evidence_completeness": true,
+        "fallback_class": "deterministic",
+        "hard_fail_checks": [],
+        "packet_id": "packet-validate-stabilization",
+        "scope_size": 2,
+        "score": 100,
+        "warning_checks": []
+      }
+    ],
+    "schema_version": "objective-packet-quality.v1"
+  },
+  "packet_results_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.packet-results.jsonl",
+  "packet_verdicts": [],
+  "preferences_applied": [
+    {
+      "decision": "Use runtime-generated governed artifacts as the single source of objective state.",
+      "key": "pref:planning-gate",
+      "rationale": "The memory backend was unavailable, so the implementation followed the repo-local governed-runtime contract directly."
+    }
+  ],
+  "prompt_contract_used": [
+    {
+      "done_when": "objective closure or accepted blocked closure is represented by runtime-generated artifacts and finalize_gate returns ok=true",
+      "name": "proxy-runtime-closeout.v1",
+      "required_constraints": "single-writer runtime state, verifier-gated packet outcomes, and fail-closed terminal integrity",
+      "required_context": "objective intent, validated plan, runtime artifacts, cycle artifacts, and capture manifests",
+      "verification_section": "runtime tests, wrapper tests, validate_impl, finalize_gate, and fresh-track artifact validation"
+    }
+  ],
+  "repo_capabilities": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.repo-capabilities.json",
+    "capabilities": {
+      "build": true,
+      "lint": false,
+      "schema_check": false,
+      "security_sensitive_review": true,
+      "smoke_e2e": false,
+      "tests": true,
+      "typecheck": true
+    },
+    "confidence_by_lane": {
+      "build": "medium",
+      "lint": "none",
+      "schema_check": "none",
+      "security_sensitive_review": "none",
+      "smoke_e2e": "none",
+      "tests": "high",
+      "typecheck": "medium"
+    },
+    "detectors_run": [
+      "ci_config",
+      "node_package_json",
+      "python_project"
+    ],
+    "lane_commands": {
+      "build": [
+        "npm run build"
+      ],
+      "lint": [],
+      "schema_check": [],
+      "security_sensitive_review": [],
+      "smoke_e2e": [],
+      "tests": [
+        "npm run test"
+      ],
+      "typecheck": [
+        "pyright"
+      ]
+    },
+    "missing_capabilities": {
+      "lint": "No deterministic repo capability discovered for lint.",
+      "schema_check": "No deterministic repo capability discovered for schema_check.",
+      "smoke_e2e": "No deterministic repo capability discovered for smoke_e2e."
+    },
+    "schema_version": "objective-repo-capabilities.v1",
+    "source_refs": {
+      "build": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/.github/workflows/pr-limit.yaml",
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/.github/workflows/pr.yaml"
+      ],
+      "lint": [],
+      "schema_check": [],
+      "security_sensitive_review": [],
+      "smoke_e2e": [],
+      "tests": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/package.json"
+      ],
+      "typecheck": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/pyproject.toml"
+      ]
+    },
+    "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw"
+  },
+  "rollback_validation": {
+    "evidence": ".../artifact-loop-lead-surface-review/SKILL.md     |   9 +-\n artifact-loop/README.md                            |  90 ++-\n artifact-loop/contracts/_defs.schema.json          |   6 +-\n artifact-loop/co",
+    "executed": true,
+    "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003825-rollback-stabilization-scope-96/manifest.json",
+    "proof_hash": "f422814a4a0e64b584038f7d7b960d5051248490504520e320f44fa66d9ef95b",
+    "result": "pass"
+  },
+  "schedule_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.schedule.json",
+  "schema_version": "implementation.v1",
+  "skill_trigger_eval_results": [
+    {
+      "false_negative_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "skill": "planning-gate",
+      "threshold_passed": true
+    }
+  ],
+  "smoke_results": [
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+      "decision": "continue",
+      "observed_output": "> artifact-loop@0.1.0 build\n> tsc",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004101-smoke-build-25/manifest.json",
+      "proof_hash": "f08f9ce8efb764843a29bbadb8c847be15ec1daeee436887ec52c95107d48f05",
+      "stage": "25%",
+      "status": "pass"
+    },
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+      "decision": "continue",
+      "observed_output": "> artifact-loop@0.1.0 scenario:org-surface-smoke\n> bash ./scripts/scenarios/org_surface_smoke_v1.sh\n\n==> Building artifact-loop\n==> Starting shared service on http://127.0.0.1:52960\n==> Bootstrapping ",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004107-smoke-org-surface-50/manifest.json",
+      "proof_hash": "2d2482394ec78e5aa47af98c30e1ac3d1fb11e0c7e97ac946a82b24ca331273b",
+      "stage": "50%",
+      "status": "pass"
+    },
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+      "decision": "continue",
+      "observed_output": "> artifact-loop@0.1.0 review:lead-surfaces\n> bash ./scripts/scenarios/lead_surface_review_v1.sh\n\n==> Bootstrapping shared-coordination acceptance scenario\n==> Capturing lead-facing surfaces into /tmp/",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004125-smoke-lead-review-75/manifest.json",
+      "proof_hash": "723c5f4358578c59187607354cdfd7aff89e99292ab7737274933d52c6f01cc1",
+      "stage": "75%",
+      "status": "pass"
+    },
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces",
+      "decision": "approve",
+      "observed_output": "> artifact-loop@0.1.0 check\n> tsc --noEmit\n\n\n> artifact-loop@0.1.0 build\n> tsc\n\n\n> artifact-loop@0.1.0 test\n> vitest run\n\n\n\u001b[1m\u001b[46m RUN \u001b[49m\u001b[22m \u001b[36mv4.1.0 \u001b[39m\u001b[90m/Users/chadsimon/chad_bot_atte",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004154-smoke-stabilization-final-100/manifest.json",
+      "proof_hash": "523d70172fa093d9db46cc40e0d3275eca8e6a41f5509e8a4280747f76479e42",
+      "stage": "100%",
+      "status": "pass"
+    }
+  ],
+  "summary": "Runtime-compiled implementation for artifact-loop-stabilization-20260320",
+  "support_confidence": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.support-confidence.json",
+    "authoritative_source_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.runtime-state.json",
+    "external_support_coverage": {
+      "checkpoint_ready": false,
+      "deterministic_coverage_status": "pass",
+      "fallback_support_packet_ids": [],
+      "required_lane_gap_count": 0,
+      "validation_gap_present": false
+    },
+    "final_gate_recommendation": "allow_closure",
+    "mode": "enforce",
+    "objective_id": "objective-artifact-loop-stabilization-20260320",
+    "objective_support_status": "supported",
+    "packet_support": [
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-build-org-surface-smoke.verdict.json",
+        "packet_id": "packet-build-org-surface-smoke",
+        "runtime_state": "queued",
+        "strategy_name": "command_capture",
+        "support_status": "pending",
+        "unsupported_risk_reason": ""
+      },
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-extend-lead-surface-review.verdict.json",
+        "packet_id": "packet-extend-lead-surface-review",
+        "runtime_state": "queued",
+        "strategy_name": "command_capture",
+        "support_status": "pending",
+        "unsupported_risk_reason": ""
+      },
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-operator-rollout-docs.verdict.json",
+        "packet_id": "packet-operator-rollout-docs",
+        "runtime_state": "queued",
+        "strategy_name": "command_capture",
+        "support_status": "pending",
+        "unsupported_risk_reason": ""
+      },
+      {
+        "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/packets/packet-validate-stabilization.verdict.json",
+        "packet_id": "packet-validate-stabilization",
+        "runtime_state": "queued",
+        "strategy_name": "command_capture",
+        "support_status": "pending",
+        "unsupported_risk_reason": ""
+      }
+    ],
+    "schema_version": "objective-support-confidence.v1",
+    "support_backed_closure": false,
+    "support_gap_reasons": [],
+    "support_remediation_available": true,
+    "track_id": "artifact-loop-stabilization-20260320",
+    "unsupported_closure_risk": "none"
+  },
+  "tests_run": [
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+      "name": "test-artifact-loop-package",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774003904-test-artifact-loop-package-72/manifest.json",
+      "proof_hash": "b456f9986e97a7aa85b4b5b3099e083cb3bfa57fea098cb91ad76a8ceb12ed3c",
+      "result": "> artifact-loop@0.1.0 test\n> vitest run\n\n\n\u001b[1m\u001b[46m RUN \u001b[49m\u001b[22m \u001b[36mv4.1.0 \u001b[39m\u001b[90m/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop\u001b[39m\n\n \u001b[32m\u2713\u001b[39m __tests__/contract-hardening.test.t",
+      "status": "pass"
+    },
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+      "name": "worker-org-surface-smoke",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004252-worker-org-surface-smoke-tests/manifest.json",
+      "proof_hash": "702bb45cc58b015cd2a117d0f117ccf6c23dd8b6a008dc63e985b3292e4be8d2",
+      "result": "> artifact-loop@0.1.0 scenario:org-surface-smoke\n> bash ./scripts/scenarios/org_surface_smoke_v1.sh\n\n==> Building artifact-loop\n==> Starting shared service on http://127.0.0.1:53219\n==> Bootstrapping ",
+      "status": "pass"
+    },
+    {
+      "command": "bash -lc cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+      "name": "verifier-lead-surface-review",
+      "proof_artifact": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/captures/1774004274-verifier-lead-surface-review-tests/manifest.json",
+      "proof_hash": "c928c53970b5cf8e449ced220f6437d206846108e88a10b0aa51272dfe563a1b",
+      "result": "> artifact-loop@0.1.0 review:lead-surfaces\n> bash ./scripts/scenarios/lead_surface_review_v1.sh\n\n==> Bootstrapping shared-coordination acceptance scenario\n==> Capturing lead-facing surfaces into /tmp/",
+      "status": "pass"
+    }
+  ],
+  "validation_commands": [
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check",
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+    "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+  ],
+  "validation_plan": {
+    "artifact_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/objective.validation-plan.json",
+    "changed_files": [
+      ".agents/skills/artifact-loop-lead-surface-review/SKILL.md",
+      "artifact-loop",
+      "artifact-loop/README.md",
+      "artifact-loop/docs/org-stabilization-rollout.md",
+      "artifact-loop/docs/tailscale-rollout.md",
+      "artifact-loop/package.json",
+      "artifact-loop/scripts/scenarios/lead_surface_review_v1.sh",
+      "artifact-loop/scripts/scenarios/lib/shared-coordination-common.sh",
+      "artifact-loop/scripts/scenarios/org_surface_smoke_v1.sh",
+      "planning_artifacts/artifact-loop-stabilization-20260320"
+    ],
+    "coverage": {
+      "generated_lane_count": 0,
+      "manual_blocker_count": 0,
+      "required_lane_count": 0
+    },
+    "escalated_review_required": false,
+    "generated_packets": [],
+    "lanes": [
+      {
+        "capability_confidence": "high",
+        "capability_source": [
+          "/Users/chadsimon/chad_bot_attempt/nemoclaw/package.json"
+        ],
+        "commands": [
+          "npm run test"
+        ],
+        "generated_packet_ids": [],
+        "lane": "tests",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "risk_trigger": ""
+      },
+      {
+        "capability_confidence": "medium",
+        "capability_source": [
+          "/Users/chadsimon/chad_bot_attempt/nemoclaw/pyproject.toml"
+        ],
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+          "pyright"
+        ],
+        "generated_packet_ids": [],
+        "lane": "types_build",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "risk_trigger": ""
+      },
+      {
+        "capability_confidence": "none",
+        "capability_source": [],
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces"
+        ],
+        "generated_packet_ids": [],
+        "lane": "lint",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "No deterministic repo capability discovered for lint.",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "risk_trigger": ""
+      },
+      {
+        "capability_confidence": "none",
+        "capability_source": [],
+        "commands": [
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run build",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run scenario:org-surface-smoke",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run review:lead-surfaces",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm test",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run accept:shared-coordination",
+          "cd /Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop && npm run check && npm run build && npm test && npm run accept:shared-coordination && npm run scenario:org-surface-smoke && npm run review:lead-surfaces"
+        ],
+        "generated_packet_ids": [],
+        "lane": "smoke_e2e",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "No deterministic repo capability discovered for smoke_e2e.",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "risk_trigger": ""
+      },
+      {
+        "capability_confidence": "none",
+        "capability_source": [],
+        "commands": [],
+        "generated_packet_ids": [],
+        "lane": "migration_schema",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "No deterministic repo capability discovered for schema_check.",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "risk_trigger": ""
+      },
+      {
+        "capability_confidence": "none",
+        "capability_source": [],
+        "commands": [],
+        "generated_packet_ids": [],
+        "lane": "security_sensitive_review",
+        "manual_only_blocker": "",
+        "missing_capability_reason": "",
+        "paths": [],
+        "reasons": [],
+        "required": false,
+        "risk_trigger": ""
+      }
+    ],
+    "objective_id": "objective-artifact-loop-stabilization-20260320",
+    "required_packets": [
+      "packet-build-org-surface-smoke",
+      "packet-extend-lead-surface-review",
+      "packet-operator-rollout-docs",
+      "packet-validate-stabilization"
+    ],
+    "route_hint": "R3",
+    "schema_version": "objective-validation-plan.v1",
+    "track_id": "artifact-loop-stabilization-20260320",
+    "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw"
+  }
+}

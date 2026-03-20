@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team-project-list-item.schema.json",
+  "type": "object",
+  "required": [
+    "project_id",
+    "title",
+    "total_tasks",
+    "counts_by_status",
+    "blocked_count",
+    "needs_input_count",
+    "ready_for_review_count",
+    "last_activity_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "total_tasks": { "type": "integer", "minimum": 0 },
+    "counts_by_status": {
+      "type": "object",
+      "required": ["not_started", "in_progress", "needs_input", "blocked", "ready_for_review", "done"],
+      "additionalProperties": false,
+      "properties": {
+        "not_started": { "type": "integer", "minimum": 0 },
+        "in_progress": { "type": "integer", "minimum": 0 },
+        "needs_input": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "ready_for_review": { "type": "integer", "minimum": 0 },
+        "done": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "blocked_count": { "type": "integer", "minimum": 0 },
+    "needs_input_count": { "type": "integer", "minimum": 0 },
+    "ready_for_review_count": { "type": "integer", "minimum": 0 },
+    "last_activity_at": {
+      "anyOf": [
+        { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+
+> artifact-loop@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90m/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop[39m
+
+ [32m✓[39m __tests__/contract-hardening.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 710[2mms[22m[39m
+ [32m✓[39m __tests__/enrichment.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 964[2mms[22m[39m
+ [32m✓[39m src/__tests__/contracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 670[2mms[22m[39m
+ [32m✓[39m src/__tests__/service.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1338[2mms[22m[39m
+     [33m[2m✓[22m[39m serves health checks [33m 409[2mms[22m[39m
+     [33m[2m✓[22m[39m creates tasks, assignments, ingests artifacts, and exposes state/history/stats [33m 534[2mms[22m[39m
+     [33m[2m✓[22m[39m creates projects, links tasks, and exposes project summaries and worker grouping [33m 334[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.organization.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1652[2mms[22m[39m
+     [33m[2m✓[22m[39m supports draft approval, assignment inbox, task messages, and scheduled brief runs [33m 897[2mms[22m[39m
+     [33m[2m✓[22m[39m builds team summaries and scheduled team briefs from project truth [33m 599[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.projects.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 312[2mms[22m[39m
+ [32m✓[39m src/__tests__/service.organization.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2103[2mms[22m[39m
+     [33m[2m✓[22m[39m bootstraps org state, exposes team surfaces, and rejects duplicate bootstrap [33m 665[2mms[22m[39m
+     [33m[2m✓[22m[39m supports the end-to-end organization loop over HTTP plus the local brief runner [33m 1193[2mms[22m[39m
+ok
+ [32m✓[39m src/__tests__/tailscale-rollout.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 546[2mms[22m[39m
+     [33m[2m✓[22m[39m requires an external service url and supports validate-only argument checks [33m 533[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/real-work-capture.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 2011[2mms[22m[39m
+     [33m[2m✓[22m[39m tracks session-default run, git diff, and stats without git affecting status [33m 2010[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/task-read.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 2267[2mms[22m[39m
+     [33m[2m✓[22m[39m shows command signal status from command_result evidence [33m 1414[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-commands.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 604[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/session.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 780[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-git-diff.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2506[2mms[22m[39m
+     [33m[2m✓[22m[39m captures working_tree summary and does not change status [33m 723[2mms[22m[39m
+     [33m[2m✓[22m[39m captures staged-only summary [33m 1778[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/emit-test-run.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2655[2mms[22m[39m
+     [33m[2m✓[22m[39m captures a passing command [33m 647[2mms[22m[39m
+     [33m[2m✓[22m[39m captures a failing command [33m 1141[2mms[22m[39m
+     [33m[2m✓[22m[39m exits with the wrapped command exit code [33m 864[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/organization-loop.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2612[2mms[22m[39m
+     [33m[2m✓[22m[39m supports the lead and worker organization loop commands locally [33m 916[2mms[22m[39m
+     [33m[2m✓[22m[39m supports invite claim onboarding plus team summary and team brief commands locally [33m 1614[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/stats.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/failure-escape.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 128[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.assignments.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m __tests__/invariants.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/remote-mode.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 3458[2mms[22m[39m
+     [33m[2m✓[22m[39m ingests test evidence through the shared service and persists remote provenance [33m 910[2mms[22m[39m
+     [33m[2m✓[22m[39m renders remote task status and history while keeping session resolution local [33m 626[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves run --next against remote task state and ingests remotely [33m 1150[2mms[22m[39m
+     [33m[2m✓[22m[39m feeds project summaries through the existing remote worker flow after tasks are linked [33m 369[2mms[22m[39m
+     [33m[2m✓[22m[39m fails closed when remote ingest fails after the wrapped command succeeds [33m 336[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/e2e/session-workflow.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 177[2mms[22m[39m
+ [32m✓[39m src/__tests__/engine.adoption.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 78[2mms[22m[39m
+ [2m[90m↓[39m[22m src/__tests__/harness/org-loop.smoke.test.ts [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+ [32m✓[39m src/__tests__/cli/e2e/golden-path.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 78[2mms[22m[39m
+ [32m✓[39m __tests__/schema-validation.test.ts [2m([22m[2m86 tests[22m[2m)[22m[33m 5662[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts run with optional override id [33m 341[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects invalid prior_state [33m 569[2mms[22m[39m
+ [32m✓[39m src/__tests__/harness/org-loop.harness.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 4020[2mms[22m[39m
+     [33m[2m✓[22m[39m covers the happy path through the shared hub [33m 3188[2mms[22m[39m
+     [33m[2m✓[22m[39m scheduled brief movement reflects remote evidence and not inbox-only activity [33m 650[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli/run.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 3960[2mms[22m[39m
+     [33m[2m✓[22m[39m emits test_result and preserves session-default source tracking [33m 518[2mms[22m[39m
+     [33m[2m✓[22m[39m emits command_result without changing status when no matching command signal exists [33m 1090[2mms[22m[39m
+     [33m[2m✓[22m[39m uses existing command signal rules and nothing more [33m 996[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves the next runnable required test signal [33m 375[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves the next runnable required command signal [33m 308[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m26 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (27)[39m
+[2m      Tests [22m [1m[32m211 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (212)[39m
+[2m   Start at [22m 06:51:46
+[2m   Duration [22m 8.56s[2m (transform 18.67s, setup 0ms, import 35.55s, tests 39.59s, environment 3ms)[22m
+

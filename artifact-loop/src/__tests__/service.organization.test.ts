@@ -297,4 +297,78 @@ describe("artifact-loop organization HTTP service", () => {
     expect(latestBrief.project_id).toBe("proj-core");
     expect(latestBrief.brief.project.id).toBe("proj-core");
   });
+
+  it("supports invite claim plus team summary and brief surfaces over HTTP", async () => {
+    await request("/org/bootstrap", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        organization: {
+          id: "org-core",
+          name: "Core Org",
+          timezone: "America/New_York",
+        },
+        initial_team: {
+          id: "team-core",
+          name: "Core Team",
+          description: "Organization loop team",
+        },
+        initial_member: {
+          id: "lead-1",
+          display_name: "Lead",
+          timezone: "America/New_York",
+        },
+        initial_agent: {
+          id: "lead-agent-1",
+          label: "Lead Agent",
+          connector_type: "lead-cli",
+        },
+      }),
+    });
+
+    const invite = await requestJson<{ invite: { id: string; status: string }; claim_token: string }>(
+      "/teams/team-core/invites",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          member_id: "worker-claim",
+          role: "worker",
+          display_name: "Claim Worker",
+          timezone: "America/New_York",
+          invited_by_worker_id: "lead-1",
+        }),
+      },
+    );
+    expect(invite.invite.status).toBe("pending");
+    expect(invite.claim_token).toContain("invite-");
+
+    const claimed = await requestJson<{ membership: { status: string }; agent: { id: string } }>(
+      "/invites/claim",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          claim_token: invite.claim_token,
+          agent_id: "worker-claim-agent",
+          agent_label: "Claim Agent",
+          agent_connector_type: "remote",
+        }),
+      },
+    );
+    expect(claimed.membership.status).toBe("active");
+    expect(claimed.agent.id).toBe("worker-claim-agent");
+
+    const summary = await requestJson<{ team: { id: string }; active_members_by_role: { worker: number } }>(
+      "/teams/team-core/summary?requested_by_worker_id=lead-1",
+    );
+    expect(summary.team.id).toBe("team-core");
+    expect(summary.active_members_by_role.worker).toBe(1);
+
+    const brief = await requestJson<{ team: { id: string }; rendered_text: string }>(
+      "/teams/team-core/brief?requested_by_worker_id=lead-1",
+    );
+    expect(brief.team.id).toBe("team-core");
+    expect(brief.rendered_text).toContain("Team Brief: Core Team");
+  });
 });

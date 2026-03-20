@@ -1,0 +1,19 @@
+{
+  "blocked_fields": [],
+  "content": "Frontloaded plan verifier approved the execution-ready plan.",
+  "gate": "plan-verifier",
+  "meta": {
+    "artifacts": {
+      "sufficiency": "/Users/chadsimon/chad_bot_attempt/nemoclaw/planning_artifacts/artifact-loop-stabilization-20260320/plan.sufficiency.json"
+    },
+    "plan_status": "execution_ready",
+    "runtime_compatible": true,
+    "track_id": "artifact-loop-stabilization-20260320",
+    "track_token": "artifact-loop-stabilization-20260320"
+  },
+  "missing_fields": [],
+  "next_step": "Run validate_plan.py.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

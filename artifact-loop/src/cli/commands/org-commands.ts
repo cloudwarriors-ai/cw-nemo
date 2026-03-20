@@ -2,8 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Command } from "commander";
+import { resolveEngine } from "../helpers/engine-factory.js";
 import { resolveArtifactLoopClient } from "../helpers/client.js";
-import { formatJson, formatOrganization } from "../helpers/format.js";
+import {
+  formatAdoptionPlan,
+  formatAdoptionStatus,
+  formatJson,
+  formatOrganization,
+} from "../helpers/format.js";
 
 export function registerOrgCommands(program: Command): void {
   const orgCmd = program.command("org").description("Organization bootstrap and inspection commands");
@@ -86,6 +92,74 @@ export function registerOrgCommands(program: Command): void {
           throw new Error("Organization not bootstrapped");
         }
         console.log(opts.json ? formatJson(organization) : formatOrganization(organization));
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  orgCmd
+    .command("adopt-existing")
+    .requiredOption("--org-id <id>", "Organization id")
+    .requiredOption("--org-name <name>", "Organization name")
+    .requiredOption("--org-timezone <tz>", "Organization timezone")
+    .requiredOption("--team-id <id>", "Default team id")
+    .requiredOption("--team-name <name>", "Default team name")
+    .requiredOption("--team-description <text>", "Default team description")
+    .option("--apply", "Apply the adoption plan")
+    .option("--json", "Output as JSON")
+    .option("--data-dir <dir>", "Data directory")
+    .action((opts: {
+      orgId: string;
+      orgName: string;
+      orgTimezone: string;
+      teamId: string;
+      teamName: string;
+      teamDescription: string;
+      apply?: boolean;
+      json?: boolean;
+      dataDir?: string;
+    }) => {
+      try {
+        const engine = resolveEngine(opts);
+        const input = {
+          organization: {
+            id: opts.orgId,
+            name: opts.orgName,
+            timezone: opts.orgTimezone,
+          },
+          default_team: {
+            id: opts.teamId,
+            name: opts.teamName,
+            description: opts.teamDescription,
+          },
+        };
+        const result = opts.apply
+          ? engine.applyAdoptExisting(input)
+          : engine.planAdoptExisting(input);
+        if (opts.json) {
+          console.log(formatJson(result));
+        } else if ("applied" in result) {
+          console.log(`Applied adoption report ${result.report_id}`);
+          console.log(formatAdoptionStatus({ has_report: true, report: result }));
+        } else {
+          console.log(formatAdoptionPlan(result));
+        }
+      } catch (err) {
+        console.error((err as Error).message);
+        process.exitCode = 1;
+      }
+    });
+
+  orgCmd
+    .command("adoption-status")
+    .option("--json", "Output as JSON")
+    .option("--data-dir <dir>", "Data directory")
+    .action((opts: { json?: boolean; dataDir?: string }) => {
+      try {
+        const engine = resolveEngine(opts);
+        const status = engine.getAdoptionStatus();
+        console.log(opts.json ? formatJson(status) : formatAdoptionStatus(status));
       } catch (err) {
         console.error((err as Error).message);
         process.exitCode = 1;

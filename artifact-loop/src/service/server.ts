@@ -8,10 +8,14 @@ import type {
   AssignmentCreate,
   CanonicalStatus,
   IngestRequest,
+  InviteClaimRequest,
+  InviteCreate,
+  InviteRevokeRequest,
   OrganizationBootstrapRequest,
   ProjectBriefScheduleUpsert,
   ProjectCreate,
   ProjectTaskLinkCreate,
+  TeamBriefScheduleUpsert,
   TeamCreate,
   TeamMembershipCreate,
   TaskDraftSetApproveRequest,
@@ -119,7 +123,19 @@ function mapMutationError(err: unknown): { statusCode: number; message: string }
   if (message.startsWith("Team already exists:")) {
     return { statusCode: 409, message };
   }
+  if (message.startsWith("Invite already claimed:")) {
+    return { statusCode: 409, message };
+  }
+  if (message.startsWith("Invite is not claimable:")) {
+    return { statusCode: 409, message };
+  }
+  if (message === "Invalid invite token") {
+    return { statusCode: 403, message };
+  }
   if (message.startsWith("Member already belongs to different team:")) {
+    return { statusCode: 409, message };
+  }
+  if (message.startsWith("Member already active in team:")) {
     return { statusCode: 409, message };
   }
   if (message === "Organization not bootstrapped") {
@@ -160,6 +176,12 @@ function mapMutationError(err: unknown): { statusCode: number; message: string }
   }
   if (message.startsWith("Task draft set not found:")) {
     return { statusCode: 404, message };
+  }
+  if (message.startsWith("Invite not found:")) {
+    return { statusCode: 404, message };
+  }
+  if (message.startsWith("Pending membership not found for invite:")) {
+    return { statusCode: 409, message };
   }
   if (message.startsWith("Inbox item not found:")) {
     return { statusCode: 404, message };
@@ -216,6 +238,13 @@ export function createArtifactLoopServer(options: ArtifactLoopServerOptions): Se
           return;
         }
         sendJson(res, 200, organization);
+        return;
+      }
+
+      if (req.method === "POST" && path.length === 2 && path[0] === "invites" && path[1] === "claim") {
+        const body = await readJsonBody(req);
+        validator.assertValid(CONTRACT_IDS.inviteClaim, body);
+        sendJson(res, 200, engine.claimInvite(body as InviteClaimRequest));
         return;
       }
 
@@ -333,6 +362,116 @@ export function createArtifactLoopServer(options: ArtifactLoopServerOptions): Se
 
         if (req.method === "GET" && path.length === 3 && path[2] === "members") {
           sendJson(res, 200, engine.getTeamMembers(teamId));
+          return;
+        }
+
+        if (req.method === "POST" && path.length === 3 && path[2] === "invites") {
+          const body = await readJsonBody(req);
+          validator.assertValid(CONTRACT_IDS.inviteCreate, body);
+          sendJson(res, 201, engine.createTeamInvite(teamId, body as InviteCreate));
+          return;
+        }
+
+        if (req.method === "GET" && path.length === 3 && path[2] === "invites") {
+          sendJson(res, 200, engine.getTeamInvites(teamId));
+          return;
+        }
+
+        if (req.method === "GET" && path.length === 3 && path[2] === "projects") {
+          const requestedBy = url.searchParams.get("requested_by_worker_id");
+          if (!requestedBy) {
+            sendError(res, 400, "requested_by_worker_id is required");
+            return;
+          }
+          sendJson(res, 200, engine.getTeamProjects(teamId, requestedBy));
+          return;
+        }
+
+        if (req.method === "GET" && path.length === 3 && path[2] === "summary") {
+          const requestedBy = url.searchParams.get("requested_by_worker_id");
+          if (!requestedBy) {
+            sendError(res, 400, "requested_by_worker_id is required");
+            return;
+          }
+          sendJson(res, 200, engine.getTeamSummary(teamId, requestedBy));
+          return;
+        }
+
+        if (req.method === "GET" && path.length === 3 && path[2] === "brief") {
+          const requestedBy = url.searchParams.get("requested_by_worker_id");
+          if (!requestedBy) {
+            sendError(res, 400, "requested_by_worker_id is required");
+            return;
+          }
+          sendJson(res, 200, engine.getTeamBrief(teamId, requestedBy));
+          return;
+        }
+
+        if (path.length >= 3 && path[2] === "brief-schedule") {
+          if (req.method === "PUT" && path.length === 3) {
+            const body = await readJsonBody(req);
+            validator.assertValid(CONTRACT_IDS.teamBriefScheduleUpsert, body);
+            sendJson(res, 200, engine.upsertTeamBriefSchedule(teamId, body as TeamBriefScheduleUpsert));
+            return;
+          }
+
+          if (req.method === "GET" && path.length === 3) {
+            const requestedBy = url.searchParams.get("requested_by_worker_id");
+            if (!requestedBy) {
+              sendError(res, 400, "requested_by_worker_id is required");
+              return;
+            }
+            const schedule = engine.getTeamBriefSchedule(teamId, requestedBy);
+            if (!schedule) {
+              sendError(res, 404, `Team brief schedule not found: ${teamId}`);
+              return;
+            }
+            sendJson(res, 200, schedule);
+            return;
+          }
+        }
+
+        if (path.length >= 3 && path[2] === "brief-runs") {
+          const requestedBy = url.searchParams.get("requested_by_worker_id");
+          if (!requestedBy) {
+            sendError(res, 400, "requested_by_worker_id is required");
+            return;
+          }
+
+          if (req.method === "GET" && path.length === 3) {
+            sendJson(res, 200, engine.getTeamBriefRuns(teamId, requestedBy));
+            return;
+          }
+
+          if (req.method === "GET" && path.length === 4 && path[3] === "latest") {
+            const briefRun = engine.getLatestTeamBriefRun(teamId, requestedBy);
+            if (!briefRun) {
+              sendError(res, 404, `Team brief run not found: latest`);
+              return;
+            }
+            sendJson(res, 200, briefRun);
+            return;
+          }
+        }
+      }
+
+      if (path.length >= 2 && path[0] === "invites") {
+        const inviteId = decodeURIComponent(path[1]);
+
+        if (req.method === "GET" && path.length === 2) {
+          const invite = engine.getInvite(inviteId);
+          if (!invite) {
+            sendError(res, 404, `Invite not found: ${inviteId}`);
+            return;
+          }
+          sendJson(res, 200, invite);
+          return;
+        }
+
+        if (req.method === "POST" && path.length === 3 && path[2] === "revoke") {
+          const body = await readJsonBody(req);
+          validator.assertValid(CONTRACT_IDS.inviteRevoke, body);
+          sendJson(res, 200, engine.revokeInvite(inviteId, body as InviteRevokeRequest));
           return;
         }
       }

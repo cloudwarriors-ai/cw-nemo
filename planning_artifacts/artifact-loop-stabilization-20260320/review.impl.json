@@ -1,0 +1,22 @@
+{
+  "blocked_fields": [],
+  "content": "Implementation evidence passed deterministic checks.",
+  "gate": "implementation",
+  "meta": {
+    "impl_quality": {
+      "best_score": 58,
+      "loop": 1,
+      "score": 58,
+      "stagnant_loops": 0,
+      "stall_limit": 2
+    },
+    "impl_smoke_100_pass": true,
+    "track_id": "artifact-loop-stabilization-20260320",
+    "track_token": "artifact-loop-stabilization-20260320"
+  },
+  "missing_fields": [],
+  "next_step": "Run finalize_gate.py for final fail-closed approval.",
+  "risks": [],
+  "status": "approve",
+  "type": "planning_gate_review"
+}

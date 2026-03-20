@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team-membership-create.schema.json",
+  "type": "object",
+  "required": ["member_id", "role", "added_by_worker_id"],
+  "additionalProperties": false,
+  "properties": {
+    "member_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "role": { "$ref": "_defs.schema.json#/definitions/team_membership_role" },
+    "status": { "$ref": "_defs.schema.json#/definitions/team_membership_status" },
+    "display_name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "worker_role": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "added_by_worker_id": { "$ref": "_defs.schema.json#/definitions/id" }
+  }
+}

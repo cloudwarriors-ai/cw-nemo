@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "assignment.schema.json",
+  "type": "object",
+  "description": "Task assignment record.",
+  "required": ["id", "task_id", "assignee_human_id", "assigned_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "assignee_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "assigned_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "assigned_by": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+  }
+}

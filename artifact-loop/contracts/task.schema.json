@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task.schema.json",
+  "type": "object",
+  "description": "Persisted task domain model.",
+  "required": [
+    "id",
+    "title",
+    "description",
+    "assignee_human_id",
+    "status",
+    "acceptance_criteria",
+    "acceptance_signals",
+    "depends_on",
+    "last_activity_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "description": { "type": "string" },
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "assignee_agent_id": {
+      "$ref": "_defs.schema.json#/definitions/id",
+      "description": "Optional — tasks may exist in partial-assignment state where a human owns the task but no agent is yet assigned."
+    },
+    "status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+    "acceptance_criteria": { "type": "string" },
+    "acceptance_signals": {
+      "type": "array",
+      "items": { "$ref": "acceptance-signal.schema.json" }
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/id" }
+    },
+    "last_activity_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "override": { "$ref": "override.schema.json" }
+  }
+}

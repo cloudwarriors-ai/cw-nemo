@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "normalization-context.schema.json",
+  "type": "object",
+  "description": "Context used to bind a raw artifact to a task during ingestion.",
+  "required": ["primary_task_id", "session_id", "worker_id", "context_source"],
+  "additionalProperties": false,
+  "properties": {
+    "primary_task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "session_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "worker_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "context_source": { "$ref": "_defs.schema.json#/definitions/context_source" }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "budget": {
+    "fail_threshold": 0.35,
+    "fallback_count": 0,
+    "fallback_ratio": 0.0,
+    "packet_count": 2,
+    "route_hint": "R3",
+    "status": "pass",
+    "warning_threshold": 0.2
+  },
+  "hard_fail_packet_ids": [],
+  "route_hint": "R3",
+  "rows": [
+    {
+      "dependency_complexity": 0,
+      "evidence_completeness": true,
+      "fallback_class": "deterministic",
+      "hard_fail_checks": [],
+      "packet_id": "packet-emit-and-read-formatting",
+      "scope_size": 3,
+      "score": 100,
+      "warning_checks": []
+    },
+    {
+      "dependency_complexity": 1,
+      "evidence_completeness": true,
+      "fallback_class": "deterministic",
+      "hard_fail_checks": [],
+      "packet_id": "packet-verify-cli-contracts",
+      "scope_size": 4,
+      "score": 100,
+      "warning_checks": []
+    }
+  ],
+  "schema_version": "objective-packet-quality.v1"
+}

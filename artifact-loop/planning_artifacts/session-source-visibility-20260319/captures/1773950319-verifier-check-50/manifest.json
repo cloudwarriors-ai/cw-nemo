@@ -1,0 +1,40 @@
+{
+  "captured_at": "2026-03-19T19:58:40+00:00",
+  "command_argv": [
+    "npm",
+    "run",
+    "check"
+  ],
+  "cwd": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop",
+  "duration_ms": 714,
+  "ended_at": "2026-03-19T19:58:40+00:00",
+  "env_whitelist": {
+    "HOME": "/Users/chadsimon",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Users/chadsimon/.codex/tmp/arg0/codex-arg0vHab8f:/Users/chadsimon/.opencode/bin:/Users/chadsimon/.rbenv/shims:/Users/chadsimon/.rbenv/bin:/Users/chadsimon/.local/bin:/Applications/Codex.app/Contents/Resources",
+    "PWD": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop",
+    "SHELL": "/bin/zsh",
+    "TMPDIR": "/var/folders/8g/yc19qrvx1p5f65_tdtpj2fqw0000gn/T/",
+    "USER": "chadsimon"
+  },
+  "exit_code": 0,
+  "name": "verifier-check",
+  "output_truncated": false,
+  "producer": "run_cmd_capture.v1",
+  "safety": {
+    "decision": "ok",
+    "override_reason": "",
+    "override_used": false
+  },
+  "schema_version": "run-cmd-capture.v1",
+  "stage": "50%",
+  "started_at": "2026-03-19T19:58:39+00:00",
+  "stderr_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-verifier-check-50/stderr.redacted.txt",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_path": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-verifier-check-50/stdout.redacted.txt",
+  "stdout_sha256": "fa9ffb62c44fe780089e365d95e4fc4b1aac2e9e5eae220aa71a234ccfceb15b",
+  "timeout_exceeded": false,
+  "timeout_sec": 300,
+  "track_id": "session-source-visibility-20260319"
+}

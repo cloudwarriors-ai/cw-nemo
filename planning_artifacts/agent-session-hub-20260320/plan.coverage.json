@@ -1,0 +1,91 @@
+{
+  "integration_map": [
+    {
+      "evidence": [
+        "planning_artifacts/agent-session-hub-20260320/captures"
+      ],
+      "integration_id": "INT-001",
+      "packet_ids": [
+        "packet-build-session-service"
+      ],
+      "touchpoint": "Shared HTTP session service and file-backed persistence.",
+      "verification": [
+        "session-hub/test/service.test.js"
+      ]
+    },
+    {
+      "evidence": [
+        "planning_artifacts/agent-session-hub-20260320/captures"
+      ],
+      "integration_id": "INT-002",
+      "packet_ids": [
+        "packet-build-session-cli",
+        "packet-validate-session-flow"
+      ],
+      "touchpoint": "CLI local client-state resolution against the remote service URL.",
+      "verification": [
+        "session-hub/test/cli.test.js"
+      ]
+    }
+  ],
+  "objective_coverage_map": [
+    {
+      "evidence": [
+        "session-hub/test/service.test.js"
+      ],
+      "packet_ids": [
+        "packet-build-session-service"
+      ],
+      "requirement_id": "REQ-001",
+      "verification": [
+        "Service integration tests"
+      ]
+    },
+    {
+      "evidence": [
+        "session-hub/test/cli.test.js"
+      ],
+      "packet_ids": [
+        "packet-build-session-cli",
+        "packet-validate-session-flow"
+      ],
+      "requirement_id": "REQ-002",
+      "verification": [
+        "CLI integration tests"
+      ]
+    }
+  ],
+  "objective_ref": "agent-session-hub-20260320",
+  "packet_ids": [
+    "packet-build-session-cli",
+    "packet-build-session-service",
+    "packet-validate-session-flow"
+  ],
+  "requirement_ids": [
+    "REQ-001",
+    "REQ-002"
+  ],
+  "requirement_risk_rank": [
+    {
+      "associated_packet_ids": [
+        "packet-build-session-service"
+      ],
+      "evidence_type": "service_test",
+      "failure_impact": "Shared session service cannot persist connect/send state.",
+      "priority": "critical",
+      "requirement_id": "REQ-001"
+    },
+    {
+      "associated_packet_ids": [
+        "packet-build-session-cli",
+        "packet-validate-session-flow"
+      ],
+      "evidence_type": "cli_integration_test",
+      "failure_impact": "Agents cannot rely on connect-once local state for session messaging.",
+      "priority": "critical",
+      "requirement_id": "REQ-002"
+    }
+  ],
+  "schema_version": "plan-coverage.v1",
+  "track_id": "agent-session-hub-20260320"
+}

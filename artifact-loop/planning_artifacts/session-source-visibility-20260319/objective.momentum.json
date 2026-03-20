@@ -1,0 +1,27 @@
+{
+  "current_frontier": [],
+  "entries": [
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-emit-and-read-formatting",
+      "resolves_dependency_classification": true,
+      "unlocks_packets": [
+        "packet-verify-cli-contracts"
+      ]
+    },
+    {
+      "execution_mode": "sequence_required",
+      "isolates_blocker": false,
+      "movement_type": "closure_advancing",
+      "packet_id": "packet-verify-cli-contracts",
+      "resolves_dependency_classification": false,
+      "unlocks_packets": []
+    }
+  ],
+  "objective_id": "objective-session-source-visibility-20260319",
+  "safe_momentum_ready": false,
+  "schema_version": "objective-momentum.v1",
+  "track_id": "session-source-visibility-20260319"
+}

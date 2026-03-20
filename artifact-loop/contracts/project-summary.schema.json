@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-summary.schema.json",
+  "type": "object",
+  "description": "Project-level coordination summary read model.",
+  "required": ["project", "total_tasks", "counts_by_status", "buckets", "last_activity_at"],
+  "additionalProperties": false,
+  "properties": {
+    "project": { "$ref": "project.schema.json" },
+    "total_tasks": { "type": "integer", "minimum": 0 },
+    "counts_by_status": {
+      "type": "object",
+      "required": ["not_started", "in_progress", "needs_input", "blocked", "ready_for_review", "done"],
+      "additionalProperties": false,
+      "properties": {
+        "not_started": { "type": "integer", "minimum": 0 },
+        "in_progress": { "type": "integer", "minimum": 0 },
+        "needs_input": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "ready_for_review": { "type": "integer", "minimum": 0 },
+        "done": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "buckets": {
+      "type": "object",
+      "required": ["blocked", "needs_input", "ready_for_review"],
+      "additionalProperties": false,
+      "properties": {
+        "blocked": {
+          "type": "array",
+          "items": { "$ref": "project-task-list-item.schema.json" }
+        },
+        "needs_input": {
+          "type": "array",
+          "items": { "$ref": "project-task-list-item.schema.json" }
+        },
+        "ready_for_review": {
+          "type": "array",
+          "items": { "$ref": "project-task-list-item.schema.json" }
+        }
+      }
+    },
+    "last_activity_at": {
+      "anyOf": [
+        { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

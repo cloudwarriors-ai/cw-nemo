@@ -1,0 +1,11 @@
+{"kind":"task_use","timestamp":"2026-03-19T21:41:36.145Z","action":"set","task_id":"validate-signal-visibility"}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:41:36.213Z","command_name":"task status","task_id":"validate-signal-visibility","context_source":"session_default","override_session":false}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:41:44.103Z","command_name":"run","task_id":"validate-signal-visibility","context_source":"session_default","override_session":false}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:41:44.738Z","command_name":"task status","task_id":"validate-signal-visibility","context_source":"session_default","override_session":false}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:41:51.676Z","command_name":"run","task_id":"validate-signal-visibility","context_source":"session_default","override_session":false}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:41:52.693Z","command_name":"emit git-diff","task_id":"validate-signal-visibility","context_source":"session_default","override_session":false}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:41:52.788Z","command_name":"task status","task_id":"validate-signal-visibility","context_source":"session_default","override_session":false}
+{"kind":"task_use","timestamp":"2026-03-19T21:42:05.264Z","action":"change","task_id":"review-signal-trial","previous_task_id":"validate-signal-visibility"}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:42:05.334Z","command_name":"task status","task_id":"review-signal-trial","context_source":"session_default","override_session":false}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:42:05.408Z","command_name":"task status","task_id":"validate-signal-visibility","context_source":"explicit_lock","override_session":true}
+{"kind":"command_resolution","timestamp":"2026-03-19T21:42:05.478Z","command_name":"task history","task_id":"validate-signal-visibility","context_source":"explicit_lock","override_session":true}

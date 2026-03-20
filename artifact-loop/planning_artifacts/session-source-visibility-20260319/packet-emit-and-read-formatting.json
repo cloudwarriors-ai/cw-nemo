@@ -1,0 +1,38 @@
+{
+  "changed_files": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/helpers/format.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-test-run.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-note.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/emit-merge.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-status.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/cli/commands/task-history.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-commands.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/task-read.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/emit-test-run.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/golden-path.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/failure-escape.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/src/__tests__/cli/e2e/session-workflow.test.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/helpers/format.d.ts",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-test-run.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-note.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/emit-merge.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-status.js",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/dist/src/cli/commands/task-history.js"
+  ],
+  "cycle_id": "objective-session-source-visibility-20260319-cycle-final",
+  "evidence_refs": [
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-worker-build-50/manifest.json",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-verifier-check-50/manifest.json",
+    "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/planning_artifacts/session-source-visibility-20260319/captures/1773950319-test-vitest-100/manifest.json"
+  ],
+  "objective_id": "objective-session-source-visibility-20260319",
+  "packet_id": "packet-emit-and-read-formatting",
+  "runtime_state": "accepted",
+  "schema_version": "objective-packet-result.v1",
+  "track_id": "session-source-visibility-20260319",
+  "updated_at": "2026-03-19T20:03:22+00:00",
+  "verifier_output": "accepted"
+}

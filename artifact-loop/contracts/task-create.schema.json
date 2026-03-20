@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-create.schema.json",
+  "type": "object",
+  "description": "Input schema for task creation. Status restricted to non-terminal. No override on create. At least one acceptance signal required.",
+  "required": [
+    "id",
+    "title",
+    "description",
+    "assignee_human_id",
+    "status",
+    "acceptance_criteria",
+    "acceptance_signals",
+    "depends_on"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "description": { "type": "string" },
+    "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "assignee_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "needs_input", "blocked", "ready_for_review"],
+      "description": "Non-terminal statuses only — cannot create a task as done"
+    },
+    "acceptance_criteria": { "type": "string" },
+    "acceptance_signals": {
+      "type": "array",
+      "items": { "$ref": "acceptance-signal.schema.json" },
+      "minItems": 1
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/id" }
+    }
+  }
+}

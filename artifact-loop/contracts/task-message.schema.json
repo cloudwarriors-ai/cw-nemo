@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-message.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "project_id",
+    "task_id",
+    "sender_worker_id",
+    "recipient_worker_id",
+    "kind",
+    "body",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "sender_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "sender_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "recipient_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "recipient_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "kind": {
+      "type": "string",
+      "enum": ["ping", "reply", "note"]
+    },
+    "body": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "acknowledged_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

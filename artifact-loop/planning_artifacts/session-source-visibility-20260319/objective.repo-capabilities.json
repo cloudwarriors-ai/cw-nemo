@@ -1,0 +1,57 @@
+{
+  "capabilities": {
+    "build": true,
+    "lint": false,
+    "schema_check": false,
+    "security_sensitive_review": true,
+    "smoke_e2e": false,
+    "tests": true,
+    "typecheck": false
+  },
+  "confidence_by_lane": {
+    "build": "high",
+    "lint": "none",
+    "schema_check": "none",
+    "security_sensitive_review": "none",
+    "smoke_e2e": "none",
+    "tests": "high",
+    "typecheck": "none"
+  },
+  "detectors_run": [
+    "node_package_json"
+  ],
+  "lane_commands": {
+    "build": [
+      "npm run build"
+    ],
+    "lint": [],
+    "schema_check": [],
+    "security_sensitive_review": [],
+    "smoke_e2e": [],
+    "tests": [
+      "npm run test"
+    ],
+    "typecheck": []
+  },
+  "missing_capabilities": {
+    "lint": "No deterministic repo capability discovered for lint.",
+    "schema_check": "No deterministic repo capability discovered for schema_check.",
+    "smoke_e2e": "No deterministic repo capability discovered for smoke_e2e.",
+    "typecheck": "No deterministic repo capability discovered for typecheck."
+  },
+  "schema_version": "objective-repo-capabilities.v1",
+  "source_refs": {
+    "build": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/package.json"
+    ],
+    "lint": [],
+    "schema_check": [],
+    "security_sensitive_review": [],
+    "smoke_e2e": [],
+    "tests": [
+      "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/package.json"
+    ],
+    "typecheck": []
+  },
+  "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop"
+}

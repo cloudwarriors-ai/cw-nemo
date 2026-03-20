@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-state.schema.json",
+  "type": "object",
+  "description": "Task state with derivation-essential fields and reporting enrichment fields.",
+  "required": ["status", "task_confidence", "binding_confidence", "missing_inputs"],
+  "additionalProperties": false,
+  "properties": {
+    "status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+    "task_confidence": { "$ref": "_defs.schema.json#/definitions/task_confidence" },
+    "binding_confidence": { "$ref": "_defs.schema.json#/definitions/binding_confidence" },
+    "missing_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "source", "detected_at"],
+        "additionalProperties": false,
+        "properties": {
+          "type": { "$ref": "_defs.schema.json#/definitions/missing_input_type" },
+          "source": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+          "detected_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+          "resolved_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+          "resolution_artifact_id": { "$ref": "_defs.schema.json#/definitions/id" }
+        }
+      }
+    },
+    "blocked_by": {
+      "type": "array",
+      "items": { "$ref": "_defs.schema.json#/definitions/id" },
+      "description": "Task IDs that block this task (Phase 5 reporting field)"
+    },
+    "staleness_level": {
+      "$ref": "_defs.schema.json#/definitions/staleness_level",
+      "description": "Recency metric based on last artifact timestamp (Phase 5 reporting field)"
+    },
+    "needs_attention": {
+      "type": "boolean",
+      "description": "Operator alerting flag driven by staleness and other conditions (Phase 5 reporting field)"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "needs_input" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "missing_inputs": { "type": "array", "minItems": 1 }
+        }
+      }
+    }
+  ]
+}

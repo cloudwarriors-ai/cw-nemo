@@ -1,0 +1,40 @@
+{
+  "autonomy_level": "L2_supervised_autonomous",
+  "clarification_governor": {
+    "allowed_topics": [
+      "product_meaning",
+      "authority_security_boundaries",
+      "missing_success_criteria",
+      "non_discoverable_tradeoffs"
+    ],
+    "default_batch_limit": 1,
+    "new_authority_boundary_required_for_mid_execution_clarification": true,
+    "repo_discoverable_questions_forbidden": true
+  },
+  "intent_contract": {
+    "ambiguity_classification": [
+      {
+        "classification": "technical_reversible",
+        "item_id": "amb-001",
+        "statement": "Task history currently lacks a task identifier line, so the minimal extension is to add the same `Task:` header used by status output."
+      }
+    ],
+    "authority_sensitive_decisions": [],
+    "non_goals": [
+      "No daemon, dashboard, or background session-state UX work.",
+      "No new CLI flags, no changes to session.json layout, and no JSON-output changes.",
+      "No changes outside artifact-loop runtime/test surfaces required for this CLI contract fix."
+    ],
+    "objective": "Show the resolved task ID in human CLI output and add a `(from session)` annotation only when the task came from the session file.",
+    "objective_shape_status": "accepted_rewritten",
+    "success_criteria": [
+      "Emit commands always print `for <task-id>` and only append `(from session)` when `--task` is omitted.",
+      "Task status and task history surfaces identify the resolved task and annotate session-derived resolution without changing JSON output.",
+      "artifact-loop typecheck and the 137-test suite pass after the contract update."
+    ]
+  },
+  "objective_intent_ref": "objective.intent.json",
+  "objective_ref": "session-source-visibility-20260319",
+  "schema_version": "plan-intent.v1",
+  "track_id": "session-source-visibility-20260319"
+}

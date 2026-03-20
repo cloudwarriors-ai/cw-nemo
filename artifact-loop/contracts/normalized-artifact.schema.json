@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "normalized-artifact.schema.json",
+  "type": "object",
+  "description": "CENTER OF THE SYSTEM. Normalized artifact with typed signal payload. Idempotent on (id, primary_task_id).",
+  "required": [
+    "id",
+    "raw_artifact_id",
+    "primary_task_id",
+    "session_id",
+    "artifact_source",
+    "worker_id",
+    "context_source",
+    "signal_payload",
+    "normalization_state",
+    "binding_confidence",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "raw_artifact_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "primary_task_id": {
+      "$ref": "_defs.schema.json#/definitions/id",
+      "description": "Single task ID this artifact is bound to"
+    },
+    "session_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "artifact_source": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "worker_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "context_source": { "$ref": "_defs.schema.json#/definitions/context_source" },
+    "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "normalization_state": { "$ref": "_defs.schema.json#/definitions/normalization_state" },
+    "binding_confidence": { "$ref": "_defs.schema.json#/definitions/binding_confidence" },
+    "signal_payload": {
+      "description": "Typed payload discriminated by 'type' field. Acceptance-evaluable variants require signal_id.",
+      "oneOf": [
+        { "$ref": "#/definitions/test_result" },
+        { "$ref": "#/definitions/file_change" },
+        { "$ref": "#/definitions/command_result" },
+        { "$ref": "#/definitions/git_diff_summary" },
+        { "$ref": "#/definitions/merge_result" },
+        { "$ref": "#/definitions/manual_event" },
+        { "$ref": "#/definitions/runtime_event" }
+      ]
+    }
+  },
+  "definitions": {
+    "test_result": {
+      "type": "object",
+      "required": ["type", "signal_id", "passed"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "test_result" },
+        "signal_id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "passed": { "type": "boolean" },
+        "output": { "type": "string" },
+        "error": { "type": "string" }
+      }
+    },
+    "file_change": {
+      "type": "object",
+      "required": ["type", "signal_id", "path", "change_type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "file_change" },
+        "signal_id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "path": { "type": "string", "minLength": 1 },
+        "change_type": {
+          "type": "string",
+          "enum": ["created", "modified", "deleted"]
+        }
+      }
+    },
+    "command_result": {
+      "type": "object",
+      "required": ["type", "signal_id", "exit_code"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "command_result" },
+        "signal_id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "exit_code": { "type": "integer" },
+        "stdout": { "type": "string" },
+        "stderr": { "type": "string" }
+      }
+    },
+    "git_diff_summary": {
+      "type": "object",
+      "required": ["type", "mode", "files"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "git_diff_summary" },
+        "mode": {
+          "type": "string",
+          "enum": ["working_tree", "staged"]
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "change_type"],
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "change_type": {
+                "type": "string",
+                "enum": ["created", "modified", "deleted"]
+              },
+              "previous_path": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "base_ref": { "type": "string", "minLength": 1 },
+        "head_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "merge_result": {
+      "type": "object",
+      "required": ["type", "signal_id", "merge_ref", "target_branch"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "merge_result" },
+        "signal_id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "merge_ref": { "type": "string", "minLength": 1 },
+        "target_branch": { "type": "string", "minLength": 1 }
+      }
+    },
+    "manual_event": {
+      "type": "object",
+      "required": ["type", "event_type", "description", "by"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "manual_event" },
+        "signal_id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "event_type": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "by": { "type": "string", "minLength": 1 }
+      }
+    },
+    "runtime_event": {
+      "type": "object",
+      "required": ["type", "event_type", "source", "detail"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "runtime_event" },
+        "signal_id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "event_type": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}

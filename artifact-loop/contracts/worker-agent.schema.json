@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "worker-agent.schema.json",
+  "type": "object",
+  "required": ["id", "worker_id", "label", "connector_type", "active", "created_at", "updated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "label": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "connector_type": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "active": { "type": "boolean" },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "updated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "last_seen_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

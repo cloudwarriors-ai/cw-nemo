@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-brief-schedule.schema.json",
+  "type": "object",
+  "required": ["project_id", "owner_worker_id", "timezone", "delivery_hour_local", "enabled"],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "owner_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "delivery_hour_local": { "type": "integer", "minimum": 0, "maximum": 23 },
+    "enabled": { "type": "boolean" },
+    "last_run_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "next_run_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

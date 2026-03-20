@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-draft-set.schema.json",
+  "type": "object",
+  "required": ["id", "project_id", "status", "generated_by_agent_id", "generated_at", "drafts"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "project_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "approved", "rejected"]
+    },
+    "generated_by_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "generated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "approved_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "approved_by_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "rejected_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "rejected_by_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "drafts": {
+      "type": "array",
+      "items": { "$ref": "task-draft.schema.json" }
+    }
+  }
+}

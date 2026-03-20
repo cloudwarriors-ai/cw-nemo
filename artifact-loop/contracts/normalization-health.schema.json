@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "normalization-health.schema.json",
+  "type": "object",
+  "description": "Health metrics for the normalization pipeline.",
+  "required": [
+    "timestamp",
+    "quarantine_count",
+    "quarantine_reasons",
+    "binding_confidence_distribution",
+    "pipeline_health"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "timestamp": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "quarantine_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "quarantine_reasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason", "count"],
+        "additionalProperties": false,
+        "properties": {
+          "reason": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "binding_confidence_distribution": {
+      "type": "object",
+      "required": ["low", "medium", "high"],
+      "additionalProperties": false,
+      "properties": {
+        "low": { "type": "integer", "minimum": 0, "description": "binding_confidence < 0.3" },
+        "medium": { "type": "integer", "minimum": 0, "description": "0.3 <= binding_confidence < 0.7" },
+        "high": { "type": "integer", "minimum": 0, "description": "binding_confidence >= 0.7" }
+      }
+    },
+    "pipeline_health": {
+      "type": "string",
+      "enum": ["healthy", "degraded", "unhealthy"]
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "acceptance_checks": [
+    "Build, check, and test capture manifests prove dist regeneration and 137 passing tests for the updated command surfaces.",
+    "Validation evidence artifacts show source-backed and bin-backed CLI paths agree on the task-source output contract."
+  ],
+  "allowed_scope": [
+    "artifact-loop/dist",
+    "artifact-loop/bin",
+    "artifact-loop/src/__tests__/cli",
+    "artifact-loop/package.json"
+  ],
+  "automatable_acceptance": true,
+  "cancelled_by": "",
+  "classification": "ready",
+  "constraints": [
+    "Validation must use the artifact-loop package root.",
+    "Do not rely on unstaged unrelated repo changes.",
+    "Close only when bin-backed and source-backed tests agree."
+  ],
+  "definition_of_done": {
+    "acceptance_checks": [
+      "npm run build",
+      "npm run check",
+      "npm test"
+    ],
+    "allowed_scope": [
+      "artifact-loop/dist",
+      "artifact-loop/bin",
+      "artifact-loop/src/__tests__/cli",
+      "artifact-loop/package.json"
+    ],
+    "behavior_outcome": "Validation evidence proves the updated CLI contract in both source-backed and dist-backed execution paths.",
+    "evidence_requirements": [
+      "worker-build capture",
+      "verifier-check capture",
+      "test-vitest capture",
+      "smoke stage captures"
+    ],
+    "objective_linkage": "REQ-002,REQ-003",
+    "rollback_or_fallback": "Rebuild dist or revert bounded output changes if validation fails.",
+    "verifier_acceptance_condition": "Reviewer confirms the executable bin entrypoint and source tests report the same task-source contract."
+  },
+  "dependencies": [
+    "packet-emit-and-read-formatting"
+  ],
+  "dependency_mode": "accepted_upstream",
+  "evidence_destination": "planning_artifacts/session-source-visibility-20260319/packet-verify-cli-contracts.json",
+  "execution_mode": "sequence_required",
+  "execution_strategy": "validation_command",
+  "failure_signals": [
+    "emit-test-run.test.ts still reports the old output contract.",
+    "Typecheck or full test suite fails after output-string changes."
+  ],
+  "fallback_or_rollback": "Restore dist/source parity by rebuilding or reverting the bounded output change set.",
+  "last_cycle_id": "",
+  "last_verifier_output": "",
+  "maintainable_completion_path": true,
+  "packet_class": "validation",
+  "packet_id": "packet-verify-cli-contracts",
+  "packet_lane": "validator",
+  "parallelism_class": "serial",
+  "primary_behavior": "Verify source, dist, and CLI contract parity with build, typecheck, and full test evidence.",
+  "product_meaning_resolved": true,
+  "prohibited_action_required": false,
+  "runtime_state": "queued",
+  "shared_surface_categories": [
+    "dist-parity",
+    "cli-output",
+    "validation"
+  ],
+  "strategy_inputs": {
+    "command": "npm test",
+    "validation_lane": "unit_and_e2e"
+  },
+  "swarm_eligible": false,
+  "verifier_mapping": "Captured build, check, test, and smoke manifests plus reviewer confirmation that the bin entrypoint is updated."
+}

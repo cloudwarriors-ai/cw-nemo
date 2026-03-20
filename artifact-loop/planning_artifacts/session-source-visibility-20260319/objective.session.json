@@ -1,0 +1,38 @@
+{
+  "bootstrap_commands": [],
+  "checkpoint_interval_minutes": 20,
+  "checkpoint_required": true,
+  "clean_state_assertions": [
+    "Runtime state is resumable from objective runtime artifacts."
+  ],
+  "context_index_required": true,
+  "current_frontier": [],
+  "estimated_packet_count": 0,
+  "expected_duration_minutes": 0,
+  "objective_id": "objective-session-source-visibility-20260319",
+  "objective_shape_status": "accepted_rewritten",
+  "objective_summary": "Show the resolved task ID in human CLI output and add a `(from session)` annotation only when the task came from the session file.",
+  "packet_ids": [],
+  "repo_state_summary": {
+    "branch": "main",
+    "cwd": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop",
+    "is_git_repo": true,
+    "repo_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw",
+    "status_short": [
+      "M ../.github/workflows/pr.yaml",
+      "M ../Makefile",
+      "?? ../AGENTS.md",
+      "?? ../CLAUDE.md",
+      "?? ./"
+    ]
+  },
+  "requirement_ids": [],
+  "route_hint": "",
+  "safe_momentum_ready": false,
+  "schema_version": "objective-session.v1",
+  "session_harness_required": true,
+  "track_id": "session-source-visibility-20260319",
+  "track_token": "session-source-visibility-20260319",
+  "ui_evidence_required": false,
+  "validation_commands": []
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team.schema.json",
+  "type": "object",
+  "required": ["id", "organization_id", "name", "description", "created_at", "updated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "organization_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "description": { "type": "string" },
+    "created_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "updated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" }
+  }
+}

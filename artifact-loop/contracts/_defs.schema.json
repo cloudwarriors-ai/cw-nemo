@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "_defs.schema.json",
+  "definitions": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Non-empty identifier"
+    },
+    "iso8601_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 date-time string"
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "needs_input",
+        "blocked",
+        "ready_for_review",
+        "done"
+      ],
+      "description": "The six canonical task statuses"
+    },
+    "normalization_state": {
+      "type": "string",
+      "enum": [
+        "observed",
+        "bound",
+        "quarantined",
+        "normalized",
+        "consumed_for_derivation"
+      ],
+      "description": "Full artifact lifecycle enum. Derivation eligibility (normalized, consumed_for_derivation) is enforced by the derivation helper, not by this schema."
+    },
+    "signal_category": {
+      "type": "string",
+      "enum": ["test", "file", "command", "merge"]
+    },
+    "context_source": {
+      "type": "string",
+      "enum": ["explicit_lock", "session_default", "explicit_event", "branch_inference"]
+    },
+    "missing_input_type": {
+      "type": "string",
+      "enum": ["dependency", "human_decision", "external_resource"]
+    },
+    "team_membership_role": {
+      "type": "string",
+      "enum": ["admin", "lead", "worker"]
+    },
+    "team_membership_status": {
+      "type": "string",
+      "enum": ["active", "inactive"]
+    },
+    "task_confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Overall task completion confidence. Consumed by briefs. Not interchangeable with binding_confidence."
+    },
+    "binding_confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Artifact-to-task binding quality. Consumed by normalization health metrics. Not interchangeable with task_confidence."
+    },
+    "staleness_level": {
+      "type": "string",
+      "enum": ["fresh", "aging", "stale"],
+      "description": "Recency classification based on last artifact timestamp relative to current time"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "organization-bootstrap.schema.json",
+  "type": "object",
+  "required": ["organization", "initial_team", "initial_member", "initial_agent"],
+  "additionalProperties": false,
+  "properties": {
+    "organization": {
+      "type": "object",
+      "required": ["id", "name", "timezone"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+        "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+      }
+    },
+    "initial_team": {
+      "type": "object",
+      "required": ["id", "name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+        "description": { "type": "string" }
+      }
+    },
+    "initial_member": {
+      "type": "object",
+      "required": ["id", "display_name", "timezone"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "display_name": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+        "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+      }
+    },
+    "initial_agent": {
+      "type": "object",
+      "required": ["id", "label", "connector_type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "_defs.schema.json#/definitions/id" },
+        "label": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+        "connector_type": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+        "active": { "type": "boolean" }
+      }
+    }
+  }
+}

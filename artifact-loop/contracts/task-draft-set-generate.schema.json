@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-draft-set-generate.schema.json",
+  "type": "object",
+  "required": ["generated_by_agent_id", "drafts"],
+  "additionalProperties": false,
+  "properties": {
+    "generated_by_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "drafts": {
+      "type": "array",
+      "items": { "$ref": "task-draft.schema.json" }
+    }
+  }
+}

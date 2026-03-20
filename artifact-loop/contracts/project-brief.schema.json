@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-brief.schema.json",
+  "type": "object",
+  "description": "Read-only morning brief for one project.",
+  "required": [
+    "project",
+    "generated_at",
+    "snapshot",
+    "recent_movement",
+    "blocked",
+    "needs_input",
+    "ready_for_review",
+    "by_worker",
+    "by_human",
+    "by_agent",
+    "lead_attention_items",
+    "rendered_text"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "project": { "$ref": "project.schema.json" },
+    "generated_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+    "snapshot": {
+      "type": "object",
+      "required": ["total_tasks", "counts_by_status", "last_activity_at"],
+      "additionalProperties": false,
+      "properties": {
+        "total_tasks": { "type": "integer", "minimum": 0 },
+        "counts_by_status": {
+          "type": "object",
+          "required": ["not_started", "in_progress", "needs_input", "blocked", "ready_for_review", "done"],
+          "additionalProperties": false,
+          "properties": {
+            "not_started": { "type": "integer", "minimum": 0 },
+            "in_progress": { "type": "integer", "minimum": 0 },
+            "needs_input": { "type": "integer", "minimum": 0 },
+            "blocked": { "type": "integer", "minimum": 0 },
+            "ready_for_review": { "type": "integer", "minimum": 0 },
+            "done": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "last_activity_at": {
+          "anyOf": [
+            { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "recent_movement": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "task_title",
+          "assignee_human_id",
+          "changed_at",
+          "from_status",
+          "to_status",
+          "rules_applied"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "task_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "task_title": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+          "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "assignee_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "changed_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+          "from_status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+          "to_status": { "$ref": "_defs.schema.json#/definitions/canonical_status" },
+          "rules_applied": {
+            "type": "array",
+            "items": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+          }
+        }
+      }
+    },
+    "blocked": {
+      "type": "array",
+      "items": { "$ref": "project-task-list-item.schema.json" }
+    },
+    "needs_input": {
+      "type": "array",
+      "items": { "$ref": "project-task-list-item.schema.json" }
+    },
+    "ready_for_review": {
+      "type": "array",
+      "items": { "$ref": "project-task-list-item.schema.json" }
+    },
+    "by_worker": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["worker_id", "tasks", "recent_activity_at", "artifact_count"],
+        "additionalProperties": false,
+        "properties": {
+          "worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "tasks": {
+            "type": "array",
+            "items": { "$ref": "project-task-list-item.schema.json" }
+          },
+          "recent_activity_at": { "$ref": "_defs.schema.json#/definitions/iso8601_timestamp" },
+          "artifact_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "by_human": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assignee_human_id", "tasks"],
+        "additionalProperties": false,
+        "properties": {
+          "assignee_human_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "tasks": {
+            "type": "array",
+            "items": { "$ref": "project-task-list-item.schema.json" }
+          }
+        }
+      }
+    },
+    "by_agent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assignee_agent_id", "tasks"],
+        "additionalProperties": false,
+        "properties": {
+          "assignee_agent_id": { "$ref": "_defs.schema.json#/definitions/id" },
+          "tasks": {
+            "type": "array",
+            "items": { "$ref": "project-task-list-item.schema.json" }
+          }
+        }
+      }
+    },
+    "lead_attention_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "task", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["blocked", "needs_input", "ready_for_review"]
+          },
+          "task": { "$ref": "project-task-list-item.schema.json" },
+          "reason": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+        }
+      }
+    },
+    "rendered_text": { "$ref": "_defs.schema.json#/definitions/non_empty_string" }
+  }
+}

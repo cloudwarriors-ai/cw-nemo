@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-brief-schedule-upsert.schema.json",
+  "type": "object",
+  "required": ["owner_worker_id", "timezone", "delivery_hour_local", "enabled"],
+  "additionalProperties": false,
+  "properties": {
+    "owner_worker_id": { "$ref": "_defs.schema.json#/definitions/id" },
+    "timezone": { "$ref": "_defs.schema.json#/definitions/non_empty_string" },
+    "delivery_hour_local": { "type": "integer", "minimum": 0, "maximum": 23 },
+    "enabled": { "type": "boolean" }
+  }
+}

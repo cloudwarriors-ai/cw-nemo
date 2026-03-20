@@ -1,0 +1,122 @@
+{
+  "changed_files": [
+    "artifact-loop/bin",
+    "artifact-loop/dist",
+    "artifact-loop/package.json",
+    "artifact-loop/src/__tests__/cli",
+    "artifact-loop/src/cli/commands",
+    "artifact-loop/src/cli/helpers"
+  ],
+  "coverage": {
+    "generated_lane_count": 0,
+    "manual_blocker_count": 0,
+    "required_lane_count": 0
+  },
+  "escalated_review_required": false,
+  "generated_packets": [],
+  "lanes": [
+    {
+      "capability_confidence": "high",
+      "capability_source": [
+        "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop/package.json"
+      ],
+      "commands": [
+        "npm test",
+        "npm run test"
+      ],
+      "generated_packet_ids": [],
+      "lane": "tests",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [
+        "npm run check",
+        "npm test"
+      ],
+      "generated_packet_ids": [],
+      "lane": "types_build",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for typecheck.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [
+        "npm run check",
+        "npm test"
+      ],
+      "generated_packet_ids": [],
+      "lane": "lint",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for lint.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [
+        "npm run build",
+        "npm run check",
+        "node -e \"import('./dist/src/cli/helpers/format.js').then((m)=>console.log(m.formatTaskReference('feat-widget', true)))\"",
+        "npm test"
+      ],
+      "generated_packet_ids": [],
+      "lane": "smoke_e2e",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for smoke_e2e.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [],
+      "generated_packet_ids": [],
+      "lane": "migration_schema",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "No deterministic repo capability discovered for schema_check.",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    },
+    {
+      "capability_confidence": "none",
+      "capability_source": [],
+      "commands": [],
+      "generated_packet_ids": [],
+      "lane": "security_sensitive_review",
+      "manual_only_blocker": "",
+      "missing_capability_reason": "",
+      "paths": [],
+      "reasons": [],
+      "required": false,
+      "risk_trigger": ""
+    }
+  ],
+  "objective_id": "objective-session-source-visibility-20260319",
+  "required_packets": [
+    "packet-emit-and-read-formatting",
+    "packet-verify-cli-contracts"
+  ],
+  "route_hint": "R3",
+  "schema_version": "objective-validation-plan.v1",
+  "track_id": "session-source-visibility-20260319",
+  "workspace_root": "/Users/chadsimon/chad_bot_attempt/nemoclaw/artifact-loop"
+}

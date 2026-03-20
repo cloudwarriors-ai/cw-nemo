@@ -1,0 +1,26 @@
+{
+  "id": "validate-real-work-capture",
+  "title": "Validate real-work capture slice",
+  "description": "Use artifact-loop against the actual artifact-loop worktree to validate check/test/git-diff flows.",
+  "assignee_human_id": "chad",
+  "status": "ready_for_review",
+  "acceptance_criteria": "check passes and tests pass",
+  "acceptance_signals": [
+    {
+      "id": "sig-check",
+      "category": "command",
+      "required": true,
+      "success_condition": "npm run check exits 0",
+      "command": "npm run check"
+    },
+    {
+      "id": "sig-tests",
+      "category": "test",
+      "required": true,
+      "success_condition": "npm test passes",
+      "pattern": "vitest"
+    }
+  ],
+  "depends_on": [],
+  "last_activity_at": "2026-03-19T21:09:12.502Z"
+}

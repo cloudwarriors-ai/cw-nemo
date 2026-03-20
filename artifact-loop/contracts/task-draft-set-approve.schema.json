@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "task-draft-set-approve.schema.json",
+  "type": "object",
+  "required": ["approved_by_worker_id"],
+  "additionalProperties": false,
+  "properties": {
+    "approved_by_worker_id": { "$ref": "_defs.schema.json#/definitions/id" }
+  }
+}

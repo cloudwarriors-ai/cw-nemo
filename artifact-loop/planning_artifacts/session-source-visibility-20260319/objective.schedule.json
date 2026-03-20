@@ -1,0 +1,91 @@
+{
+  "accepted_packet_count": 2,
+  "active_packets_by_lane": {
+    "explorer": [],
+    "reviewer": [],
+    "validator": [],
+    "worker": []
+  },
+  "admission_failures": {
+    "packet-emit-and-read-formatting": [
+      "already_accepted"
+    ],
+    "packet-verify-cli-contracts": [
+      "already_accepted"
+    ]
+  },
+  "awaiting_reviewer_barrier": [],
+  "blocked_packet_count": 0,
+  "blocked_set": [],
+  "closure_readiness": "checkpoint_blocked",
+  "convergence_required_for_closure": false,
+  "convergence_status": "idle",
+  "current_frontier": [],
+  "cycle_log": [
+    {
+      "classification": "closure_advancing",
+      "closure_impact": "Required packets are complete; objective is checkpoint-blocked by unrelated dirty repo state.",
+      "cycle_id": "objective-session-source-visibility-20260319-cycle-final",
+      "escalation_condition": "Checkpoint cannot be approved while unrelated dirty repo state remains.",
+      "expected_evidence": [
+        "build capture",
+        "check capture",
+        "test capture",
+        "smoke captures"
+      ],
+      "frontier_movement": false,
+      "frontier_movement_reason": "",
+      "objective_id": "objective-session-source-visibility-20260319",
+      "packet_ids": [
+        "packet-emit-and-read-formatting",
+        "packet-verify-cli-contracts"
+      ],
+      "pivot_condition": "Checkpoint state becomes clean or user explicitly accepts blocked closure.",
+      "purpose": "Bind verification evidence to the accepted packet set.",
+      "stop_condition": "All required packets accepted and checkpoint state classified.",
+      "strategy_label": "manual_evidence_bind"
+    }
+  ],
+  "dispatch_block_reasons": {},
+  "dispatch_history": [],
+  "escalation_count": 0,
+  "execution_shape": "single_lane",
+  "frontier_dispatch_order": [],
+  "frontier_movement": false,
+  "frontier_movement_reason": "",
+  "lane_caps": {},
+  "lane_queue_depths": {
+    "explorer": 0,
+    "reviewer": 0,
+    "validator": 0,
+    "worker": 0
+  },
+  "max_no_frontier_movement_cycles": 2,
+  "max_noop_cycles": 2,
+  "max_parallel_packets": 1,
+  "max_same_strategy_retries": 2,
+  "max_verifier_return_cycles": 2,
+  "migration_fallback_used": false,
+  "objective_id": "objective-session-source-visibility-20260319",
+  "parallelism_policy": "serial_only",
+  "rejected_packet_count": 0,
+  "repacketization_count": 0,
+  "repacketization_events": [],
+  "retry_counters": {},
+  "reviewer_barrier_points": [],
+  "route_swarm_cap": null,
+  "runnable_but_not_dispatched": [],
+  "runnable_candidates": [],
+  "runnable_set": [],
+  "runtime_states": {
+    "packet-emit-and-read-formatting": "accepted",
+    "packet-verify-cli-contracts": "accepted"
+  },
+  "safe_momentum_available": false,
+  "schema_version": "objective-schedule.v1",
+  "strategy_switches": {},
+  "swarm_status": "single_lane",
+  "total_packet_count": 2,
+  "total_runtime_attempts": 2,
+  "track_id": "session-source-visibility-20260319"
+}

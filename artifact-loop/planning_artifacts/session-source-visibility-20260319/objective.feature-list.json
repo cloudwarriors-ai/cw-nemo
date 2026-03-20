@@ -1,0 +1,95 @@
+{
+  "features": [
+    {
+      "definition_of_done": {
+        "acceptance_checks": [
+          "Existing emit command vitest assertions prove explicit and session-derived output variants."
+        ],
+        "allowed_scope": [
+          "artifact-loop/src/cli/commands",
+          "artifact-loop/src/__tests__/cli"
+        ],
+        "behavior_outcome": "Emit command summaries make the target task explicit for both explicit and session-derived calls.",
+        "evidence_requirements": [
+          "Captured unit-test evidence plus touched emit command sources."
+        ],
+        "objective_linkage": "session-source-visibility",
+        "rollback_or_fallback": "Revert the shared task label helper and emit string changes if command output regresses.",
+        "verifier_acceptance_condition": "Reviewer confirms explicit-task outputs omit the session suffix while session-derived outputs include it."
+      },
+      "evidence_refs": [
+        "Emit command source diff",
+        "test-vitest capture manifest"
+      ],
+      "packet_ids": [
+        "packet-emit-and-read-formatting"
+      ],
+      "priority": "core",
+      "requirement_id": "REQ-001",
+      "status": "verified"
+    },
+    {
+      "definition_of_done": {
+        "acceptance_checks": [
+          "Existing task-read and session workflow tests assert explicit and session-derived status/history output."
+        ],
+        "allowed_scope": [
+          "artifact-loop/src/cli/commands",
+          "artifact-loop/src/cli/helpers",
+          "artifact-loop/src/__tests__/cli"
+        ],
+        "behavior_outcome": "Task reads expose provenance on the `Task:` line while `--json` responses remain unchanged.",
+        "evidence_requirements": [
+          "Captured test evidence and formatter/helper source diff."
+        ],
+        "objective_linkage": "session-source-visibility",
+        "rollback_or_fallback": "Drop the history/status task reference change and restore previous formatter signatures if it causes regressions.",
+        "verifier_acceptance_condition": "Reviewer confirms only human-readable task lines changed and JSON paths are untouched."
+      },
+      "evidence_refs": [
+        "task-read/session workflow diffs",
+        "test-vitest capture manifest"
+      ],
+      "packet_ids": [
+        "packet-emit-and-read-formatting",
+        "packet-verify-cli-contracts"
+      ],
+      "priority": "core",
+      "requirement_id": "REQ-002",
+      "status": "verified"
+    },
+    {
+      "definition_of_done": {
+        "acceptance_checks": [
+          "emit-test-run.test.ts passes through bin/artifact-loop.js after dist rebuild."
+        ],
+        "allowed_scope": [
+          "artifact-loop/src",
+          "artifact-loop/dist",
+          "artifact-loop/bin"
+        ],
+        "behavior_outcome": "Direct bin execution and in-process CLI tests observe the same output contract.",
+        "evidence_requirements": [
+          "Captured build, test, and smoke manifests plus dist file updates."
+        ],
+        "objective_linkage": "session-source-visibility",
+        "rollback_or_fallback": "Regenerate dist from source or revert generated output if executable behavior diverges.",
+        "verifier_acceptance_condition": "Reviewer confirms dist-backed tests and source-backed tests both pass."
+      },
+      "evidence_refs": [
+        "worker-build capture manifest",
+        "verifier-check capture manifest",
+        "test-vitest capture manifest"
+      ],
+      "packet_ids": [
+        "packet-verify-cli-contracts"
+      ],
+      "priority": "critical",
+      "requirement_id": "REQ-003",
+      "status": "verified"
+    }
+  ],
+  "objective_id": "objective-session-source-visibility-20260319",
+  "schema_version": "objective-feature-list.v1",
+  "track_id": "session-source-visibility-20260319"
+}
